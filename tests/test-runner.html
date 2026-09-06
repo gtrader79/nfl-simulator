@@ -1,0 +1,68 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>NFL Simulator — Rebuild Tests</title>
+  <style>
+    :root {
+      color-scheme: light dark;
+      font-family: system-ui, sans-serif;
+    }
+    body {
+      margin: 0 auto;
+      max-width: 72rem;
+      padding: 2rem;
+    }
+    #summary {
+      font-weight: 700;
+    }
+    #results {
+      font-family: ui-monospace, monospace;
+      line-height: 1.55;
+      white-space: pre-wrap;
+    }
+    .pass { color: #15803d; }
+    .fail { color: #b91c1c; }
+  </style>
+</head>
+<body>
+  <main>
+    <h1>NFL Simulator — Rebuild Tests</h1>
+    <p id="summary" role="status" aria-live="polite">Running…</p>
+    <ol id="results" aria-label="Test results"></ol>
+  </main>
+
+  <script type="module">
+    import { runRegisteredTests } from './test-utils.js';
+    import './model.test.js';
+    import './simulation.test.js';
+    import './state.test.js';
+    import './data.test.js';
+
+    const summaryElement = document.querySelector('#summary');
+    const resultsElement = document.querySelector('#results');
+
+    function appendResult(cssClass, message) {
+      const item = document.createElement('li');
+      item.className = cssClass;
+      item.textContent = message;
+      resultsElement.append(item);
+    }
+
+    const reporter = {
+      log(message) {
+        appendResult('pass', String(message));
+      },
+      error(message, error) {
+        appendResult('fail', `${String(message)} — ${error?.message ?? String(error)}`);
+      },
+    };
+
+    const summary = await runRegisteredTests({ reporter });
+    summaryElement.textContent = `${summary.passed}/${summary.total} tests passed`;
+    summaryElement.className = summary.failed === 0 ? 'pass' : 'fail';
+    document.body.dataset.testStatus = summary.failed === 0 ? 'passed' : 'failed';
+  </script>
+</body>
+</html>
