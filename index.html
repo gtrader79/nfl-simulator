@@ -1,0 +1,77 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#102c29">
+  <title>NFL Matchup Simulator</title>
+  <link rel="stylesheet" href="./css/tokens.css">
+  <link rel="stylesheet" href="./css/app.css">
+  <link rel="stylesheet" href="./css/responsive.css">
+  <script defer src="https://cdn.jsdelivr.net/npm/chart.js@4.5.1/dist/chart.umd.min.js"></script>
+  <script defer src="https://cdn.jsdelivr.net/npm/matter-js@0.20.0/build/matter.min.js"></script>
+  <script type="module" src="./js/main.js"></script>
+</head>
+<body>
+  <a class="skip" href="#matchup-heading">Skip to Matchup Setup</a>
+  <a class="skip" href="#prediction-heading">Skip to Results</a>
+  <div id="app">
+    <header class="page-header">
+      <div class="header-inner"><div><p class="eyebrow">Win Probability &amp; Matchup Analysis</p>
+        <h1>NFL Matchup Simulator</h1><p id="freshness">Loading NFL season data…</p></div>
+        <button type="button" data-action="reset" class="secondary" disabled>Reset</button>
+      </div>
+    </header>
+    <main>
+      <div id="fatal-error" class="notice error" tabindex="-1" hidden></div>
+      <noscript><p class="notice error">JavaScript is required to run the simulator.</p></noscript>
+      <div id="workspace" class="workspace">
+        <section class="card" aria-labelledby="matchup-heading">
+          <p class="eyebrow">01 / The matchup</p><h2 id="matchup-heading" tabindex="-1">Matchup Setup</h2>
+          <p class="muted">Choose two teams from the same season. Game conditions are optional.</p>
+          <label for="season">Season</label><select id="season" data-input="season" disabled></select>
+          <div class="team-selectors">
+            <div><label for="team-a">Team A</label><select id="team-a" data-input="teamA" aria-describedby="selection-guidance" disabled><option value="">Choose Team A</option></select></div>
+            <span class="versus">VS</span>
+            <div><label for="team-b">Team B</label><select id="team-b" data-input="teamB" aria-describedby="selection-guidance" disabled><option value="">Choose Team B</option></select></div>
+          </div>
+          <div id="team-identities" class="team-identities"></div>
+          <p id="division-indicator" class="badge" hidden>Divisional matchup</p>
+          <p id="selection-guidance">Select two teams to begin.</p>
+          <div id="notice" class="notice error" tabindex="-1" hidden></div>
+          <button class="primary desktop-run" type="button" data-action="run" disabled>Run Simulation</button>
+        </section>
+        <section class="card" aria-labelledby="conditions-heading">
+          <p class="eyebrow">02 / Set the scene</p><h2 id="conditions-heading">Game Conditions</h2>
+          <p id="conditions-summary" class="muted"></p>
+          <div id="condition-groups"></div>
+          <div class="coming-soon"><p aria-disabled="true"><strong>Strength of Schedule</strong><span>Coming Soon · Opponent strength</span></p>
+            <p aria-disabled="true"><strong>Injuries</strong><span>Coming Soon · Player availability</span></p></div>
+        </section>
+      </div>
+      <section id="prediction" class="card prediction" aria-labelledby="prediction-heading" aria-busy="false">
+        <p class="eyebrow">03 / The prediction</p><h2 id="prediction-heading" tabindex="-1">Prediction</h2>
+        <div id="stale-banner" class="notice warning" hidden><p>Inputs changed — Run Simulation to update results.</p><button type="button" data-action="run">Run Again</button></div>
+        <p id="running-message" hidden>Updating…</p>
+        <div id="prediction-content"><h3>Prediction not run</h3><p>Select two teams, review game conditions, and run the simulation.</p></div>
+      </section>
+      <section class="card" aria-labelledby="progression-heading">
+        <h2 id="progression-heading">How the Prediction Changed</h2>
+        <p class="muted">Five cumulative stages. Each team's probability complements the other to 100%.</p>
+        <p id="progression-empty">Run a simulation to see the five-stage comparison.</p>
+        <div id="probability-chart-region" hidden><div data-chart="win-probability" class="chart-host probability-chart"></div><p data-chart-status class="muted"></p></div>
+        <div id="progression-content"></div>
+      </section>
+      <section aria-labelledby="base-heading">
+        <div class="section-heading"><h2 id="base-heading">Why This Matchup Looks This Way</h2><p>Base statistics only · Available before you run</p></div>
+        <div id="base-content" class="base-grid"><p class="card">Select two different teams to compare offense and defense.</p></div>
+      </section>
+      <section class="card" aria-labelledby="stats-heading"><h2 id="stats-heading">Team Stats</h2><p class="muted">Selected-season values and ranks. Model metrics include the approved statistical adjustment.</p><div id="stats-content">Select two different teams to compare statistics.</div></section>
+      <section class="card" aria-labelledby="visual-heading"><h2 id="visual-heading">Visual Simulation</h2><p id="visual-summary"></p><p id="visual-message">Run the simulation before playing the visual.</p><div class="visual-actions"><button id="visual-play" type="button" disabled>Play Visual Simulation</button><button id="visual-stop" type="button" hidden>Stop</button></div><div id="ball-drop" class="ball-host"></div></section>
+      <footer><p>NFL season-to-date statistics · nflreadpy / nflfastR</p><p>Win probability only. Reloading starts a fresh session.</p></footer>
+    </main>
+    <div id="mobile-actions" class="mobile-actions"><span id="mobile-status">Choose two teams</span><button class="primary" type="button" data-action="run" disabled>Run Simulation</button></div>
+    <p id="announcer" class="sr-only" aria-live="polite" aria-atomic="true"></p>
+  </div>
+</body>
+</html>
