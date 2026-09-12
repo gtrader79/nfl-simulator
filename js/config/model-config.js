@@ -4,6 +4,8 @@
  * Source: Architecture/proposed-model-config.json
  * Calibration report: MCR-v1-20260903
  * Product-owner approval: 2026-09-04
+ * Scenario 6 Injuries analytical approval: 2026-09-12
+ * Scenario 6 holdout disposition: certified with qualified exception
  *
  * Fitted numbers must never be edited manually. A future model change requires
  * a new calibrated artifact, calibration report, and explicit approval.
@@ -718,6 +720,147 @@ export const MODEL_CONFIG = deepFreeze({
     },
     "momentum": 1.4571437586150784,
     "divisionHomeInteraction": -0.2646781537209383
+  },
+  "injuries": {
+    "version": "scenario6-injuries-20260912",
+    "certification": {
+      "status": "certified-with-qualified-holdout-exception",
+      "approvedDate": "2026-09-12",
+      "holdoutSeason": 2025,
+      "holdoutExposed": true,
+      "retuningAuthorized": false,
+      "acceptedExceptions": [
+        {
+          "criterion": "simpleBaselineLogLossPairedBootstrapUpper95",
+          "observed": 0.012869,
+          "threshold": 0.005,
+          "disposition": "FAIL — FORMALLY ACCEPTED",
+          "approvedDate": "2026-09-12"
+        },
+        {
+          "criterion": "simpleBaselineBrierPairedBootstrapUpper95",
+          "observed": 0.005412,
+          "threshold": 0.005,
+          "disposition": "FAIL — FORMALLY ACCEPTED",
+          "approvedDate": "2026-09-12"
+        },
+        {
+          "criterion": "expectedCalibrationError",
+          "observed": 0.045268,
+          "threshold": 0.04,
+          "disposition": "FAIL — FORMALLY ACCEPTED",
+          "approvedDate": "2026-09-12"
+        },
+        {
+          "criterion": "maximumEligibleBinGap",
+          "observed": 0.152149,
+          "threshold": 0.08,
+          "disposition": "FAIL — FORMALLY ACCEPTED",
+          "approvedDate": "2026-09-12"
+        }
+      ]
+    },
+    "development": {
+      "featureFirstSeason": 2016,
+      "featureLastSeason": 2024,
+      "coefficientFirstSeason": 2018,
+      "coefficientLastSeason": 2024,
+      "rollingValidationFirstSeason": 2021,
+      "rollingValidationLastSeason": 2024,
+      "manualTranslationGames": 2472,
+      "holdoutEligibleGames": 266
+    },
+    "selectedRegularization": {
+      "alpha": 100.0,
+      "halfLife": "none"
+    },
+    "baselineAvailability": 1.0,
+    "featureOrientation": "team-b-minus-team-a",
+    "availabilityShocks": {
+      "available": 0.0,
+      "questionable": 0.316669,
+      "doubtful": 0.990426,
+      "out": 1.0
+    },
+    "groupBurdenBounds": {
+      "minimum": 0.0,
+      "maximum": 1.0
+    },
+    "manualTranslation": {
+      "method": "group_lsq_weight",
+      "developmentFirstSeason": 2016,
+      "developmentLastSeason": 2024
+    },
+    "positionGroups": [
+      {
+        "id": "qb",
+        "groupImportanceWeight": 0.8095332291842642,
+        "coefficient": 4.128588701054724,
+        "active": true,
+        "fixedZero": false
+      },
+      {
+        "id": "rb",
+        "groupImportanceWeight": 0.3383135840625962,
+        "coefficient": 2.7755084081758117,
+        "active": true,
+        "fixedZero": false
+      },
+      {
+        "id": "wr",
+        "groupImportanceWeight": 0.24501583338979643,
+        "coefficient": 6.217565833083719,
+        "active": true,
+        "fixedZero": false
+      },
+      {
+        "id": "te",
+        "groupImportanceWeight": 0.3670670359302999,
+        "coefficient": 1.2334874543453394,
+        "active": true,
+        "fixedZero": false
+      },
+      {
+        "id": "ol",
+        "groupImportanceWeight": 0.19708840389184681,
+        "coefficient": 1.3409174883564927,
+        "active": true,
+        "fixedZero": false
+      },
+      {
+        "id": "defensive-front",
+        "groupImportanceWeight": 0.17959775722408947,
+        "coefficient": 0.0,
+        "active": false,
+        "fixedZero": true
+      },
+      {
+        "id": "lb",
+        "groupImportanceWeight": 0.20475146692900625,
+        "coefficient": 0.0,
+        "active": false,
+        "fixedZero": true
+      },
+      {
+        "id": "secondary",
+        "groupImportanceWeight": 0.17648600880208537,
+        "coefficient": 0.0,
+        "active": false,
+        "fixedZero": true
+      }
+    ],
+    "monitoring": {
+      "season": 2026,
+      "interimMinimumEligibleBinaryGames": 200,
+      "minimumEligibleCalibrationBinGames": 40,
+      "expectedCalibrationErrorThreshold": 0.04,
+      "maximumEligibleBinGapThreshold": 0.08,
+      "pairedBootstrapDegradationMaximum": 0.005,
+      "compareAgainstFrozenScenario5": true,
+      "compareAgainstSimpleBaseline": true,
+      "finalSeasonReviewRequired": true,
+      "recalibrationTrigger": "If the prospective Scenario 6 review confirms material calibration or comparative-performance failure, recalibration requires a new untouched holdout; exposed 2025 may enter training only after a later season is designated as the new untouched holdout."
+    }
   },
   "sourceData": {
     "provider": "nflreadpy / nflfastR",
