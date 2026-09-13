@@ -199,16 +199,31 @@ export function createAppController({ store, repository, metricCatalog,
       dispatch(ACTIONS.SIMULATION_STARTED);
       await yieldFrame();
       if (destroyed || generation !== token) return false;
-      const result = await model.runScenarios({ matchup, leagueMetrics: state.data.leagueMetrics,
-        factors: { ...snapshot.factors, isDivisionalMatchup: snapshot.isDivisionalMatchup },
-        modelConfig, randomSource: randomSourceFactory() });
+      const result = await model.runScenarios({
+        matchup,
+        leagueMetrics: state.data.leagueMetrics,
+        factors: {
+          ...snapshot.factors,
+          isDivisionalMatchup:
+            snapshot.isDivisionalMatchup,
+        },
+        injuries: snapshot.injuries,
+        modelConfig,
+        randomSource: randomSourceFactory(),
+      });
       if (destroyed || generation !== token) return false;
       validateResult(result, modelConfig, snapshot);
       const completedAt = clock();
       if (!Number.isFinite(Date.parse(completedAt))) throw new Error('Invalid completion timestamp.');
-      const output = { ...result, runId: `run-${++runNumber}`, completedAt,
-        datasetGeneratedAt: state.data.generatedAt, inputSnapshot: snapshot,
-        baseMatchup: matchup, finalScenarioId: 'competitive-factors' };
+      const output = {
+        ...result,
+        runId: `run-${++runNumber}`,
+        completedAt,
+        datasetGeneratedAt: state.data.generatedAt,
+        inputSnapshot: snapshot,
+        baseMatchup: matchup,
+        finalScenarioId: 'injuries',
+      };
       dispatch(ACTIONS.SIMULATION_SUCCEEDED, { result: output, inputSnapshot: snapshot });
       return true;
     } catch (error) {
