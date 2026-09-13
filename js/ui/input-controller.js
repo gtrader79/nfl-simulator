@@ -3,11 +3,44 @@ export function createInputController({ root, handlers }) {
   let bound = false;
   function change(event) {
     const target = event.target;
-    if (target.disabled) return;
-    if (target.dataset.factor) handlers.onFactorChange(target.dataset.factor, target.value);
-    else if (target.dataset.input === 'season') handlers.onSeasonChange(Number(target.value));
-    else if (target.dataset.input === 'teamA') handlers.onTeamAChange(target.value || null);
-    else if (target.dataset.input === 'teamB') handlers.onTeamBChange(target.value || null);
+
+    if (target.disabled) {
+      return;
+    }
+
+    if (
+      target.dataset.injuryTeam
+      && target.dataset.injuryGroup
+    ) {
+      handlers.onInjuryChange(
+        target.dataset.injuryTeam,
+        target.dataset.injuryGroup,
+        target.value,
+      );
+    } else if (target.dataset.factor) {
+      handlers.onFactorChange(
+        target.dataset.factor,
+        target.value,
+      );
+    } else if (
+      target.dataset.input === 'season'
+    ) {
+      handlers.onSeasonChange(
+        Number(target.value),
+      );
+    } else if (
+      target.dataset.input === 'teamA'
+    ) {
+      handlers.onTeamAChange(
+        target.value || null,
+      );
+    } else if (
+      target.dataset.input === 'teamB'
+    ) {
+      handlers.onTeamBChange(
+        target.value || null,
+      );
+    }
   }
   function click(event) {
     const button = event.target.closest('[data-action]');
@@ -28,7 +61,13 @@ export function createInputController({ root, handlers }) {
     },
     setEnabledState(view) {
       const editable = view.lifecycleStatus === 'ready' && view.simulationStatus !== 'running';
-      root.querySelectorAll('[data-input], [data-factor]').forEach(control => { control.disabled = !editable; });
+      root
+        .querySelectorAll(
+          '[data-input], [data-factor], [data-injury-team]',
+        )
+        .forEach((control) => {
+          control.disabled = !editable;
+        });
       root.querySelectorAll('[data-action="run"]').forEach(button => { button.disabled = !view.canRunSimulation; });
       root.querySelectorAll('[data-action="reset"]').forEach(button => { button.disabled = view.lifecycleStatus !== 'ready'; });
     },
