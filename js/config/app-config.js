@@ -20,6 +20,7 @@ export const APP_CONFIG = deepFreeze({
     { id: 'stadium-weather', order: 3, label: 'Stadium & Weather' },
     { id: 'fatigue', order: 4, label: 'Fatigue' },
     { id: 'competitive-factors', order: 5, label: 'Competitive Factors' },
+    { id: 'injuries', order: 6, label: 'Injuries' },
   ],
   factors: {
     defaults: {
