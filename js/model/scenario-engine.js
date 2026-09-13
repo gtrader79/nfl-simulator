@@ -25,6 +25,13 @@ export const FACTOR_OPTIONS = Object.freeze({
   momentum: Object.freeze(['team-a', 'neutral', 'team-b']),
 });
 
+export const INJURY_STATUS_OPTIONS = Object.freeze([
+  'available',
+  'questionable',
+  'doubtful',
+  'out',
+]);
+
 const PASS_COMPONENT_PAIR_IDS = Object.freeze(new Set([
   'pass_efficiency',
   'pressure',
@@ -75,10 +82,142 @@ function canonicalizeZero(value) {
   return value === 0 ? 0 : value;
 }
 
+function clamp(value, minimum, maximum) {
+  return Math.min(maximum, Math.max(minimum, value));
+}
+
 function requireOption(value, options, path) {
   if (!options.includes(value)) {
     throw new RangeError(`${path} must be one of: ${options.join(', ')}.`);
   }
+}
+
+function requireInjurySide(side, positionGroups, path) {
+  if (!isPlainObject(side)) {
+    throw new TypeError(`${path} must be a plain object.`);
+  }
+
+  const approvedIds = positionGroups.map((group) => group.id);
+  const actualIds = Object.keys(side);
+
+  if (
+    actualIds.length !== approvedIds.length
+    || approvedIds.some((id) => !Object.hasOwn(side, id))
+    || actualIds.some((id) => !approvedIds.includes(id))
+  ) {
+    throw new RangeError(
+      `${path} must contain exactly the certified injury position groups.`,
+    );
+  }
+
+  approvedIds.forEach((id) => {
+    requireOption(
+      side[id],
+      INJURY_STATUS_OPTIONS,
+      `${path}.${id}`,
+    );
+  });
+}
+
+function requireInjuryConfig(modelConfig) {
+  const injuries = modelConfig?.injuries;
+
+  if (!isPlainObject(injuries)) {
+    throw new TypeError('modelConfig.injuries must be a plain object.');
+  }
+
+  if (!isPlainObject(injuries.availabilityShocks)) {
+    throw new TypeError(
+      'modelConfig.injuries.availabilityShocks must be a plain object.',
+    );
+  }
+
+  if (!isPlainObject(injuries.groupBurdenBounds)) {
+    throw new TypeError(
+      'modelConfig.injuries.groupBurdenBounds must be a plain object.',
+    );
+  }
+
+  if (!Array.isArray(injuries.positionGroups)) {
+    throw new TypeError(
+      'modelConfig.injuries.positionGroups must be an array.',
+    );
+  }
+
+  if (
+    injuries.groupBurdenBounds.minimum !== 0
+    || injuries.groupBurdenBounds.maximum !== 1
+  ) {
+    throw new RangeError(
+      'Scenario 6 GroupBurden bounds must remain exactly [0, 1].',
+    );
+  }
+
+  for (const status of INJURY_STATUS_OPTIONS) {
+    if (!isFiniteNumber(injuries.availabilityShocks[status])) {
+      throw new TypeError(
+        `modelConfig.injuries.availabilityShocks.${status} must be finite.`,
+      );
+    }
+  }
+
+  const seenIds = new Set();
+
+  injuries.positionGroups.forEach((group, index) => {
+    const path = `modelConfig.injuries.positionGroups[${index}]`;
+
+    if (!isPlainObject(group)) {
+      throw new TypeError(`${path} must be a plain object.`);
+    }
+
+    if (
+      typeof group.id !== 'string'
+      || group.id.length === 0
+      || seenIds.has(group.id)
+    ) {
+      throw new TypeError(
+        'Scenario 6 position-group IDs must be unique nonempty strings.',
+      );
+    }
+
+    seenIds.add(group.id);
+
+    if (
+      !isFiniteNumber(group.groupImportanceWeight)
+      || group.groupImportanceWeight <= 0
+      || group.groupImportanceWeight > 1
+    ) {
+      throw new RangeError(
+        `${path}.groupImportanceWeight must be inside (0, 1].`,
+      );
+    }
+
+    if (
+      !isFiniteNumber(group.coefficient)
+      || group.coefficient < 0
+    ) {
+      throw new RangeError(
+        `${path}.coefficient must be a finite nonnegative number.`,
+      );
+    }
+
+    if (
+      typeof group.active !== 'boolean'
+      || typeof group.fixedZero !== 'boolean'
+    ) {
+      throw new TypeError(
+        `${path}.active and ${path}.fixedZero must be Boolean.`,
+      );
+    }
+
+    if (group.fixedZero && group.coefficient !== 0) {
+      throw new RangeError(
+        `${path} fixed-zero groups must retain coefficient zero.`,
+      );
+    }
+  });
+
+  return injuries;
 }
 
 function requireFactors(factors) {
@@ -201,6 +340,114 @@ function getPassComponent(baseMatchup) {
     throw new RangeError('Pass-component score must remain finite.');
   }
   return passComponent;
+}
+
+/**
+ * Calculate the certified Scenario 6 manual injury adjustment.
+ *
+ * Positive total favors Team A because the certified orientation is:
+ * Team B burden minus Team A burden.
+ */
+export function calculateInjuryAdjustment({
+  injuries,
+  modelConfig,
+} = {}) {
+  const injuryConfig = requireInjuryConfig(modelConfig);
+
+  if (!isPlainObject(injuries)) {
+    throw new TypeError('injuries must be a plain object.');
+  }
+
+  requireInjurySide(
+    injuries.teamA,
+    injuryConfig.positionGroups,
+    'injuries.teamA',
+  );
+
+  requireInjurySide(
+    injuries.teamB,
+    injuryConfig.positionGroups,
+    'injuries.teamB',
+  );
+
+  const minimumBurden =
+    injuryConfig.groupBurdenBounds.minimum;
+
+  const maximumBurden =
+    injuryConfig.groupBurdenBounds.maximum;
+
+  let total = 0;
+
+  const groups = injuryConfig.positionGroups.map((group) => {
+    const teamAStatus = injuries.teamA[group.id];
+    const teamBStatus = injuries.teamB[group.id];
+
+    const teamAShock =
+      injuryConfig.availabilityShocks[teamAStatus];
+
+    const teamBShock =
+      injuryConfig.availabilityShocks[teamBStatus];
+
+    const teamABurden = clamp(
+      group.groupImportanceWeight * teamAShock,
+      minimumBurden,
+      maximumBurden,
+    );
+
+    const teamBBurden = clamp(
+      group.groupImportanceWeight * teamBShock,
+      minimumBurden,
+      maximumBurden,
+    );
+
+    const feature = teamBBurden - teamABurden;
+    const contribution = group.coefficient * feature;
+
+    const finiteValues = [
+      teamAShock,
+      teamBShock,
+      teamABurden,
+      teamBBurden,
+      feature,
+      contribution,
+    ];
+
+    if (!finiteValues.every(isFiniteNumber)) {
+      throw new RangeError(
+        `Scenario 6 injury calculation for ${group.id} must remain finite.`,
+      );
+    }
+
+    total += contribution;
+
+    return {
+      id: group.id,
+      active: group.active,
+      fixedZero: group.fixedZero,
+      coefficient: group.coefficient,
+      groupImportanceWeight: group.groupImportanceWeight,
+      teamAStatus,
+      teamBStatus,
+      teamAShock: canonicalizeZero(teamAShock),
+      teamBShock: canonicalizeZero(teamBShock),
+      teamABurden: canonicalizeZero(teamABurden),
+      teamBBurden: canonicalizeZero(teamBBurden),
+      feature: canonicalizeZero(feature),
+      contribution: canonicalizeZero(contribution),
+    };
+  });
+
+  if (!isFiniteNumber(total)) {
+    throw new RangeError(
+      'Scenario 6 total injury adjustment must remain finite.',
+    );
+  }
+
+  return deepFreeze({
+    orientation: injuryConfig.featureOrientation,
+    total: canonicalizeZero(total),
+    groups,
+  });
 }
 
 function calculateAdjustments(baseMatchup, factors, situational) {
