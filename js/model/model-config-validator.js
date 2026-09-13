@@ -14,6 +14,7 @@ export const APPROVED_SCENARIOS = Object.freeze([
   Object.freeze({ id: 'stadium-weather', order: 3 }),
   Object.freeze({ id: 'fatigue', order: 4 }),
   Object.freeze({ id: 'competitive-factors', order: 5 }),
+  Object.freeze({ id: 'injuries', order: 6 }),
 ]);
 
 export const APPROVED_METRIC_PAIRINGS = Object.freeze({
@@ -336,7 +337,7 @@ function validateAppConfig(appConfig, modelConfig, issues) {
       issues,
       'appConfig.scenarios',
       'SCENARIOS',
-      'The application configuration must declare the five active scenarios.',
+      'The application configuration must declare the six active scenarios.',
     );
     return;
   }
@@ -346,7 +347,7 @@ function validateAppConfig(appConfig, modelConfig, issues) {
       issues,
       'appConfig.scenarios',
       'SCENARIO_COUNT',
-      'Exactly five Version 1 scenarios are required.',
+      'Exactly six Version 1 scenarios are required.',
     );
   }
   const scenarioIds = new Set();
@@ -369,7 +370,7 @@ function validateAppConfig(appConfig, modelConfig, issues) {
         issues,
         path,
         'SCENARIO_ORDER',
-        'Scenario IDs and order must match the approved Version 1 sequence.',
+        'Scenario IDs and order must match the approved active scenario sequence.',
       );
     }
   });
