@@ -241,7 +241,7 @@ test('unsupported certified situational terms remain exactly zero', () => {
   assertEqual(result.adjustments.competitive.gameType, 0);
 });
 
-test('scenario order is exactly one through six and Scenario 1 is deterministic, () => {
+test('scenario order is exactly one through six and Scenario 1 is deterministic', () => {
   const result = run();
 
   assertDeepEqual(result.scenarios.map(({ id, order }) => ({ id, order })), [
