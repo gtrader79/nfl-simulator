@@ -8,6 +8,7 @@ export const ACTIONS = Object.freeze({
   TEAM_A_CHANGED: 'TEAM_A_CHANGED',
   TEAM_B_CHANGED: 'TEAM_B_CHANGED',
   FACTOR_CHANGED: 'FACTOR_CHANGED',
+  INJURY_CHANGED: 'INJURY_CHANGED',
   BASE_ANALYTICS_STARTED: 'BASE_ANALYTICS_STARTED',
   BASE_ANALYTICS_SUCCEEDED: 'BASE_ANALYTICS_SUCCEEDED',
   BASE_ANALYTICS_FAILED: 'BASE_ANALYTICS_FAILED',
@@ -44,12 +45,22 @@ export const SIMULATION_STATUS = Object.freeze({
 });
 
 const FACTOR_KEYS = Object.freeze(Object.keys(APP_CONFIG.factors.defaults));
+const INJURY_TEAMS = Object.freeze(['teamA', 'teamB']);
+
+const INJURY_GROUP_IDS = Object.freeze(
+  APP_CONFIG.injuries.positionGroups.map((group) => group.id),
+);
+
+const INJURY_STATUS_VALUES = Object.freeze(
+  APP_CONFIG.injuries.options.map((option) => option.value),
+);
 const ACTION_TYPES = new Set(Object.values(ACTIONS));
 const READY_ONLY_ACTIONS = new Set([
   ACTIONS.SEASON_CHANGED,
   ACTIONS.TEAM_A_CHANGED,
   ACTIONS.TEAM_B_CHANGED,
   ACTIONS.FACTOR_CHANGED,
+  ACTIONS.INJURY_CHANGED,
   ACTIONS.BASE_ANALYTICS_STARTED,
   ACTIONS.BASE_ANALYTICS_SUCCEEDED,
   ACTIONS.BASE_ANALYTICS_FAILED,
@@ -220,6 +231,165 @@ function requireFactorChange(payload) {
   return payload;
 }
 
+function requireInjuryConfig(appConfig) {
+  requirePlainObject(appConfig.injuries, 'appConfig.injuries');
+
+  if (
+    !Array.isArray(appConfig.injuries.positionGroups)
+    || appConfig.injuries.positionGroups.length === 0
+  ) {
+    throw new TypeError(
+      'appConfig.injuries.positionGroups must be a nonempty array.',
+    );
+  }
+
+  if (
+    !Array.isArray(appConfig.injuries.options)
+    || appConfig.injuries.options.length === 0
+  ) {
+    throw new TypeError(
+      'appConfig.injuries.options must be a nonempty array.',
+    );
+  }
+
+  requirePlainObject(
+    appConfig.injuries.defaults,
+    'appConfig.injuries.defaults',
+  );
+
+  const groupIds =
+    appConfig.injuries.positionGroups.map((group, index) => {
+      requirePlainObject(
+        group,
+        `appConfig.injuries.positionGroups[${index}]`,
+      );
+
+      return requireNonemptyString(
+        group.id,
+        `appConfig.injuries.positionGroups[${index}].id`,
+      );
+    });
+
+  if (new Set(groupIds).size !== groupIds.length) {
+    throw new RangeError(
+      'appConfig.injuries.positionGroups must not contain duplicate IDs.',
+    );
+  }
+
+  const statusValues =
+    appConfig.injuries.options.map((option, index) => {
+      requirePlainObject(
+        option,
+        `appConfig.injuries.options[${index}]`,
+      );
+
+      return requireNonemptyString(
+        option.value,
+        `appConfig.injuries.options[${index}].value`,
+      );
+    });
+
+  if (new Set(statusValues).size !== statusValues.length) {
+    throw new RangeError(
+      'appConfig.injuries.options must not contain duplicate values.',
+    );
+  }
+
+  INJURY_TEAMS.forEach((team) => {
+    const defaults = requirePlainObject(
+      appConfig.injuries.defaults[team],
+      `appConfig.injuries.defaults.${team}`,
+    );
+
+    const actualKeys = Object.keys(defaults);
+
+    if (
+      actualKeys.length !== groupIds.length
+      || groupIds.some((id) => !Object.hasOwn(defaults, id))
+      || actualKeys.some((id) => !groupIds.includes(id))
+    ) {
+      throw new RangeError(
+        `appConfig.injuries.defaults.${team} must contain exactly the configured injury groups.`,
+      );
+    }
+
+    groupIds.forEach((id) => {
+      if (!statusValues.includes(defaults[id])) {
+        throw new RangeError(
+          `appConfig.injuries.defaults.${team}.${id} is invalid.`,
+        );
+      }
+    });
+  });
+
+  return {
+    groupIds,
+    statusValues,
+  };
+}
+
+function requireInjuryState(
+  value,
+  path = 'injuries',
+  groupIds = INJURY_GROUP_IDS,
+  statusValues = INJURY_STATUS_VALUES,
+) {
+  requirePlainObject(value, path);
+
+  INJURY_TEAMS.forEach((team) => {
+    const side = requirePlainObject(
+      value[team],
+      `${path}.${team}`,
+    );
+
+    const actualKeys = Object.keys(side);
+
+    if (
+      actualKeys.length !== groupIds.length
+      || groupIds.some((id) => !Object.hasOwn(side, id))
+      || actualKeys.some((id) => !groupIds.includes(id))
+    ) {
+      throw new RangeError(
+        `${path}.${team} must contain exactly the configured injury groups.`,
+      );
+    }
+
+    groupIds.forEach((id) => {
+      if (!statusValues.includes(side[id])) {
+        throw new RangeError(
+          `${path}.${team}.${id} is not an approved injury status.`,
+        );
+      }
+    });
+  });
+
+  return value;
+}
+
+function requireInjuryChange(payload) {
+  requirePlainObject(payload, 'action.payload');
+
+  if (!INJURY_TEAMS.includes(payload.team)) {
+    throw new RangeError(
+      'action.payload.team must be teamA or teamB.',
+    );
+  }
+
+  if (!INJURY_GROUP_IDS.includes(payload.positionGroup)) {
+    throw new RangeError(
+      'action.payload.positionGroup is not an approved injury group.',
+    );
+  }
+
+  if (!INJURY_STATUS_VALUES.includes(payload.value)) {
+    throw new RangeError(
+      'action.payload.value is not an approved injury status.',
+    );
+  }
+
+  return payload;
+}
+
 function snapshotMatchesState(snapshot, state) {
   if (!isPlainObject(snapshot) || !isPlainObject(snapshot.factors)) {
     return false;
@@ -277,6 +447,7 @@ function assertStateContract(state) {
   if (!Object.values(SIMULATION_STATUS).includes(state.simulation?.status)) {
     throw new RangeError('initialState.simulation.status is invalid.');
   }
+  requireInjuryState(state.injuries, 'initialState.injuries');
 }
 
 function reduceState(state, action) {
@@ -351,6 +522,7 @@ function reduceState(state, action) {
         },
         matchup: clearMatchup(),
         factors: state.factors,
+        injuries: state.injuries,
         simulation: clearSimulation(),
         notice: null,
       });
@@ -418,6 +590,33 @@ function reduceState(state, action) {
       return freezeState({
         ...candidateState,
         simulation: withRecalculatedStale(state.simulation, candidateState),
+      });
+    }
+
+    case ACTIONS.INJURY_CHANGED: {
+      const change = requireInjuryChange(payload);
+
+      if (
+        state.injuries[change.team][change.positionGroup]
+        === change.value
+      ) {
+        return state;
+      }
+
+      const injuries = copySerializable(
+        {
+          ...state.injuries,
+          [change.team]: {
+            ...state.injuries[change.team],
+            [change.positionGroup]: change.value,
+          },
+        },
+        'injuries',
+      );
+
+      return freezeState({
+        ...state,
+        injuries,
       });
     }
 
@@ -558,7 +757,14 @@ function reduceState(state, action) {
           leagueMetrics: requireLeagueMetrics(payload.leagueMetrics),
         },
         matchup: clearMatchup(),
-        factors: copySerializable(APP_CONFIG.factors.defaults, 'APP_CONFIG.factors.defaults'),
+        factors: copySerializable(
+          APP_CONFIG.factors.defaults,
+          'APP_CONFIG.factors.defaults',
+        ),
+        injuries: copySerializable(
+          APP_CONFIG.injuries.defaults,
+          'APP_CONFIG.injuries.defaults',
+        ),
         simulation: clearSimulation(),
         notice: null,
       });
@@ -588,12 +794,20 @@ export function createInitialState(appConfig = APP_CONFIG) {
   requirePlainObject(appConfig.factors, 'appConfig.factors');
   requirePlainObject(appConfig.factors.defaults, 'appConfig.factors.defaults');
   requirePlainObject(appConfig.factors.options, 'appConfig.factors.options');
+  const injuryContract = requireInjuryConfig(appConfig);
   FACTOR_KEYS.forEach((key) => {
     const value = appConfig.factors.defaults[key];
     if (!Array.isArray(appConfig.factors.options[key]) || !appConfig.factors.options[key].includes(value)) {
       throw new RangeError(`appConfig default is invalid for factor ${key}.`);
     }
   });
+
+  requireInjuryState(
+    appConfig.injuries.defaults,
+    'appConfig.injuries.defaults',
+    injuryContract.groupIds,
+    injuryContract.statusValues,
+  );
 
   return freezeState({
     lifecycle: { status: LIFECYCLE_STATUS.BOOTING, fatalError: null },
@@ -605,7 +819,14 @@ export function createInitialState(appConfig = APP_CONFIG) {
       leagueMetrics: null,
     },
     matchup: clearMatchup(),
-    factors: copySerializable(appConfig.factors.defaults, 'appConfig.factors.defaults'),
+    factors: copySerializable(
+      appConfig.factors.defaults,
+      'appConfig.factors.defaults',
+    ),
+    injuries: copySerializable(
+      appConfig.injuries.defaults,
+      'appConfig.injuries.defaults',
+    ),
     simulation: clearSimulation(),
     notice: null,
   });
