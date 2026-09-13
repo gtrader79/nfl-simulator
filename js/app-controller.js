@@ -7,6 +7,21 @@ import { ACTIONS } from './state/store.js';
 import { selectViewModel, selectCanRunSimulation, selectIsValidMatchup,
   selectTeamA, selectTeamB, selectIsDivisionalMatchup } from './state/selectors.js';
 
+const INJURY_TEAMS = Object.freeze([
+  'teamA',
+  'teamB',
+]);
+
+const INJURY_GROUP_IDS = Object.freeze(
+  APP_CONFIG.injuries.positionGroups
+    .map((group) => group.id),
+);
+
+const INJURY_STATUS_VALUES = Object.freeze(
+  APP_CONFIG.injuries.options
+    .map((option) => option.value),
+);
+
 function freeze(value) {
   if (value && typeof value === 'object' && !Object.isFrozen(value)) {
     Object.values(value).forEach(freeze);
@@ -159,11 +174,28 @@ export function createAppController({ store, repository, metricCatalog,
         return false;
       }
       const state = store.getState();
-      const snapshot = freeze({ season: state.data.selectedSeason,
-        teamAId: state.matchup.teamAId, teamBId: state.matchup.teamBId,
-        teamA: structuredClone(selectTeamA(state, repository)),
-        teamB: structuredClone(selectTeamB(state, repository)),
-        factors: { ...state.factors }, isDivisionalMatchup: selectIsDivisionalMatchup(state, repository) });
+      const snapshot = freeze({
+        season: state.data.selectedSeason,
+        teamAId: state.matchup.teamAId,
+        teamBId: state.matchup.teamBId,
+        teamA: structuredClone(
+          selectTeamA(state, repository),
+        ),
+        teamB: structuredClone(
+          selectTeamB(state, repository),
+        ),
+        factors: {
+          ...state.factors,
+        },
+        injuries: structuredClone(
+          state.injuries,
+        ),
+        isDivisionalMatchup:
+          selectIsDivisionalMatchup(
+            state,
+            repository,
+          ),
+      });
       dispatch(ACTIONS.SIMULATION_STARTED);
       await yieldFrame();
       if (destroyed || generation !== token) return false;
@@ -194,6 +226,40 @@ export function createAppController({ store, repository, metricCatalog,
         || !APP_CONFIG.factors.options[factor].includes(value)) return false;
       dispatch(ACTIONS.FACTOR_CHANGED, { factor, value }); return true;
     },
+
+    onInjuryChange(
+      team,
+      positionGroup,
+      value,
+    ) {
+      if (!editable()) {
+        return false;
+      }
+
+      if (
+        !INJURY_TEAMS.includes(team)
+        || !INJURY_GROUP_IDS.includes(
+          positionGroup,
+        )
+        || !INJURY_STATUS_VALUES.includes(
+          value,
+        )
+      ) {
+        return false;
+      }
+
+      dispatch(
+        ACTIONS.INJURY_CHANGED,
+        {
+          team,
+          positionGroup,
+          value,
+        },
+      );
+
+      return true;
+    },
+    
     onSeasonChange(selectedSeason) {
       if (!editable()) return false;
       if (!store.getState().data.availableSeasons.includes(selectedSeason)) {
