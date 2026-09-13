@@ -415,6 +415,209 @@ test('142 a situational swing toward Team B names Team B and preserves its direc
         1 - mean;
   },
 );
+test(
+  '143 active Scenario 6 injury controls render from configuration and default to Available',
+  async () =>
+    withUI(({ root }) => {
+      const controls = [
+        ...root.querySelectorAll(
+          '[data-injury-team][data-injury-group]',
+        ),
+      ];
+
+      assertEqual(
+        controls.length,
+        APP_CONFIG.injuries
+          .positionGroups.length
+          * 2,
+      );
+
+      assert(
+        controls.every(
+          (control) =>
+            control.value === 'available',
+        ),
+      );
+
+      assertDeepEqual(
+        [
+          ...new Set(
+            controls.map(
+              (control) =>
+                control.dataset.injuryGroup,
+            ),
+          ),
+        ],
+        APP_CONFIG.injuries
+          .positionGroups
+          .map((group) => group.id),
+      );
+
+      assertEqual(
+        root.querySelectorAll(
+          '.coming-soon strong',
+        )[0].textContent,
+        'Strength of Schedule',
+      );
+
+      assertEqual(
+        [...root.querySelectorAll(
+          '.coming-soon strong',
+        )].some(
+          (element) =>
+            element.textContent
+              === 'Injuries',
+        ),
+        false,
+      );
+
+      assert(
+        [
+          ...root.querySelectorAll(
+            '#condition-groups > details',
+          ),
+        ].every(
+          (details) => !details.open,
+        ),
+      );
+    }),
+);
+test(
+  '144 Scenario 6 injury controls update semantic state without automatically running',
+  async () =>
+    withUI(
+      ({
+        q,
+        change,
+        store,
+        calls,
+      }) => {
+        change(
+          '[data-injury-team="teamA"][data-injury-group="qb"]',
+          'questionable',
+        );
+
+        assertEqual(
+          store.getState()
+            .injuries.teamA.qb,
+          'questionable',
+        );
+
+        assertEqual(
+          store.getState()
+            .injuries.teamB.qb,
+          'available',
+        );
+
+        assertEqual(
+          calls(),
+          0,
+        );
+
+        assertEqual(
+          q(
+            '[data-injury-team="teamA"][data-injury-group="qb"]',
+          ).value,
+          'questionable',
+        );
+      },
+    ),
+);
+
+test(
+  '145 Scenario 6 injury controls become stale inputs, rerun explicitly, and Reset restores Available',
+  async () =>
+    withUI(
+      async ({
+        root,
+        q,
+        change,
+        selectTeams,
+        run,
+        store,
+        calls,
+      }) => {
+        selectTeams();
+
+        change(
+          '[data-injury-team="teamA"][data-injury-group="qb"]',
+          'questionable',
+        );
+
+        await run();
+
+        assertEqual(
+          calls(),
+          1,
+        );
+
+        assertEqual(
+          store.getState()
+            .simulation.result
+            .inputSnapshot
+            .injuries.teamA.qb,
+          'questionable',
+        );
+
+        change(
+          '[data-injury-team="teamB"][data-injury-group="wr"]',
+          'out',
+        );
+
+        assertEqual(
+          store.getState()
+            .simulation.isStale,
+          true,
+        );
+
+        assertEqual(
+          q('#stale-banner').hidden,
+          false,
+        );
+
+        assertEqual(
+          calls(),
+          1,
+        );
+
+        await run();
+
+        assertEqual(
+          calls(),
+          2,
+        );
+
+        assertEqual(
+          store.getState()
+            .simulation.isStale,
+          false,
+        );
+
+        assertEqual(
+          store.getState()
+            .simulation.result
+            .inputSnapshot
+            .injuries.teamB.wr,
+          'out',
+        );
+
+        q(
+          '[data-action="reset"]',
+        ).click();
+
+        assert(
+          [
+            ...root.querySelectorAll(
+              '[data-injury-team][data-injury-group]',
+            ),
+          ].every(
+            (control) =>
+              control.value === 'available',
+          ),
+        );
+      },
+    ),
+);
   const summary=buildGameDaySummary(result);
   assert(summary.headline.includes(result.inputSnapshot.teamB.teamName));
   assert(summary.body.includes(`20.0 percentage points for ${result.inputSnapshot.teamB.abbreviation}`));
