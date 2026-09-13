@@ -174,6 +174,7 @@ export function selectViewModel(state, repository) {
     teamA,
     teamB,
     factors: state.factors,
+    injuries: state.injuries,
     isValidMatchup,
     isDivisionalMatchup: isValidMatchup
       ? selectIsDivisionalMatchup(state, repository)
