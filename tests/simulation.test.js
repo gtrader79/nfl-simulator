@@ -91,7 +91,7 @@ function createBaseMatchup(teamA = createTeam('AAA'), teamB = createTeam('BBB'))
   });
 }
 
-ffunction run({
+function run({
   matchup = createBaseMatchup(),
   factors = createFactors(),
   injuries = createInjuries(),
