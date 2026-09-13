@@ -598,7 +598,7 @@ function createScenario({
 }
 
 /**
- * Executes the five approved scenarios cumulatively.
+ * Executes the six approved scenarios cumulatively.
  *
  * `matchup` may be a certified base-matchup result or `{teamA, teamB}`. The
  * latter form uses `leagueMetrics` to calculate the base result first.
@@ -606,6 +606,7 @@ function createScenario({
 export function runScenarios({
   matchup,
   factors,
+  injuries,
   leagueMetrics,
   modelConfig,
   randomSource,
@@ -642,21 +643,47 @@ export function runScenarios({
   const fatigueScore = stadiumWeatherScore + adjustments.fatigue.total;
   const competitiveScore = fatigueScore + adjustments.competitive.total;
 
+  const injuryAdjustment = calculateInjuryAdjustment({
+    injuries,
+    modelConfig,
+  });
+
+  const injuryScore =
+    competitiveScore + injuryAdjustment.total;
+
   const scenarioScoreSamples = [
     [baseScore],
     simulation.samples,
-    simulation.residuals.map((residual) => stadiumWeatherScore + residual),
-    simulation.residuals.map((residual) => fatigueScore + residual),
-    simulation.residuals.map((residual) => competitiveScore + residual),
+    simulation.residuals.map(
+      (residual) =>
+        stadiumWeatherScore + residual,
+    ),
+    simulation.residuals.map(
+      (residual) =>
+        fatigueScore + residual,
+    ),
+    simulation.residuals.map(
+      (residual) =>
+        competitiveScore + residual,
+    ),
+    simulation.residuals.map(
+      (residual) =>
+        injuryScore + residual,
+    ),
   ];
   const cumulativeAdjustments = [
     0,
     0,
     adjustments.stadiumWeather.total,
-    adjustments.stadiumWeather.total + adjustments.fatigue.total,
+    adjustments.stadiumWeather.total
+      + adjustments.fatigue.total,
     adjustments.stadiumWeather.total
       + adjustments.fatigue.total
       + adjustments.competitive.total,
+    adjustments.stadiumWeather.total
+      + adjustments.fatigue.total
+      + adjustments.competitive.total
+      + injuryAdjustment.total,
   ];
 
   const scenarios = APPROVED_SCENARIOS.map((definition, index) => createScenario({
@@ -675,7 +702,10 @@ export function runScenarios({
     teamBId: baseMatchup.teamBId,
     baseScore,
     factors: factorsSnapshot,
-    adjustments,
+    adjustments: {
+      ...adjustments,
+      injuries: injuryAdjustment,
+    },
     residuals: [...simulation.residuals],
     scenarios,
   });
