@@ -223,11 +223,11 @@ test('118 selecting teams immediately populates stats, base contributions and ru
   assertEqual(root.querySelectorAll('#base-content tbody tr').length, 14);
   assertEqual(q('.desktop-run').disabled, false); assertEqual(calls(), 0);
 }));
-test('119 UI Run displays five model summaries and focuses Prediction', async () => withUI(async ({ root, q, selectTeams, run, store, calls }) => {
+test('119 UI Run displays six model summaries and focuses Prediction', async () => withUI(async ({ root, q, selectTeams, run, store, calls }) => {
   selectTeams(); await run(); assertEqual(calls(), 1);
   assertEqual(store.getState().simulation.status, 'complete');
   assertEqual(root.querySelectorAll('.probability').length, 2);
-  assertEqual(root.querySelectorAll('#progression-content tbody tr').length, 5);
+  assertEqual(root.querySelectorAll('#progression-content tbody tr').length, 6);
   assertEqual(document.activeElement, q('#prediction-heading'));
   assertEqual(q('#announcer').textContent, 'Simulation completed');
 }));
@@ -299,9 +299,9 @@ function visualView(store) {
   return {simulationResult:result,simulationStatus:state.simulation.status,areResultsStale:state.simulation.isStale,
     baseAnalytics:state.matchup.baseAnalytics,teamA:result?.inputSnapshot.teamA,teamB:result?.inputSnapshot.teamB};
 }
-test('130 progression chart uses the five existing summaries and exact uncertainty endpoints',async()=>withUI(async h=>{
+test('130 progression chart uses the six active summaries and exact uncertainty endpoints',async()=>withUI(async h=>{
   h.selectTeams();await h.run();const result=h.store.getState().simulation.result,c=probabilityChartConfig(result);
-  assertEqual(c.data.labels.length,5);assertDeepEqual(c.data.datasets[0].data,result.scenarios.map(s=>s.probabilitySummary.teamA.p5*100));
+  assertEqual(c.data.labels.length,6);assertDeepEqual(c.data.datasets[0].data,result.scenarios.map(s=>s.probabilitySummary.teamA.p5*100));
   assertDeepEqual(c.data.datasets[1].data,result.scenarios.map(s=>s.probabilitySummary.teamA.p95*100));
   assertDeepEqual(c.data.datasets[2].data,result.scenarios.map(s=>s.probabilitySummary.teamA.mean*100));
   assert(c.data.datasets[5].borderDash.length>0);assert(c.data.datasets[6].data.every(x=>x===50));
@@ -333,7 +333,7 @@ test('134 a chart construction failure preserves analytical tables and reports l
   h.selectTeams();await h.run();h.root.querySelectorAll('[data-chart]').forEach(host=>{host.getBoundingClientRect=()=>({width:600,height:300});});
   let failures=0;class BrokenChart{constructor(){throw new Error('Synthetic chart failure');}}
   const charts=createCharts({root:h.root,Chart:BrokenChart,ResizeObserverImpl:null,onError:()=>failures++});
-  try{charts.render(visualView(h.store));assertEqual(failures,3);assertEqual(h.root.querySelectorAll('#progression-content tbody tr').length,5);
+  try{charts.render(visualView(h.store));assertEqual(failures,3);assertEqual(h.root.querySelectorAll('#progression-content tbody tr').length,6);
     assert(h.root.querySelector('[data-chart-status]').textContent.includes('unavailable'));
   }finally{charts.destroy();}
 }));
@@ -405,7 +405,16 @@ test('141 a rounded even matchup has a neutral game day headline',async()=>withU
 }));
 test('142 a situational swing toward Team B names Team B and preserves its direction',async()=>withUI(async h=>{
   h.selectTeams();await h.run();const result=structuredClone(h.store.getState().simulation.result);
-  [.6,.6,.4,.4,.4].forEach((mean,i)=>{result.scenarios[i].probabilitySummary.teamA.mean=mean;result.scenarios[i].probabilitySummary.teamB.mean=1-mean;});
+  [.6,.6,.4,.4,.4,.4].forEach(
+  (mean, i) => {
+    result.scenarios[i]
+      .probabilitySummary.teamA.mean = mean;
+
+    result.scenarios[i]
+      .probabilitySummary.teamB.mean =
+        1 - mean;
+  },
+);
   const summary=buildGameDaySummary(result);
   assert(summary.headline.includes(result.inputSnapshot.teamB.teamName));
   assert(summary.body.includes(`20.0 percentage points for ${result.inputSnapshot.teamB.abbreviation}`));
