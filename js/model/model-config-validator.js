@@ -69,6 +69,117 @@ const APPROVED_MONITORING = Object.freeze({
   minimumEligibleCalibrationBinGames: 40,
 });
 
+const APPROVED_INJURY_VERSION = 'scenario6-injuries-20260912';
+const APPROVED_INJURY_DATE = '2026-09-12';
+const APPROVED_INJURY_CERTIFICATION_STATUS =
+  'certified-with-qualified-holdout-exception';
+const APPROVED_INJURY_HOLDOUT_SEASON = 2025;
+
+const APPROVED_INJURY_EXCEPTIONS = Object.freeze({
+  simpleBaselineLogLossPairedBootstrapUpper95: Object.freeze({
+    observed: 0.012869,
+    threshold: 0.005,
+  }),
+  simpleBaselineBrierPairedBootstrapUpper95: Object.freeze({
+    observed: 0.005412,
+    threshold: 0.005,
+  }),
+  expectedCalibrationError: Object.freeze({
+    observed: 0.045268,
+    threshold: 0.04,
+  }),
+  maximumEligibleBinGap: Object.freeze({
+    observed: 0.152149,
+    threshold: 0.08,
+  }),
+});
+
+const APPROVED_INJURY_DEVELOPMENT = Object.freeze({
+  featureFirstSeason: 2016,
+  featureLastSeason: 2024,
+  coefficientFirstSeason: 2018,
+  coefficientLastSeason: 2024,
+  rollingValidationFirstSeason: 2021,
+  rollingValidationLastSeason: 2024,
+  manualTranslationGames: 2472,
+  holdoutEligibleGames: 266,
+});
+
+const APPROVED_INJURY_AVAILABILITY_SHOCKS = Object.freeze({
+  available: 0,
+  questionable: 0.316669,
+  doubtful: 0.990426,
+  out: 1,
+});
+
+const APPROVED_INJURY_POSITION_GROUPS = Object.freeze([
+  Object.freeze({
+    id: 'qb',
+    groupImportanceWeight: 0.8095332291842642,
+    coefficient: 4.128588701054724,
+    active: true,
+    fixedZero: false,
+  }),
+  Object.freeze({
+    id: 'rb',
+    groupImportanceWeight: 0.3383135840625962,
+    coefficient: 2.7755084081758117,
+    active: true,
+    fixedZero: false,
+  }),
+  Object.freeze({
+    id: 'wr',
+    groupImportanceWeight: 0.24501583338979643,
+    coefficient: 6.217565833083719,
+    active: true,
+    fixedZero: false,
+  }),
+  Object.freeze({
+    id: 'te',
+    groupImportanceWeight: 0.3670670359302999,
+    coefficient: 1.2334874543453394,
+    active: true,
+    fixedZero: false,
+  }),
+  Object.freeze({
+    id: 'ol',
+    groupImportanceWeight: 0.19708840389184681,
+    coefficient: 1.3409174883564927,
+    active: true,
+    fixedZero: false,
+  }),
+  Object.freeze({
+    id: 'defensive-front',
+    groupImportanceWeight: 0.17959775722408947,
+    coefficient: 0,
+    active: false,
+    fixedZero: true,
+  }),
+  Object.freeze({
+    id: 'lb',
+    groupImportanceWeight: 0.20475146692900625,
+    coefficient: 0,
+    active: false,
+    fixedZero: true,
+  }),
+  Object.freeze({
+    id: 'secondary',
+    groupImportanceWeight: 0.17648600880208537,
+    coefficient: 0,
+    active: false,
+    fixedZero: true,
+  }),
+]);
+
+const APPROVED_INJURY_MONITORING = Object.freeze({
+  season: 2026,
+  interimMinimumEligibleBinaryGames: 200,
+  minimumEligibleCalibrationBinGames: 40,
+  expectedCalibrationErrorThreshold: 0.04,
+  maximumEligibleBinGapThreshold: 0.08,
+  pairedBootstrapDegradationMaximum: 0.005,
+});
+
 function isPlainObject(value) {
   if (value === null || typeof value !== 'object' || Array.isArray(value)) {
     return false;
@@ -710,6 +821,524 @@ function validateSituational(modelConfig, expectedFeatureIds, issues) {
   }
 }
 
+function validateInjuries(modelConfig, issues) {
+  const injuries = modelConfig.injuries;
+  if (!validateRequiredObject(injuries, 'modelConfig.injuries', issues)) {
+    return;
+  }
+
+  if (injuries.version !== APPROVED_INJURY_VERSION) {
+    addIssue(
+      issues,
+      'modelConfig.injuries.version',
+      'INJURY_VERSION',
+      `The certified Scenario 6 injury version is exactly ${APPROVED_INJURY_VERSION}.`,
+    );
+  }
+
+  const certification = injuries.certification;
+  if (validateRequiredObject(
+    certification,
+    'modelConfig.injuries.certification',
+    issues,
+  )) {
+    if (
+      certification.status
+      !== APPROVED_INJURY_CERTIFICATION_STATUS
+    ) {
+      addIssue(
+        issues,
+        'modelConfig.injuries.certification.status',
+        'INJURY_CERTIFICATION',
+        'Scenario 6 must retain its certified qualified-holdout disposition.',
+      );
+    }
+
+    if (
+      certification.approvedDate !== APPROVED_INJURY_DATE
+      || !isIsoDate(certification.approvedDate)
+    ) {
+      addIssue(
+        issues,
+        'modelConfig.injuries.certification.approvedDate',
+        'INJURY_CERTIFICATION',
+        `Scenario 6 approval date must remain ${APPROVED_INJURY_DATE}.`,
+      );
+    }
+
+    if (
+      certification.holdoutSeason
+      !== APPROVED_INJURY_HOLDOUT_SEASON
+    ) {
+      addIssue(
+        issues,
+        'modelConfig.injuries.certification.holdoutSeason',
+        'INJURY_HOLDOUT',
+        'The exposed Scenario 6 holdout season must remain 2025.',
+      );
+    }
+
+    if (certification.holdoutExposed !== true) {
+      addIssue(
+        issues,
+        'modelConfig.injuries.certification.holdoutExposed',
+        'INJURY_HOLDOUT',
+        'The 2025 Scenario 6 holdout must remain recorded as exposed.',
+      );
+    }
+
+    if (certification.retuningAuthorized !== false) {
+      addIssue(
+        issues,
+        'modelConfig.injuries.certification.retuningAuthorized',
+        'INJURY_HOLDOUT',
+        'Retuning from the exposed 2025 Scenario 6 holdout is prohibited.',
+      );
+    }
+
+    if (!Array.isArray(certification.acceptedExceptions)) {
+      addIssue(
+        issues,
+        'modelConfig.injuries.certification.acceptedExceptions',
+        'INJURY_EXCEPTION_SET',
+        'The four formally accepted Scenario 6 holdout failures are required.',
+      );
+    } else {
+      const approvedIds = Object.keys(APPROVED_INJURY_EXCEPTIONS);
+      const seenIds = new Set();
+
+      certification.acceptedExceptions.forEach((exception, index) => {
+        const path =
+          `modelConfig.injuries.certification.acceptedExceptions[${index}]`;
+
+        if (!isPlainObject(exception)) {
+          addIssue(
+            issues,
+            path,
+            'INJURY_EXCEPTION',
+            'Each Scenario 6 accepted exception must be a plain object.',
+          );
+          return;
+        }
+
+        const expected =
+          APPROVED_INJURY_EXCEPTIONS[exception.criterion];
+
+        if (!expected) {
+          addIssue(
+            issues,
+            `${path}.criterion`,
+            'INJURY_EXCEPTION',
+            'The Scenario 6 exception criterion is not approved.',
+          );
+        } else if (seenIds.has(exception.criterion)) {
+          addIssue(
+            issues,
+            `${path}.criterion`,
+            'INJURY_EXCEPTION',
+            'Scenario 6 exception criteria must be unique.',
+          );
+        } else {
+          seenIds.add(exception.criterion);
+
+          if (exception.observed !== expected.observed) {
+            addIssue(
+              issues,
+              `${path}.observed`,
+              'INJURY_EXCEPTION',
+              'The certified Scenario 6 holdout observation must remain unchanged.',
+            );
+          }
+
+          if (exception.threshold !== expected.threshold) {
+            addIssue(
+              issues,
+              `${path}.threshold`,
+              'INJURY_EXCEPTION',
+              'The approved Scenario 6 acceptance threshold must remain unchanged.',
+            );
+          }
+        }
+
+        if (
+          exception.disposition
+          !== APPROVED_EXCEPTION_DISPOSITION
+        ) {
+          addIssue(
+            issues,
+            `${path}.disposition`,
+            'INJURY_EXCEPTION',
+            'The Scenario 6 holdout failure must remain explicitly formally accepted.',
+          );
+        }
+
+        if (
+          exception.approvedDate !== APPROVED_INJURY_DATE
+          || !isIsoDate(exception.approvedDate)
+        ) {
+          addIssue(
+            issues,
+            `${path}.approvedDate`,
+            'INJURY_EXCEPTION',
+            `Scenario 6 exception approval date must remain ${APPROVED_INJURY_DATE}.`,
+          );
+        }
+      });
+
+      if (
+        certification.acceptedExceptions.length
+          !== approvedIds.length
+        || approvedIds.some(
+          (criterion) => !seenIds.has(criterion),
+        )
+      ) {
+        addIssue(
+          issues,
+          'modelConfig.injuries.certification.acceptedExceptions',
+          'INJURY_EXCEPTION_SET',
+          'All four approved Scenario 6 holdout failures must appear exactly once.',
+        );
+      }
+    }
+  }
+
+  const development = injuries.development;
+  if (validateRequiredObject(
+    development,
+    'modelConfig.injuries.development',
+    issues,
+  )) {
+    Object.entries(APPROVED_INJURY_DEVELOPMENT).forEach(
+      ([field, expected]) => {
+        if (development[field] !== expected) {
+          addIssue(
+            issues,
+            `modelConfig.injuries.development.${field}`,
+            'INJURY_DEVELOPMENT',
+            'Certified Scenario 6 development metadata must remain unchanged.',
+          );
+        }
+      },
+    );
+  }
+
+  const regularization = injuries.selectedRegularization;
+  if (validateRequiredObject(
+    regularization,
+    'modelConfig.injuries.selectedRegularization',
+    issues,
+  )) {
+    if (regularization.alpha !== 100) {
+      addIssue(
+        issues,
+        'modelConfig.injuries.selectedRegularization.alpha',
+        'INJURY_REGULARIZATION',
+        'The certified Scenario 6 ridge alpha is exactly 100.',
+      );
+    }
+    if (regularization.halfLife !== 'none') {
+      addIssue(
+        issues,
+        'modelConfig.injuries.selectedRegularization.halfLife',
+        'INJURY_REGULARIZATION',
+        'The certified Scenario 6 recency half-life is "none".',
+      );
+    }
+  }
+
+  if (injuries.baselineAvailability !== 1) {
+    addIssue(
+      issues,
+      'modelConfig.injuries.baselineAvailability',
+      'INJURY_AVAILABILITY',
+      'Scenario 6 healthy baseline availability is exactly 1.',
+    );
+  }
+
+  if (injuries.featureOrientation !== 'team-b-minus-team-a') {
+    addIssue(
+      issues,
+      'modelConfig.injuries.featureOrientation',
+      'INJURY_ORIENTATION',
+      'Scenario 6 injury features must remain Team B burden minus Team A burden.',
+    );
+  }
+
+  const shocks = injuries.availabilityShocks;
+  if (validateRequiredObject(
+    shocks,
+    'modelConfig.injuries.availabilityShocks',
+    issues,
+  )) {
+    Object.entries(APPROVED_INJURY_AVAILABILITY_SHOCKS).forEach(
+      ([status, expected]) => {
+        if (shocks[status] !== expected) {
+          addIssue(
+            issues,
+            `modelConfig.injuries.availabilityShocks.${status}`,
+            'INJURY_AVAILABILITY',
+            'Certified Scenario 6 availability shocks must remain unchanged.',
+          );
+        }
+      },
+    );
+
+    if (
+      !(
+        shocks.available <= shocks.questionable
+        && shocks.questionable <= shocks.doubtful
+        && shocks.doubtful <= shocks.out
+      )
+    ) {
+      addIssue(
+        issues,
+        'modelConfig.injuries.availabilityShocks',
+        'INJURY_AVAILABILITY',
+        'Scenario 6 availability shock severity must be monotonic.',
+      );
+    }
+  }
+
+  const bounds = injuries.groupBurdenBounds;
+  if (validateRequiredObject(
+    bounds,
+    'modelConfig.injuries.groupBurdenBounds',
+    issues,
+  )) {
+    if (bounds.minimum !== 0 || bounds.maximum !== 1) {
+      addIssue(
+        issues,
+        'modelConfig.injuries.groupBurdenBounds',
+        'INJURY_BOUNDS',
+        'Scenario 6 GroupBurden must remain bounded to [0, 1].',
+      );
+    }
+  }
+
+  const translation = injuries.manualTranslation;
+  if (validateRequiredObject(
+    translation,
+    'modelConfig.injuries.manualTranslation',
+    issues,
+  )) {
+    if (translation.method !== 'group_lsq_weight') {
+      addIssue(
+        issues,
+        'modelConfig.injuries.manualTranslation.method',
+        'INJURY_TRANSLATION',
+        'The certified manual translation method is group_lsq_weight.',
+      );
+    }
+    if (
+      translation.developmentFirstSeason !== 2016
+      || translation.developmentLastSeason !== 2024
+    ) {
+      addIssue(
+        issues,
+        'modelConfig.injuries.manualTranslation',
+        'INJURY_TRANSLATION',
+        'Manual translation must retain its 2016–2024 development boundary.',
+      );
+    }
+  }
+
+  if (!Array.isArray(injuries.positionGroups)) {
+    addIssue(
+      issues,
+      'modelConfig.injuries.positionGroups',
+      'INJURY_GROUP_SET',
+      'Scenario 6 requires the eight certified position groups.',
+    );
+  } else {
+    const seenIds = new Set();
+
+    injuries.positionGroups.forEach((group, index) => {
+      const path =
+        `modelConfig.injuries.positionGroups[${index}]`;
+      const expected =
+        APPROVED_INJURY_POSITION_GROUPS[index];
+
+      if (!isPlainObject(group)) {
+        addIssue(
+          issues,
+          path,
+          'INJURY_GROUP',
+          'Each Scenario 6 position-group entry must be a plain object.',
+        );
+        return;
+      }
+
+      if (!isNonEmptyString(group.id)) {
+        addIssue(
+          issues,
+          `${path}.id`,
+          'INJURY_GROUP',
+          'Each Scenario 6 position group requires an ID.',
+        );
+      } else if (seenIds.has(group.id)) {
+        addIssue(
+          issues,
+          `${path}.id`,
+          'INJURY_GROUP_SET',
+          'Scenario 6 position-group IDs must be unique.',
+        );
+      } else {
+        seenIds.add(group.id);
+      }
+
+      if (!expected || group.id !== expected.id) {
+        addIssue(
+          issues,
+          `${path}.id`,
+          'INJURY_GROUP_SET',
+          'Scenario 6 position groups and order must match the certified set.',
+        );
+        return;
+      }
+
+      validateFiniteField(
+        group.groupImportanceWeight,
+        `${path}.groupImportanceWeight`,
+        issues,
+        (value) => value > 0 && value <= 1,
+        'Scenario 6 group importance weights must be inside (0, 1].',
+      );
+
+      validateFiniteField(
+        group.coefficient,
+        `${path}.coefficient`,
+        issues,
+        (value) => value >= 0,
+        'Scenario 6 injury coefficients must be nonnegative.',
+      );
+
+      if (
+        group.groupImportanceWeight
+        !== expected.groupImportanceWeight
+      ) {
+        addIssue(
+          issues,
+          `${path}.groupImportanceWeight`,
+          'INJURY_GROUP',
+          'The certified Scenario 6 group importance weight must remain unchanged.',
+        );
+      }
+
+      if (group.coefficient !== expected.coefficient) {
+        addIssue(
+          issues,
+          `${path}.coefficient`,
+          'INJURY_GROUP',
+          'The certified Scenario 6 injury coefficient must remain unchanged.',
+        );
+      }
+
+      if (
+        group.active !== expected.active
+        || group.fixedZero !== expected.fixedZero
+      ) {
+        addIssue(
+          issues,
+          path,
+          'INJURY_GROUP',
+          'Scenario 6 active/fixed-zero status must match the certified analytical result.',
+        );
+      }
+
+      if (
+        group.active === true
+        && (
+          !isFiniteNumber(group.coefficient)
+          || group.coefficient <= ZERO_TOLERANCE
+        )
+      ) {
+        addIssue(
+          issues,
+          `${path}.coefficient`,
+          'INJURY_GROUP',
+          'An active Scenario 6 injury group requires a positive coefficient.',
+        );
+      }
+
+      if (
+        group.fixedZero === true
+        && group.coefficient !== 0
+      ) {
+        addIssue(
+          issues,
+          `${path}.coefficient`,
+          'INJURY_GROUP',
+          'A fixed-zero Scenario 6 injury group must retain coefficient zero.',
+        );
+      }
+    });
+
+    const approvedIds =
+      APPROVED_INJURY_POSITION_GROUPS.map(
+        (group) => group.id,
+      );
+
+    if (
+      injuries.positionGroups.length
+        !== APPROVED_INJURY_POSITION_GROUPS.length
+      || approvedIds.some(
+        (id) => !seenIds.has(id),
+      )
+    ) {
+      addIssue(
+        issues,
+        'modelConfig.injuries.positionGroups',
+        'INJURY_GROUP_SET',
+        'All eight certified Scenario 6 position groups must appear exactly once.',
+      );
+    }
+  }
+
+  const monitoring = injuries.monitoring;
+  if (validateRequiredObject(
+    monitoring,
+    'modelConfig.injuries.monitoring',
+    issues,
+  )) {
+    Object.entries(APPROVED_INJURY_MONITORING).forEach(
+      ([field, expected]) => {
+        if (monitoring[field] !== expected) {
+          addIssue(
+            issues,
+            `modelConfig.injuries.monitoring.${field}`,
+            'INJURY_MONITORING',
+            'Certified Scenario 6 prospective-monitoring settings must remain unchanged.',
+          );
+        }
+      },
+    );
+
+    for (const field of [
+      'compareAgainstFrozenScenario5',
+      'compareAgainstSimpleBaseline',
+      'finalSeasonReviewRequired',
+    ]) {
+      if (monitoring[field] !== true) {
+        addIssue(
+          issues,
+          `modelConfig.injuries.monitoring.${field}`,
+          'INJURY_MONITORING',
+          'Required Scenario 6 prospective monitoring must remain enabled.',
+        );
+      }
+    }
+
+    if (!isNonEmptyString(monitoring.recalibrationTrigger)) {
+      addIssue(
+        issues,
+        'modelConfig.injuries.monitoring.recalibrationTrigger',
+        'INJURY_MONITORING',
+        'The approved Scenario 6 recalibration trigger must remain documented.',
+      );
+    }
+  }
+}
+
 function validateProbabilityCalibration(modelConfig, issues) {
   const calibration = modelConfig.probabilityCalibration;
   if (!validateRequiredObject(calibration, 'modelConfig.probabilityCalibration', issues)) {
@@ -1104,6 +1733,7 @@ export function validateModelConfig({ modelConfig, metricCatalog, appConfig } = 
     });
   }
   validateSituational(modelConfig, expectedFeatureIds, issues);
+  validateInjuries(modelConfig, issues);
   validateProbabilityCalibration(modelConfig, issues);
   validateResidualDistribution(modelConfig, issues);
   validateSourceData(modelConfig, appConfig, issues);
