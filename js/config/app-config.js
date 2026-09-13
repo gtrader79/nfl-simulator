@@ -49,6 +49,58 @@ export const APP_CONFIG = deepFreeze({
       momentum: ['team-a', 'neutral', 'team-b'],
     },
   },
+  injuries: {
+    positionGroups: [
+      { id: 'qb', label: 'QB' },
+      { id: 'rb', label: 'RB' },
+      { id: 'wr', label: 'WR' },
+      { id: 'te', label: 'TE' },
+      { id: 'ol', label: 'OL' },
+      { id: 'defensive-front', label: 'Defensive Front' },
+      { id: 'lb', label: 'LB' },
+      { id: 'secondary', label: 'Secondary' },
+    ],
+    options: [
+      {
+        value: 'available',
+        label: 'Available / No Material Injury',
+      },
+      {
+        value: 'questionable',
+        label: 'Questionable',
+      },
+      {
+        value: 'doubtful',
+        label: 'Doubtful',
+      },
+      {
+        value: 'out',
+        label: 'Out',
+      },
+    ],
+    defaults: {
+      teamA: {
+        qb: 'available',
+        rb: 'available',
+        wr: 'available',
+        te: 'available',
+        ol: 'available',
+        'defensive-front': 'available',
+        lb: 'available',
+        secondary: 'available',
+      },
+      teamB: {
+        qb: 'available',
+        rb: 'available',
+        wr: 'available',
+        te: 'available',
+        ol: 'available',
+        'defensive-front': 'available',
+        lb: 'available',
+        secondary: 'available',
+      },
+    },
+  },
   messages: {
     BOOTSTRAP_FAILED: 'The NFL Simulator could not start.',
     CHART_LIBRARY_MISSING: 'Analytics are temporarily unavailable.',
