@@ -1,4 +1,5 @@
 import MODEL_CONFIG from '../js/config/model-config.js';
+import APP_CONFIG from '../js/config/app-config.js';
 import { calculateBaseMatchup } from '../js/model/matchup-model.js';
 import { toWinProbabilities } from '../js/model/probability-model.js';
 import {
@@ -65,6 +66,22 @@ function createFactors(overrides = {}) {
   };
 }
 
+function createInjuries({
+  teamA = {},
+  teamB = {},
+} = {}) {
+  return {
+    teamA: {
+      ...APP_CONFIG.injuries.defaults.teamA,
+      ...teamA,
+    },
+    teamB: {
+      ...APP_CONFIG.injuries.defaults.teamB,
+      ...teamB,
+    },
+  };
+}
+
 function createBaseMatchup(teamA = createTeam('AAA'), teamB = createTeam('BBB')) {
   return calculateBaseMatchup({
     teamA,
@@ -74,9 +91,10 @@ function createBaseMatchup(teamA = createTeam('AAA'), teamB = createTeam('BBB'))
   });
 }
 
-function run({
+ffunction run({
   matchup = createBaseMatchup(),
   factors = createFactors(),
+  injuries = createInjuries(),
   modelConfig = MODEL_CONFIG,
   randomSource = () => 0.5,
   leagueMetrics,
@@ -84,6 +102,7 @@ function run({
   return runScenarios({
     matchup,
     factors,
+    injuries,
     leagueMetrics,
     modelConfig,
     randomSource,
@@ -106,9 +125,9 @@ test('approved semantic factor option sets remain exact', () => {
   assertDeepEqual(FACTOR_OPTIONS.momentum, ['team-a', 'neutral', 'team-b']);
 });
 
-test('neutral defaults produce zero situational adjustments', () => {
+test('neutral defaults produce zero situational and injury adjustments', () => {
   const result = run();
-
+  assertEqual(result.adjustments.injuries.total, 0);
   assertEqual(result.adjustments.stadiumWeather.total, 0);
   assertEqual(result.adjustments.fatigue.total, 0);
   assertEqual(result.adjustments.competitive.total, 0);
@@ -222,7 +241,7 @@ test('unsupported certified situational terms remain exactly zero', () => {
   assertEqual(result.adjustments.competitive.gameType, 0);
 });
 
-test('scenario order is exactly one through five and Scenario 1 is deterministic', () => {
+test('scenario order is exactly one through six and Scenario 1 is deterministic, () => {
   const result = run();
 
   assertDeepEqual(result.scenarios.map(({ id, order }) => ({ id, order })), [
@@ -231,6 +250,7 @@ test('scenario order is exactly one through five and Scenario 1 is deterministic
     { id: 'stadium-weather', order: 3 },
     { id: 'fatigue', order: 4 },
     { id: 'competitive-factors', order: 5 },
+    { id: 'injuries', order: 6 },
   ]);
   assertEqual(result.scenarios[0].deterministic, true);
   assertEqual(result.scenarios[0].teamAProbabilitySamples.length, 1);
@@ -240,7 +260,7 @@ test('scenario order is exactly one through five and Scenario 1 is deterministic
   ), true);
 });
 
-test('Scenarios 2 through 5 reuse the same residual at every index', () => {
+test('Scenarios 2 through 6 reuse the same residual at every index', () => {
   let index = 0;
   const result = run({
     factors: createFactors({
@@ -253,14 +273,32 @@ test('Scenarios 2 through 5 reuse the same residual at every index', () => {
       index += 1;
       return value;
     },
+    injuries: createInjuries({
+      teamB: {
+        qb: 'out',
+      },
+    }),
   });
 
   for (const sampleIndex of [0, 1, 5000, 9999]) {
     const scenario2Score = result.baseScore + result.residuals[sampleIndex];
     const scenario3Score = scenario2Score + result.adjustments.stadiumWeather.total;
     const scenario4Score = scenario3Score + result.adjustments.fatigue.total;
-    const scenario5Score = scenario4Score + result.adjustments.competitive.total;
-    const expectedScores = [scenario2Score, scenario3Score, scenario4Score, scenario5Score];
+    const scenario5Score =
+      scenario4Score
+      + result.adjustments.competitive.total;
+    
+    const scenario6Score =
+      scenario5Score
+      + result.adjustments.injuries.total;
+    
+    const expectedScores = [
+      scenario2Score,
+      scenario3Score,
+      scenario4Score,
+      scenario5Score,
+      scenario6Score,
+    ];
     result.scenarios.slice(1).forEach((scenario, scenarioIndex) => {
       const probability = toWinProbabilities({
         scoreDelta: expectedScores[scenarioIndex],
