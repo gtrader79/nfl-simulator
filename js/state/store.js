@@ -390,10 +390,53 @@ function requireInjuryChange(payload) {
   return payload;
 }
 
-function snapshotMatchesState(snapshot, state) {
-  if (!isPlainObject(snapshot) || !isPlainObject(snapshot.factors)) {
+function injurySnapshotMatchesState(snapshotInjuries, stateInjuries) {
+  if (
+    !isPlainObject(snapshotInjuries)
+    || !isPlainObject(stateInjuries)
+  ) {
     return false;
   }
+
+  return INJURY_TEAMS.every((team) => {
+    const snapshotSide = snapshotInjuries[team];
+    const stateSide = stateInjuries[team];
+
+    if (
+      !isPlainObject(snapshotSide)
+      || !isPlainObject(stateSide)
+    ) {
+      return false;
+    }
+
+    const snapshotKeys = Object.keys(snapshotSide);
+
+    if (
+      snapshotKeys.length !== INJURY_GROUP_IDS.length
+      || INJURY_GROUP_IDS.some(
+        (id) => !Object.hasOwn(snapshotSide, id),
+      )
+      || snapshotKeys.some(
+        (id) => !INJURY_GROUP_IDS.includes(id),
+      )
+    ) {
+      return false;
+    }
+
+    return INJURY_GROUP_IDS.every(
+      (id) => snapshotSide[id] === stateSide[id],
+    );
+  });
+}
+                       
+function snapshotMatchesState(snapshot, state) {
+  if (
+    !isPlainObject(snapshot)
+    || !isPlainObject(snapshot.factors)
+  ) {
+    return false;
+  }
+
   if (
     snapshot.season !== state.data.selectedSeason
     || snapshot.teamAId !== state.matchup.teamAId
@@ -401,7 +444,29 @@ function snapshotMatchesState(snapshot, state) {
   ) {
     return false;
   }
-  return FACTOR_KEYS.every((key) => snapshot.factors[key] === state.factors[key]);
+
+  const factorsMatch = FACTOR_KEYS.every(
+    (key) => snapshot.factors[key] === state.factors[key],
+  );
+
+  if (!factorsMatch) {
+    return false;
+  }
+
+  /*
+   * Transitional compatibility:
+   * Version 1 snapshots created before Scenario 6 activation do not contain
+   * injuries. They remain valid until the controller begins capturing the
+   * Scenario 6 injury snapshot.
+   */
+  if (!Object.hasOwn(snapshot, 'injuries')) {
+    return true;
+  }
+
+  return injurySnapshotMatchesState(
+    snapshot.injuries,
+    state.injuries,
+  );
 }
 
 function withRecalculatedStale(simulation, candidateState) {
@@ -614,9 +679,17 @@ function reduceState(state, action) {
         'injuries',
       );
 
-      return freezeState({
+      const candidateState = {
         ...state,
         injuries,
+      };
+
+      return freezeState({
+        ...candidateState,
+        simulation: withRecalculatedStale(
+          state.simulation,
+          candidateState,
+        ),
       });
     }
 
