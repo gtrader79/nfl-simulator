@@ -833,3 +833,320 @@ test('production random source excludes both endpoints and diagnoses fallback', 
   assert(fallback() > 0);
   assertEqual(warnings, 1);
 });
+
+test(
+  'controller exposes semantic injury changes without running scenarios',
+  async () => {
+    const h = await readyController();
+
+    assertEqual(
+      typeof h.handlers.onInjuryChange,
+      'function',
+    );
+
+    assertEqual(
+      h.handlers.onInjuryChange(
+        'teamA',
+        'qb',
+        'questionable',
+      ),
+      true,
+    );
+
+    assertEqual(
+      h.store.getState()
+        .injuries.teamA.qb,
+      'questionable',
+    );
+
+    assertEqual(
+      h.store.getState()
+        .injuries.teamB.qb,
+      'available',
+    );
+
+    assertEqual(h.calls.runs, 0);
+  },
+);
+
+test(
+  'controller rejects invalid injury semantic events without mutation',
+  async () => {
+    const h = await readyController();
+
+    const before = h.store.getState();
+
+    assertEqual(
+      h.handlers.onInjuryChange(
+        'teamC',
+        'qb',
+        'out',
+      ),
+      false,
+    );
+
+    assertEqual(
+      h.handlers.onInjuryChange(
+        'teamA',
+        'kicker',
+        'out',
+      ),
+      false,
+    );
+
+    assertEqual(
+      h.handlers.onInjuryChange(
+        'teamA',
+        'qb',
+        'probable',
+      ),
+      false,
+    );
+
+    assertEqual(
+      h.store.getState(),
+      before,
+    );
+
+    assertEqual(h.calls.runs, 0);
+  },
+);
+
+test(
+  'controller run captures immutable injury state in the input snapshot',
+  async () => {
+    const h = await readyController();
+
+    h.handlers.onInjuryChange(
+      'teamA',
+      'qb',
+      'questionable',
+    );
+
+    h.handlers.onInjuryChange(
+      'teamB',
+      'wr',
+      'out',
+    );
+
+    assertEqual(
+      await h.handlers.onRun(),
+      true,
+    );
+
+    const result =
+      h.store.getState()
+        .simulation.result;
+
+    assertEqual(
+      result.inputSnapshot
+        .injuries.teamA.qb,
+      'questionable',
+    );
+
+    assertEqual(
+      result.inputSnapshot
+        .injuries.teamB.wr,
+      'out',
+    );
+
+    assertEqual(
+      Object.isFrozen(
+        result.inputSnapshot.injuries,
+      ),
+      true,
+    );
+
+    assertEqual(
+      Object.isFrozen(
+        result.inputSnapshot
+          .injuries.teamA,
+      ),
+      true,
+    );
+
+    assertEqual(
+      Object.isFrozen(
+        result.inputSnapshot
+          .injuries.teamB,
+      ),
+      true,
+    );
+
+    /*
+     * Transitional engine contract:
+     * Scenario 6 is not active yet.
+     */
+    assertEqual(
+      result.scenarios.length,
+      5,
+    );
+
+    assertEqual(
+      result.finalScenarioId,
+      'competitive-factors',
+    );
+  },
+);
+
+test(
+  'controller injury changes make an injury-aware completed run stale without rerunning',
+  async () => {
+    const h = await readyController();
+
+    await h.handlers.onRun();
+
+    assertEqual(
+      h.store.getState()
+        .simulation.isStale,
+      false,
+    );
+
+    assertEqual(h.calls.runs, 1);
+
+    h.handlers.onInjuryChange(
+      'teamA',
+      'qb',
+      'out',
+    );
+
+    assertEqual(
+      h.store.getState()
+        .simulation.isStale,
+      true,
+    );
+
+    assertEqual(h.calls.runs, 1);
+  },
+);
+
+test(
+  'controller injury changes restore freshness when inputs return to the run snapshot',
+  async () => {
+    const h = await readyController();
+
+    await h.handlers.onRun();
+
+    h.handlers.onInjuryChange(
+      'teamB',
+      'te',
+      'doubtful',
+    );
+
+    assertEqual(
+      h.store.getState()
+        .simulation.isStale,
+      true,
+    );
+
+    h.handlers.onInjuryChange(
+      'teamB',
+      'te',
+      'available',
+    );
+
+    assertEqual(
+      h.store.getState()
+        .simulation.isStale,
+      false,
+    );
+  },
+);
+
+test(
+  'explicit rerun replaces the injury snapshot with current manual injury inputs',
+  async () => {
+    const h = await readyController();
+
+    await h.handlers.onRun();
+
+    h.handlers.onInjuryChange(
+      'teamA',
+      'wr',
+      'out',
+    );
+
+    assertEqual(
+      h.store.getState()
+        .simulation.isStale,
+      true,
+    );
+
+    assertEqual(
+      await h.handlers.onRun(),
+      true,
+    );
+
+    const result =
+      h.store.getState()
+        .simulation.result;
+
+    assertEqual(
+      result.runId,
+      'run-2',
+    );
+
+    assertEqual(
+      result.inputSnapshot
+        .injuries.teamA.wr,
+      'out',
+    );
+
+    assertEqual(
+      h.store.getState()
+        .simulation.isStale,
+      false,
+    );
+
+    assertEqual(h.calls.runs, 2);
+  },
+);
+
+test(
+  'controller blocks injury edits while a simulation is running',
+  async () => {
+    let release;
+
+    const h = await readyController({
+      dependencies: {
+        yieldFrame: () =>
+          new Promise(
+            (resolve) => {
+              release = resolve;
+            },
+          ),
+      },
+    });
+
+    const pending =
+      h.handlers.onRun();
+
+    assertEqual(
+      h.store.getState()
+        .simulation.status,
+      'running',
+    );
+
+    assertEqual(
+      h.handlers.onInjuryChange(
+        'teamA',
+        'qb',
+        'out',
+      ),
+      false,
+    );
+
+    assertEqual(
+      h.store.getState()
+        .injuries.teamA.qb,
+      'available',
+    );
+
+    release();
+
+    assertEqual(
+      await pending,
+      true,
+    );
+  },
+);
