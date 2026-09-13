@@ -201,7 +201,7 @@ test('application configuration matches the approved model and semantic factor c
     gameType: 'regular-season',
     momentum: 'neutral',
   });
-  assertEqual(APP_CONFIG.scenarios.length, 5);
+  assertEqual(APP_CONFIG.scenarios.length, 6);
   assertEqual(Object.isFrozen(APP_CONFIG.factors.defaults), true);
 });
 
@@ -709,8 +709,8 @@ test('controller explicit run wraps certified model output with immutable identi
   const h = await readyController();
   assertEqual(await h.handlers.onRun(), true);
   const result = h.store.getState().simulation.result;
-  assertEqual(result.scenarios.length, 5);
-  assertEqual(result.finalScenarioId, 'competitive-factors');
+  assertEqual(result.scenarios.length, 6);
+  assertEqual(result.finalScenarioId, 'injuries');
   assertEqual(result.inputSnapshot.teamA.teamName, 'Alpha Aces');
   assertEqual(result.inputSnapshot.isDivisionalMatchup, true);
   assertEqual(result.completedAt, '2026-09-04T12:00:00Z');
@@ -972,20 +972,12 @@ test(
       ),
       true,
     );
-
-    /*
-     * Transitional engine contract:
-     * Scenario 6 is not active yet.
-     */
-    assertEqual(
-      result.scenarios.length,
-      5,
-    );
-
-    assertEqual(
-      result.finalScenarioId,
-      'competitive-factors',
-    );
+  
+  /*
+   * Scenario 6 is now the certified final active scenario.
+   */
+    assertEqual(result.scenarios.length, 6);
+    assertEqual(result.finalScenarioId, 'injuries');
   },
 );
 
