@@ -82,6 +82,8 @@ export function createRenderer({ root, metricCatalog = METRIC_CATALOG }) {
   let lastTeams = '';
   let lastSeason = null;
   const groupSummaries = [];
+  let injurySummaryText;
+  const injuryTeamLegends = new Map();
   const weatherFrame = node('iframe', undefined, 'weather-frame');
   weatherFrame.title = 'NFL game day weather — informational only';
   weatherFrame.setAttribute('sandbox', 'allow-scripts');
@@ -141,6 +143,89 @@ export function createRenderer({ root, metricCatalog = METRIC_CATALOG }) {
     }
     find('condition-groups').append(disclosure);
   }
+
+  const injuryDisclosure = node('details');
+  const injurySummary = node('summary', 'Injuries');
+
+  injurySummaryText = node('small');
+  injurySummary.append(injurySummaryText);
+
+  injuryDisclosure.append(
+    injurySummary,
+    node(
+      'p',
+      'Set expected pregame availability by position group. Available / No Material Injury is the default.',
+      'muted',
+    ),
+  );
+
+  for (const [teamKey, defaultLabel] of [
+    ['teamA', 'Team A'],
+    ['teamB', 'Team B'],
+  ]) {
+    const fieldset = node('fieldset');
+    const legend = node('legend', defaultLabel);
+
+    legend.dataset.injuryTeamLegend =
+      teamKey;
+
+    injuryTeamLegends.set(
+      teamKey,
+      legend,
+    );
+
+    fieldset.append(legend);
+
+    for (
+      const group
+      of APP_CONFIG.injuries.positionGroups
+    ) {
+      const controlId =
+        `injury-${teamKey}-${group.id}`;
+
+      const label = node(
+        'label',
+        group.label,
+      );
+
+      label.htmlFor = controlId;
+
+      const select = node('select');
+
+      select.id = controlId;
+      select.dataset.injuryTeam =
+        teamKey;
+      select.dataset.injuryGroup =
+        group.id;
+
+      for (
+        const optionConfig
+        of APP_CONFIG.injuries.options
+      ) {
+        const option = node(
+          'option',
+          optionConfig.label,
+        );
+
+        option.value =
+          optionConfig.value;
+
+        select.append(option);
+      }
+
+      fieldset.append(
+        label,
+        select,
+      );
+    }
+
+    injuryDisclosure.append(fieldset);
+  }
+
+  find('condition-groups').append(
+    injuryDisclosure,
+  );
+  
   function options(select, rows, placeholder) {
     const items = placeholder ? [Object.assign(node('option', placeholder), { value: '' })] : [];
     rows.forEach(([value, label]) => items.push(Object.assign(node('option', label), { value: String(value) })));
@@ -276,9 +361,63 @@ export function createRenderer({ root, metricCatalog = METRIC_CATALOG }) {
         if (input.type === 'radio') input.checked = input.value === view.factors[input.dataset.factor];
         else input.value = view.factors[input.dataset.factor];
       });
+      root
+        .querySelectorAll(
+          '[data-injury-team][data-injury-group]',
+        )
+        .forEach((select) => {
+          select.value =
+            view.injuries[
+              select.dataset.injuryTeam
+            ][
+              select.dataset.injuryGroup
+            ];
+        });
       root.querySelectorAll('[data-option-label]').forEach(span => { span.textContent = teamLabel(OPTION_LABELS[span.dataset.optionLabel],view.teamA,view.teamB); });
       root.querySelectorAll('[data-legend]').forEach(legend => { legend.textContent = teamLabel(FACTOR_LABELS[legend.dataset.legend],view.teamA,view.teamB); });
+      for (
+        const [teamKey, legend]
+        of injuryTeamLegends
+      ) {
+        const team =
+          teamKey === 'teamA'
+            ? view.teamA
+            : view.teamB;
+
+        const baseLabel =
+          teamKey === 'teamA'
+            ? 'Team A'
+            : 'Team B';
+
+        legend.textContent =
+          team
+            ? `${baseLabel} · ${team.abbreviation}`
+            : baseLabel;
+      }
       for (const [summary,factors] of groupSummaries) summary.textContent = factors.map(k => teamLabel(OPTION_LABELS[view.factors[k]],view.teamA,view.teamB)).join(' · ');
+      const nonAvailableInjuryCount =
+        Object.values(
+          view.injuries.teamA,
+        ).filter(
+          (value) =>
+            value !== 'available',
+        ).length
+        +
+        Object.values(
+          view.injuries.teamB,
+        ).filter(
+          (value) =>
+            value !== 'available',
+        ).length;
+
+      injurySummaryText.textContent =
+        nonAvailableInjuryCount === 0
+          ? 'All position groups available'
+          : `${nonAvailableInjuryCount} non-available assumption${
+              nonAvailableInjuryCount === 1
+                ? ''
+                : 's'
+            }`;
       find('conditions-summary').textContent = `Optional · ${teamLabel(OPTION_LABELS[view.factors.venue],view.teamA,view.teamB)} venue · ${OPTION_LABELS[view.factors.gameType]}`;
       find('division-indicator').hidden = !view.isDivisionalMatchup;
       find('selection-guidance').textContent = view.isValidMatchup ? 'Matchup selected. Review conditions or run with these settings.' : view.teamA || view.teamB ? 'Choose the second team to continue.' : 'Select two teams to begin.';
