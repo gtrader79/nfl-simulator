@@ -1,5 +1,5 @@
 /** Entertainment only: sample a final-scenario probability, then a team outcome. */
-export const VISUAL_SETTINGS=Object.freeze({ballCount:200,burstSize:4,burstIntervalMs:120,radii:Object.freeze([5,7,9]),settleMs:3500});
+export const VISUAL_SETTINGS=Object.freeze({ballCount:400,burstSize:6,burstIntervalMs:120,radii:Object.freeze([5,7,9]),settleMs:3500});
 export function sampleVisualTeam(samples,randomSource=Math.random) {
   if(!Array.isArray(samples)||!samples.length)throw new TypeError('Final probability samples are required.');
   const indexDraw=randomSource(),outcomeDraw=randomSource();
