@@ -19,6 +19,32 @@ const GROUPS = [
   ['Fatigue', ['travel', 'teamARest', 'teamBRest']],
   ['Competitive Context', ['gameType', 'momentum']],
 ];
+
+const INJURY_GROUP_LABELS =
+  Object.freeze(
+    Object.fromEntries(
+      APP_CONFIG.injuries.positionGroups
+        .map(
+          (group) => [
+            group.id,
+            group.label,
+          ],
+        ),
+    ),
+  );
+
+const INJURY_STATUS_LABELS =
+  Object.freeze(
+    Object.fromEntries(
+      APP_CONFIG.injuries.options
+        .map(
+          (option) => [
+            option.value,
+            option.label,
+          ],
+        ),
+    ),
+  );
 export const formatProbability = value => Number.isFinite(value) ? `${(value * 100).toFixed(1)}%` : 'N/A';
 export function formatMetric(metric, metadata) {
   return Number.isFinite(metric?.value)
@@ -26,6 +52,50 @@ export function formatMetric(metric, metadata) {
 }
 function teamLabel(text, teamA, teamB) {
   return text.replaceAll('Team A', teamA?.abbreviation ?? 'Team A').replaceAll('Team B', teamB?.abbreviation ?? 'Team B');
+}
+
+export function formatInjuryAssumptions(
+  snapshot,
+) {
+  const {
+    teamA,
+    teamB,
+    injuries,
+  } = snapshot;
+
+  const assumptions = [];
+
+  for (
+    const [teamKey, team]
+    of [
+      ['teamA', teamA],
+      ['teamB', teamB],
+    ]
+  ) {
+    for (
+      const group
+      of APP_CONFIG.injuries.positionGroups
+    ) {
+      const status =
+        injuries[teamKey][group.id];
+
+      if (status === 'available') {
+        continue;
+      }
+
+      assumptions.push(
+        `${team.abbreviation} ${
+          INJURY_GROUP_LABELS[group.id]
+        } ${
+          INJURY_STATUS_LABELS[status]
+        }`,
+      );
+    }
+  }
+
+  return assumptions.length === 0
+    ? 'Injuries: all position groups available.'
+    : `Injuries: ${assumptions.join(' · ')}.`;
 }
 
 /** Snapshot-only editorial summary; no new prediction or football facts are inferred. */
@@ -54,13 +124,44 @@ export function buildGameDaySummary(result) {
       sentences.push(`The key statistical matchup is ${leader.abbreviation}'s ${edge.side} against ${opponent.abbreviation}'s ${edge.side==='offense'?'defense':'offense'}, especially ${terms[edge.pairId]??'overall efficiency'}.`);
     }
   }
-  const stages=[['stadium-weather','Venue and weather'],['fatigue','Travel and rest'],['competitive-factors','Competitive context']];
+  const stages = [
+    [
+      'stadium-weather',
+      'Venue and weather',
+    ],
+    [
+      'fatigue',
+      'Travel and rest',
+    ],
+    [
+      'competitive-factors',
+      'Competitive context',
+    ],
+    [
+      'injuries',
+      'Injuries',
+    ],
+  ];
   const moves=stages.map(([id,label])=>{
     const index=result.scenarios.findIndex(s=>s.id===id);
     return {label,change:(result.scenarios[index].probabilitySummary.teamA.mean-result.scenarios[index-1].probabilitySummary.teamA.mean)*100};
   }).sort((x,y)=>Math.abs(y.change)-Math.abs(x.change));
   const move=moves[0];
-  if(Math.abs(move.change)>=.05)sentences.push(`The biggest situational lift comes from ${move.label.toLowerCase()}: ${Math.abs(move.change).toFixed(1)} percentage points for ${move.change>0?teamA.abbreviation:teamB.abbreviation} at that stage.`);
+  if (
+    Math.abs(move.change) >= .05
+  ) {
+    sentences.push(
+      `The biggest game-day shift comes from ${
+        move.label.toLowerCase()
+      }: ${
+        Math.abs(move.change).toFixed(1)
+      } percentage points for ${
+        move.change > 0
+          ? teamA.abbreviation
+          : teamB.abbreviation
+      } at that stage.`,
+    );
+  }
   else sentences.push('The selected game conditions make no difference at the displayed precision.');
   if(a.p5<.5&&a.p95>.5)sentences.push('There is room for either team to take the edge: the simulated probability range crosses 50%.');
   return Object.freeze({headline,body:sentences.join(' ')});
@@ -312,6 +413,13 @@ export function createRenderer({ root, metricCatalog = METRIC_CATALOG }) {
     }
     const snapshot = result.inputSnapshot; const { teamA, teamB, factors } = snapshot;
     const final = result.scenarios.find(s => s.id === result.finalScenarioId);
+    const finalScenarioLabel =
+      APP_CONFIG.scenarios.find(
+        (scenario) =>
+          scenario.id
+          === result.finalScenarioId,
+      )?.label
+      ?? 'Final Scenario';
     const cards = node('div', undefined, 'result-teams');
     for (const [team, values] of [[teamA, final.probabilitySummary.teamA], [teamB, final.probabilitySummary.teamB]]) {
       const card = node('div', undefined, 'result-team'); card.style.setProperty('--team-color', team.colors.primary);
@@ -319,14 +427,61 @@ export function createRenderer({ root, metricCatalog = METRIC_CATALOG }) {
         node('p', `${formatProbability(values.p5)}–${formatProbability(values.p95)} · Middle 90% of simulated probabilities`, 'range')); cards.append(card);
     }
     const gameDay=buildGameDaySummary(result);
-    content.replaceChildren(node('p', `${snapshot.season} · ${teamA.abbreviation} vs. ${teamB.abbreviation} · Competitive Factors`, 'muted'), cards,
+    content.replaceChildren(
+      node(
+        'p',
+        `${snapshot.season} · ${
+          teamA.abbreviation
+        } vs. ${
+          teamB.abbreviation
+        } · ${finalScenarioLabel}`,
+        'muted',
+      ),
+      cards,
       node('h3','Game Day Outlook','game-day-heading'),node('p',gameDay.headline,'favored'),node('p',gameDay.body,'game-day-summary'));
     const explanation=node('details');explanation.append(node('summary','What does the range mean?'),
       node('p','These are the 5th and 95th percentiles: the middle 90% of win-probability values produced by the simulation. A wide range means the simulated probabilities vary widely. It is not a score range or a claim of 90% confidence in the winner. The large percentage above is the average win probability.','muted'));
     content.append(explanation);
-    const description = Object.entries(FACTOR_LABELS).map(([key,label]) => `${teamLabel(label,teamA,teamB)}: ${teamLabel(OPTION_LABELS[factors[key]],teamA,teamB)}`);
-    if (snapshot.isDivisionalMatchup) description.push('Divisional matchup');
-    content.append(node('p', description.join(' · '), 'result-meta'));
+    const description =
+      Object.entries(
+        FACTOR_LABELS,
+      ).map(
+        ([key, label]) =>
+          `${teamLabel(
+            label,
+            teamA,
+            teamB,
+          )}: ${teamLabel(
+            OPTION_LABELS[
+              factors[key]
+            ],
+            teamA,
+            teamB,
+          )}`,
+      );
+
+    if (
+      snapshot.isDivisionalMatchup
+    ) {
+      description.push(
+        'Divisional matchup',
+      );
+    }
+
+    content.append(
+      node(
+        'p',
+        description.join(' · '),
+        'result-meta',
+      ),
+      node(
+        'p',
+        formatInjuryAssumptions(
+          snapshot,
+        ),
+        'result-meta injury-result-meta',
+      ),
+    );
     const rows = result.scenarios.map(s => [APP_CONFIG.scenarios.find(c => c.id === s.id).label,
       formatProbability(s.probabilitySummary.teamA.mean), `${formatProbability(s.probabilitySummary.teamA.p5)}–${formatProbability(s.probabilitySummary.teamA.p95)}`,
       formatProbability(s.probabilitySummary.teamB.mean), `${formatProbability(s.probabilitySummary.teamB.p5)}–${formatProbability(s.probabilitySummary.teamB.p95)}`]);
