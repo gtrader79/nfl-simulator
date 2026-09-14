@@ -9,7 +9,7 @@ import { calculateBaseMatchup } from '../js/model/matchup-model.js';
 import { createAppController } from '../js/app-controller.js';
 import { createStore, createInitialState } from '../js/state/store.js';
 import { selectCanRunSimulation } from '../js/state/selectors.js';
-import { createRenderer, buildGameDaySummary } from '../js/ui/renderer.js';
+import { createRenderer,  buildGameDaySummary,  formatInjuryAssumptions,} from '../js/ui/renderer.js';
 import { createInputController } from '../js/ui/input-controller.js';
 import { runScenarios } from '../js/model/scenario-engine.js';
 import { probabilityChartConfig, contributionChartConfig, createCharts, wrapLabel } from '../js/ui/charts.js';
@@ -618,6 +618,197 @@ test(
       },
     ),
 );
+
+test(
+  '146 completed result names Injuries as the final scenario and records healthy injury assumptions',
+  async () =>
+    withUI(
+      async ({
+        q,
+        selectTeams,
+        run,
+        store,
+      }) => {
+        selectTeams();
+        await run();
+
+        const result =
+          store.getState()
+            .simulation.result;
+
+        assertEqual(
+          result.finalScenarioId,
+          'injuries',
+        );
+
+        assert(
+          q(
+            '#prediction-content',
+          ).textContent.includes(
+            '· Injuries',
+          ),
+        );
+
+        assertEqual(
+          q(
+            '.injury-result-meta',
+          ).textContent,
+          'Injuries: all position groups available.',
+        );
+
+        assertEqual(
+          formatInjuryAssumptions(
+            result.inputSnapshot,
+          ),
+          'Injuries: all position groups available.',
+        );
+      },
+    ),
+);
+
+  test(
+  '147 completed result records saved non-available injury assumptions and does not relabel them from stale live inputs',
+  async () =>
+    withUI(
+      async ({
+        q,
+        change,
+        selectTeams,
+        run,
+        store,
+      }) => {
+        selectTeams();
+
+        change(
+          '[data-injury-team="teamA"][data-injury-group="qb"]',
+          'out',
+        );
+
+        change(
+          '[data-injury-team="teamB"][data-injury-group="wr"]',
+          'questionable',
+        );
+
+        await run();
+
+        const result =
+          store.getState()
+            .simulation.result;
+
+        const expected =
+          `Injuries: ${
+            result.inputSnapshot
+              .teamA.abbreviation
+          } QB Out · ${
+            result.inputSnapshot
+              .teamB.abbreviation
+          } WR Questionable.`;
+
+        assertEqual(
+          q(
+            '.injury-result-meta',
+          ).textContent,
+          expected,
+        );
+
+        change(
+          '[data-injury-team="teamA"][data-injury-group="qb"]',
+          'available',
+        );
+
+        assertEqual(
+          store.getState()
+            .simulation.isStale,
+          true,
+        );
+
+        assertEqual(
+          q(
+            '.injury-result-meta',
+          ).textContent,
+          expected,
+        );
+      },
+    ),
+);
+
+test(
+  '148 game day outlook identifies a material Scenario 6 injury shift from saved scenario summaries',
+  async () =>
+    withUI(
+      async ({
+        selectTeams,
+        run,
+        store,
+      }) => {
+        selectTeams();
+        await run();
+
+        const result =
+          structuredClone(
+            store.getState()
+              .simulation.result,
+          );
+
+        [
+          .50,
+          .50,
+          .50,
+          .50,
+          .50,
+          .70,
+        ].forEach(
+          (mean, index) => {
+            result.scenarios[index]
+              .probabilitySummary
+              .teamA.mean = mean;
+
+            result.scenarios[index]
+              .probabilitySummary
+              .teamB.mean =
+                1 - mean;
+          },
+        );
+
+        const before =
+          JSON.stringify(result);
+
+        const summary =
+          buildGameDaySummary(
+            result,
+          );
+
+        assert(
+          summary.body.includes(
+            'injuries',
+          ),
+        );
+
+        assert(
+          summary.body.includes(
+            '20.0 percentage points',
+          ),
+        );
+
+        assert(
+          summary.body.includes(
+            result.inputSnapshot
+              .teamA.abbreviation,
+          ),
+        );
+
+        assertEqual(
+          JSON.stringify(result),
+          before,
+        );
+      },
+    ),
+);
+
+  
+  
+  
+  
   const summary=buildGameDaySummary(result);
   assert(summary.headline.includes(result.inputSnapshot.teamB.teamName));
   assert(summary.body.includes(`20.0 percentage points for ${result.inputSnapshot.teamB.abbreviation}`));
