@@ -100,71 +100,357 @@ export function formatInjuryAssumptions(
 
 /** Snapshot-only editorial summary; no new prediction or football facts are inferred. */
 export function buildGameDaySummary(result) {
-  const {teamA,teamB}=result.inputSnapshot;
-  const final=result.scenarios.find(s=>s.id===result.finalScenarioId);
-  const a=final.probabilitySummary.teamA;
-  const displayedA=Number((a.mean*100).toFixed(1));
-  const even=displayedA===50;
-  const leader=a.mean>=.5?teamA:teamB,opponent=a.mean>=.5?teamB:teamA;
-  const leadingKey=a.mean>=.5?'teamA':'teamB';
-  const leadProbability=final.probabilitySummary[leadingKey];
-  const headline=even?'Too close to call: 50.0% each.'
-    :`${leader.teamName} get the nod at ${formatProbability(leadProbability.mean)}.`;
-  const sentences=[];
-  if(!even) {
-    const offense=a.mean>=.5?result.baseMatchup.teamAOffenseVsTeamBDefense:result.baseMatchup.teamBOffenseVsTeamADefense;
-    const defense=a.mean>=.5?result.baseMatchup.teamBOffenseVsTeamADefense:result.baseMatchup.teamAOffenseVsTeamBDefense;
-    const edges=[...offense.contributions.filter(c=>c.available&&c.contribution>0).map(c=>({...c,strength:c.contribution,side:'offense'})),
-      ...defense.contributions.filter(c=>c.available&&c.contribution<0).map(c=>({...c,strength:-c.contribution,side:'defense'}))]
-      .sort((x,y)=>y.strength-x.strength);
-    const terms={pass_efficiency:'passing efficiency',rush_efficiency:'rushing efficiency',success_rate:'successful plays',
-      pressure:'pressure',explosiveness:'explosive plays',interceptions:'interceptions',fumbles:'fumbles'};
-    if(edges.length) {
-      const edge=edges[0];
-      sentences.push(`The key statistical matchup is ${leader.abbreviation}'s ${edge.side} against ${opponent.abbreviation}'s ${edge.side==='offense'?'defense':'offense'}, especially ${terms[edge.pairId]??'overall efficiency'}.`);
-    }
+  const {
+    teamA,
+    teamB,
+    factors,
+    injuries,
+    isDivisionalMatchup,
+  } = result.inputSnapshot;
+  const final = result.scenarios.find(
+    (scenario) => scenario.id === result.finalScenarioId,
+  );
+  const teamAProbability = final.probabilitySummary.teamA;
+  const displayedTeamA = Number(
+    (teamAProbability.mean * 100).toFixed(1),
+  );
+  const even = displayedTeamA === 50;
+  const leadingKey = teamAProbability.mean >= .5
+    ? 'teamA'
+    : 'teamB';
+  const leader = leadingKey === 'teamA'
+    ? teamA
+    : teamB;
+  const opponent = leadingKey === 'teamA'
+    ? teamB
+    : teamA;
+  const leadProbability = final.probabilitySummary[leadingKey];
+  const displayedLead = Number(
+    (leadProbability.mean * 100).toFixed(1),
+  );
+  const metricTerms = {
+    pass_efficiency: 'passing efficiency',
+    rush_efficiency: 'rushing efficiency',
+    success_rate: 'successful plays',
+    pressure: 'pressure',
+    explosiveness: 'explosive plays',
+    interceptions: 'interceptions',
+    fumbles: 'fumbles',
+  };
+  const item = (label, text) => Object.freeze({ label, text });
+
+  function favoriteBand() {
+    if (even) return 'even';
+    if (displayedLead < 52.5) return 'coin-flip';
+    if (displayedLead < 57.5) return 'slight';
+    if (displayedLead < 65) return 'solid';
+    return 'clear';
   }
-  const stages = [
-    [
-      'stadium-weather',
-      'Venue and weather',
-    ],
-    [
-      'fatigue',
-      'Travel and rest',
-    ],
-    [
-      'competitive-factors',
-      'Competitive context',
-    ],
-    [
-      'injuries',
-      'Injuries',
-    ],
-  ];
-  const moves=stages.map(([id,label])=>{
-    const index=result.scenarios.findIndex(s=>s.id===id);
-    return {label,change:(result.scenarios[index].probabilitySummary.teamA.mean-result.scenarios[index-1].probabilitySummary.teamA.mean)*100};
-  }).sort((x,y)=>Math.abs(y.change)-Math.abs(x.change));
-  const move=moves[0];
-  if (
-    Math.abs(move.change) >= .05
+
+  function stageMovements() {
+    return [
+      ['stadium-weather', 'Stadium & Weather'],
+      ['fatigue', 'Travel & Rest'],
+      ['competitive-factors', 'Competitive Context'],
+      ['injuries', 'Injuries'],
+    ].flatMap(([id, label]) => {
+      const index = result.scenarios.findIndex(
+        (scenario) => scenario.id === id,
+      );
+      if (index < 1) return [];
+      return [{
+        id,
+        label,
+        change: (
+          result.scenarios[index].probabilitySummary.teamA.mean
+          - result.scenarios[index - 1].probabilitySummary.teamA.mean
+        ) * 100,
+      }];
+    }).sort(
+      (left, right) => Math.abs(right.change) - Math.abs(left.change),
+    );
+  }
+
+  function matchupEdges() {
+    const directions = [
+      {
+        result: result.baseMatchup.teamAOffenseVsTeamBDefense,
+        offense: teamA,
+        offenseKey: 'teamA',
+        defense: teamB,
+        defenseKey: 'teamB',
+      },
+      {
+        result: result.baseMatchup.teamBOffenseVsTeamADefense,
+        offense: teamB,
+        offenseKey: 'teamB',
+        defense: teamA,
+        defenseKey: 'teamA',
+      },
+    ];
+    return directions.flatMap((direction) => (
+      direction.result.contributions
+        .filter(
+          (contribution) => contribution.available
+            && contribution.contribution !== 0,
+        )
+        .map((contribution) => {
+          const favorsOffense = contribution.contribution > 0;
+          return {
+            ...contribution,
+            strength: Math.abs(contribution.contribution),
+            side: favorsOffense ? 'offense' : 'defense',
+            team: favorsOffense ? direction.offense : direction.defense,
+            teamKey: favorsOffense ? direction.offenseKey : direction.defenseKey,
+            opponent: favorsOffense ? direction.defense : direction.offense,
+          };
+        })
+    )).sort((left, right) => right.strength - left.strength);
+  }
+
+  const band = favoriteBand();
+  const titleRound = factors.gameType === 'regular-season'
+    ? ''
+    : ` — ${OPTION_LABELS[factors.gameType]}`;
+  const title = `Game Outlook: ${teamA.abbreviation} vs. ${teamB.abbreviation}${titleRound}`;
+  const odds = {
+    even: 'The model sees this matchup as dead even at 50.0% for each team.',
+    'coin-flip': `${leader.teamName} hold the tiniest edge at ${formatProbability(leadProbability.mean)}, making this a virtual coin flip.`,
+    slight: `${leader.teamName} hold a slight edge at ${formatProbability(leadProbability.mean)}.`,
+    solid: `The model leans toward ${leader.teamName} at ${formatProbability(leadProbability.mean)}.`,
+    clear: `${leader.teamName} are the clear favorite at ${formatProbability(leadProbability.mean)}.`,
+  }[band];
+
+  const allEdges = matchupEdges();
+  const selectedEdge = even
+    ? allEdges[0]
+    : allEdges.find((edge) => edge.teamKey === leadingKey);
+  const decidingFactors = [];
+  if (selectedEdge) {
+    const leadIn = even
+      ? `${selectedEdge.team.abbreviation}'s ${selectedEdge.side} owns the clearest base-statistical edge`
+      : `${leader.abbreviation}'s ${selectedEdge.side} has its strongest base-matchup edge`;
+    decidingFactors.push(item(
+      'The Matchup',
+      `${leadIn} against ${selectedEdge.opponent.abbreviation}'s ${
+        selectedEdge.side === 'offense' ? 'defense' : 'offense'
+      }, especially ${metricTerms[selectedEdge.pairId] ?? 'overall efficiency'}.`,
+    ));
+  } else {
+    decidingFactors.push(item(
+      'The Matchup',
+      'No single available base-statistical contribution separates the teams.',
+    ));
+  }
+
+  const movements = stageMovements();
+  const largestMovement = movements[0];
+  const displayedMovement = largestMovement
+    ? Number(Math.abs(largestMovement.change).toFixed(1))
+    : 0;
+  if (largestMovement && Math.abs(largestMovement.change) >= .05) {
+    const movementWording = displayedMovement < 1
+      ? 'small nudge'
+      : displayedMovement < 3
+        ? 'noticeable shift'
+        : displayedMovement < 5
+          ? 'meaningful shift'
+          : 'major shift';
+    decidingFactors.push(item(
+      'Biggest Game-Day Shift',
+      `${largestMovement.label} produced the largest movement, a ${movementWording} of ${
+        displayedMovement.toFixed(1)
+      } percentage points toward ${
+        largestMovement.change > 0
+          ? teamA.abbreviation
+          : teamB.abbreviation
+      }.`,
+    ));
+  } else {
+    decidingFactors.push(item(
+      'Game-Day Conditions',
+      'The selected game conditions produced no visible movement at one-decimal precision.',
+    ));
+  }
+
+  const xFactors = [];
+  if (factors.venue === 'neutral') {
+    xFactors.push(item(
+      'Venue',
+      'The saved simulation places this matchup at a neutral site.',
+    ));
+  } else if (
+    largestMovement?.id === 'stadium-weather'
+    && displayedMovement > 0
   ) {
-    sentences.push(
-      `The biggest game-day shift comes from ${
-        move.label.toLowerCase()
-      }: ${
-        Math.abs(move.change).toFixed(1)
+    const homeTeam = factors.venue === 'team-a-home'
+      ? teamA
+      : teamB;
+    xFactors.push(item(
+      'Venue',
+      `The saved simulation places the game at ${homeTeam.abbreviation}'s home venue.`,
+    ));
+  }
+  if (factors.wind !== 'normal') {
+    xFactors.push(item(
+      'Wind',
+      `The saved conditions include ${OPTION_LABELS[factors.wind]} wind.`,
+    ));
+  }
+  if (factors.precipitation !== 'none') {
+    xFactors.push(item(
+      'Precipitation',
+      `${OPTION_LABELS[factors.precipitation]} is included in the saved conditions.`,
+    ));
+  }
+  if (factors.travel !== 'neutral') {
+    const travelingTeam = factors.travel === 'team-a-traveled'
+      ? teamA
+      : teamB;
+    xFactors.push(item(
+      'Travel',
+      `${travelingTeam.abbreviation} is set for west-to-east travel.`,
+    ));
+  }
+  const restNotes = [
+    ['teamARest', teamA],
+    ['teamBRest', teamB],
+  ].filter(
+    ([factor]) => factors[factor] !== 'standard',
+  ).map(
+    ([factor, team]) => `${team.abbreviation}: ${OPTION_LABELS[factors[factor]]}`,
+  );
+  if (restNotes.length) {
+    xFactors.push(item(
+      'Rest',
+      `The saved rest assumptions are ${restNotes.join(' · ')}.`,
+    ));
+  }
+  const contextNotes = [];
+  if (factors.gameType !== 'regular-season') {
+    contextNotes.push(OPTION_LABELS[factors.gameType]);
+  }
+  if (isDivisionalMatchup) {
+    contextNotes.push('Divisional matchup');
+  }
+  if (contextNotes.length) {
+    xFactors.push(item(
+      'Game Context',
+      `The saved game context includes ${contextNotes.join(' · ')}.`,
+    ));
+  }
+  if (factors.momentum !== 'neutral') {
+    const momentumTeam = factors.momentum === 'team-a'
+      ? teamA
+      : teamB;
+    xFactors.push(item(
+      'Momentum',
+      `Momentum is set toward ${momentumTeam.abbreviation} in the saved simulation.`,
+    ));
+  }
+
+  const injuryNotes = [
+    ['teamA', teamA],
+    ['teamB', teamB],
+  ].flatMap(([teamKey, team]) => (
+    APP_CONFIG.injuries.positionGroups.flatMap((group) => {
+      const status = injuries[teamKey][group.id];
+      return status === 'available'
+        ? []
+        : [`${team.abbreviation} ${INJURY_GROUP_LABELS[group.id]}: ${INJURY_STATUS_LABELS[status]}`];
+    })
+  ));
+  if (injuryNotes.length) {
+    const injuryMovement = movements.find(
+      (movement) => movement.id === 'injuries',
+    );
+    const injuryDisplayedMovement = Number(
+      Math.abs(injuryMovement.change).toFixed(1),
+    );
+    const injuryEffect = Math.abs(injuryMovement.change) < .05
+      ? 'The Injuries stage made no visible change at one-decimal precision.'
+      : `The Injuries stage moved the prediction ${injuryDisplayedMovement.toFixed(1)} percentage points toward ${
+          injuryMovement.change > 0
+            ? teamA.abbreviation
+            : teamB.abbreviation
+        }.`;
+    xFactors.push(item(
+      'Injuries',
+      `The saved injury assumptions list ${injuryNotes.join(' · ')}. ${injuryEffect}`,
+    ));
+  }
+
+  const interpretation = 'The simulator runs this matchup thousands of times with football uncertainty built in. The displayed percentages are the average win chances the model produced. The range shows how much those win chances moved across the simulations. It is not a predicted score or point margin, and it does not guarantee the favorite will win.';
+  const rangeCrossesFifty = teamAProbability.p5 < .5
+    && teamAProbability.p95 > .5;
+  const bottomLineLead = {
+    even: 'The model has no clear favorite.',
+    'coin-flip': `${leader.teamName} hold the edge, but barely.`,
+    slight: `${leader.teamName} hold a slight advantage.`,
+    solid: `The model leans toward ${leader.teamName}.`,
+    clear: `The model clearly favors ${leader.teamName}.`,
+  }[band];
+  const rangeConclusion = rangeCrossesFifty
+    ? 'The simulated range still crosses 50%, so either team can take the edge.'
+    : even
+      ? 'At the displayed precision, this matchup remains dead even.'
+      : `${opponent.teamName} still have an upset path, but the simulated range stays on ${leader.abbreviation}'s side of 50%.`;
+  const movementConclusion = largestMovement
+    && Math.abs(largestMovement.change) >= .05
+    ? ` ${largestMovement.label} supplied the biggest game-day push.`
+    : '';
+  const bottomLine = `${bottomLineLead} ${rangeConclusion}${movementConclusion}`;
+
+  // Keep the current two-paragraph renderer stable until Section 3 consumes
+  // the structured fields above.
+  const headline = even
+    ? 'Too close to call: 50.0% each.'
+    : `${leader.teamName} get the nod at ${formatProbability(leadProbability.mean)}.`;
+  const legacySentences = [];
+  if (!even && selectedEdge) {
+    legacySentences.push(
+      `The key statistical matchup is ${leader.abbreviation}'s ${selectedEdge.side} against ${opponent.abbreviation}'s ${
+        selectedEdge.side === 'offense' ? 'defense' : 'offense'
+      }, especially ${metricTerms[selectedEdge.pairId] ?? 'overall efficiency'}.`,
+    );
+  }
+  if (largestMovement && Math.abs(largestMovement.change) >= .05) {
+    const legacyStageLabel = {
+      'stadium-weather': 'Venue and weather',
+      fatigue: 'Travel and rest',
+      'competitive-factors': 'Competitive context',
+      injuries: 'Injuries',
+    }[largestMovement.id];
+    legacySentences.push(
+      `The biggest game-day shift comes from ${legacyStageLabel.toLowerCase()}: ${
+        Math.abs(largestMovement.change).toFixed(1)
       } percentage points for ${
-        move.change > 0
+        largestMovement.change > 0
           ? teamA.abbreviation
           : teamB.abbreviation
       } at that stage.`,
     );
+  } else {
+    legacySentences.push(
+      'The selected game conditions make no difference at the displayed precision.',
+    );
   }
-  else sentences.push('The selected game conditions make no difference at the displayed precision.');
-  if(a.p5<.5&&a.p95>.5)sentences.push('There is room for either team to take the edge: the simulated probability range crosses 50%.');
-  return Object.freeze({headline,body:sentences.join(' ')});
+  if (rangeCrossesFifty) {
+    legacySentences.push(
+      'There is room for either team to take the edge: the simulated probability range crosses 50%.',
+    );
+  }
+
+  return Object.freeze({
+    title,
+    odds,
+    decidingFactors: Object.freeze(decidingFactors),
+    xFactors: Object.freeze(xFactors),
+    interpretation,
+    bottomLine,
+    headline,
+    body: legacySentences.join(' '),
+  });
 }
 
 /** Ordinary DOM output only. All probabilities and contributions arrive calculated. */
