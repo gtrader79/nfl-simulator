@@ -401,8 +401,7 @@ export function buildGameDaySummary(result) {
     : '';
   const bottomLine = `${bottomLineLead} ${rangeConclusion}${movementConclusion}`;
 
-  // Keep the current two-paragraph renderer stable until Section 3 consumes
-  // the structured fields above.
+  // Retain the original summary fields for compatibility with existing consumers.
   const headline = even
     ? 'Too close to call: 50.0% each.'
     : `${leader.teamName} get the nod at ${formatProbability(leadProbability.mean)}.`;
@@ -712,7 +711,34 @@ export function createRenderer({ root, metricCatalog = METRIC_CATALOG }) {
       card.append(node('h3', `${team.teamName} · ${team.abbreviation}`), node('span', formatProbability(values.mean), 'probability'),
         node('p', `${formatProbability(values.p5)}–${formatProbability(values.p95)} · Middle 90% of simulated probabilities`, 'range')); cards.append(card);
     }
-    const gameDay=buildGameDaySummary(result);
+    const gameDay = buildGameDaySummary(result);
+    const outlook = node('article', undefined, 'game-day-outlook');
+    outlook.append(node('h3', gameDay.title, 'game-day-heading'));
+    // Render only the certified editorial object; never read live controls here.
+    function outlookSection(key, heading, value, className) {
+      const section = node('section');
+      section.dataset.outlookSection = key;
+      section.append(node('h4', heading));
+      if (Array.isArray(value)) {
+        const list = node('ul');
+        for (const item of value) {
+          const entry = node('li');
+          entry.append(node('strong', `${item.label}: `), doc.createTextNode(item.text));
+          list.append(entry);
+        }
+        section.append(list);
+      } else {
+        section.append(node('p', value, className));
+      }
+      outlook.append(section);
+    }
+    outlookSection('odds', 'The Odds', gameDay.odds, 'favored');
+    outlookSection('deciding-factors', 'The Deciding Factors', gameDay.decidingFactors);
+    if (gameDay.xFactors.length) {
+      outlookSection('x-factors', 'The X-Factor', gameDay.xFactors);
+    }
+    outlookSection('interpretation', 'What do the numbers mean?', gameDay.interpretation);
+    outlookSection('bottom-line', 'The Bottom Line', gameDay.bottomLine, 'game-day-summary');
     content.replaceChildren(
       node(
         'p',
@@ -724,7 +750,7 @@ export function createRenderer({ root, metricCatalog = METRIC_CATALOG }) {
         'muted',
       ),
       cards,
-      node('h3','Game Day Outlook','game-day-heading'),node('p',gameDay.headline,'favored'),node('p',gameDay.body,'game-day-summary'));
+      outlook);
     const explanation=node('details');explanation.append(node('summary','What does the range mean?'),
       node('p','These are the 5th and 95th percentiles: the middle 90% of win-probability values produced by the simulation. A wide range means the simulated probabilities vary widely. It is not a score range or a claim of 90% confidence in the winner. The large percentage above is the average win probability.','muted'));
     content.append(explanation);
