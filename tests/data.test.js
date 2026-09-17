@@ -8,7 +8,7 @@ import { calculateLeagueMetrics } from '../js/data/league-metrics.js';
 import { calculateBaseMatchup } from '../js/model/matchup-model.js';
 import { createAppController } from '../js/app-controller.js';
 import { createStore, createInitialState } from '../js/state/store.js';
-import { selectCanRunSimulation } from '../js/state/selectors.js';
+import { selectCanRunSimulation, selectViewModel } from '../js/state/selectors.js';
 import { createRenderer,  buildGameDaySummary,  formatInjuryAssumptions,} from '../js/ui/renderer.js';
 import { createInputController } from '../js/ui/input-controller.js';
 import { runScenarios } from '../js/model/scenario-engine.js';
@@ -185,12 +185,14 @@ async function withUI(callback, { raw = fixture(), failLoad = false } = {}) {
   const store = createStore({ initialState: createInitialState() });
   let calls = 0;
   let failRun = false;
-  const controller = createAppController({ store,
-    repository: createDataRepository({ fetchImpl: async () => {
+  const renderer = createRenderer({ root });
+  const repository = createDataRepository({ fetchImpl: async () => {
       if (failLoad) throw new Error('Synthetic network failure');
       return { ok: true, json: async () => raw };
-    } }), metricCatalog: METRIC_CATALOG, calculateLeagueMetrics,
-    renderer: createRenderer({ root }), createInputController: ({ handlers }) => createInputController({ root, handlers }),
+    } });
+  const controller = createAppController({ store, repository,
+    metricCatalog: METRIC_CATALOG, calculateLeagueMetrics,
+    renderer, createInputController: ({ handlers }) => createInputController({ root, handlers }),
     yieldFrame: async () => {}, randomSourceFactory: () => () => 0.5,
     model: { calculateBaseMatchup, runScenarios: args => {
       calls++; if (failRun) throw new Error('Synthetic rerun failure'); return runScenarios(args);
@@ -206,6 +208,9 @@ async function withUI(callback, { raw = fixture(), failLoad = false } = {}) {
   try {
     await controller.initialize();
     await callback({ root, q, store, controller, change, selectTeams, run,
+      renderResult: simulationResult => renderer.render(store.getState(), {
+        ...selectViewModel(store.getState(), repository), simulationResult,
+      }),
       calls: () => calls, failRun: () => { failRun = true; } });
   } finally { controller.destroy(); root.remove(); }
 }
@@ -388,12 +393,12 @@ test('139 stale inputs stop animation and prevent replay until rerun',async()=>w
 test('140 game day outlook and clearer interval use the saved result without changing it',async()=>withUI(async h=>{
   h.selectTeams();await h.run();const result=h.store.getState().simulation.result,before=JSON.stringify(result);
   const summary=buildGameDaySummary(result);
-  assertEqual(h.q('.favored').textContent,summary.headline);
-  assertEqual(h.q('.game-day-summary').textContent,summary.body);
+  assertEqual(h.q('.favored').textContent,summary.odds);
+  assertEqual(h.q('.game-day-summary').textContent,summary.bottomLine);
   assert(h.q('.range').textContent.includes('Middle 90% of simulated probabilities'));
   assertEqual(JSON.stringify(result),before);
   h.change('[data-factor="venue"][value="team-a-home"]','team-a-home');
-  assertEqual(h.q('.game-day-summary').textContent,summary.body);
+  assertEqual(h.q('.game-day-summary').textContent,summary.bottomLine);
 }));
 test('141 a rounded even matchup has a neutral game day headline',async()=>withUI(async h=>{
   h.selectTeams();await h.run();const result=structuredClone(h.store.getState().simulation.result);
@@ -813,4 +818,270 @@ test(
   assert(summary.headline.includes(result.inputSnapshot.teamB.teamName));
   assert(summary.body.includes(`20.0 percentage points for ${result.inputSnapshot.teamB.abbreviation}`));
   assert(summary.body.includes('venue and weather'));
+}));
+
+test('149 game day outlook exposes the certified structured editorial contract without mutating the result', async () => withUI(async h => {
+  h.selectTeams(); await h.run();
+  const result = h.store.getState().simulation.result;
+  const before = JSON.stringify(result);
+  const summary = buildGameDaySummary(result);
+  assert(summary.title.startsWith('Game Outlook:'));
+  assert(typeof summary.odds === 'string' && summary.odds.length > 0);
+  assertEqual(summary.decidingFactors.length, 2);
+  assert(Array.isArray(summary.xFactors));
+  assert(summary.interpretation.includes('not a predicted score or point margin'));
+  assert(typeof summary.bottomLine === 'string' && summary.bottomLine.length > 0);
+  assert(Object.isFrozen(summary));
+  assert(Object.isFrozen(summary.decidingFactors));
+  assert(summary.decidingFactors.every(Object.isFrozen));
+  assert(Object.isFrozen(summary.xFactors));
+  assert(summary.xFactors.every(Object.isFrozen));
+  assert(summary.headline.includes('get the nod') || summary.headline.includes('Too close to call'));
+  assertEqual(JSON.stringify(result), before);
+}));
+
+test('150 favorite language follows the certified displayed-probability thresholds', async () => withUI(async h => {
+  h.selectTeams(); await h.run();
+  const original = h.store.getState().simulation.result;
+  for (const [mean, wording] of [
+    [.5, 'dead even'],
+    [.501, 'virtual coin flip'],
+    [.525, 'slight edge'],
+    [.575, 'model leans toward'],
+    [.65, 'clear favorite'],
+  ]) {
+    const result = structuredClone(original);
+    const final = result.scenarios.find(
+      scenario => scenario.id === result.finalScenarioId,
+    );
+    final.probabilitySummary.teamA.mean = mean;
+    final.probabilitySummary.teamB.mean = 1 - mean;
+    assert(
+      buildGameDaySummary(result).odds.toLowerCase().includes(wording),
+      `Expected ${wording} at ${(mean * 100).toFixed(1)}%.`,
+    );
+  }
+}));
+
+test('151 game-day movement wording follows the certified point bands', async () => withUI(async h => {
+  h.selectTeams(); await h.run();
+  const original = h.store.getState().simulation.result;
+  for (const [change, wording] of [
+    [.004, 'small nudge'],
+    [.015, 'noticeable shift'],
+    [.04, 'meaningful shift'],
+    [.06, 'major shift'],
+  ]) {
+    const result = structuredClone(original);
+    result.scenarios.forEach((scenario, index) => {
+      const mean = index < 2 ? .5 : .5 + change;
+      scenario.probabilitySummary.teamA.mean = mean;
+      scenario.probabilitySummary.teamB.mean = 1 - mean;
+    });
+    const movement = buildGameDaySummary(result).decidingFactors.find(
+      factor => factor.label === 'Biggest Game-Day Shift',
+    );
+    assert(movement.text.includes(wording));
+    assert(movement.text.includes(`${(change * 100).toFixed(1)} percentage points`));
+  }
+}));
+
+test('152 ordinary home-game conditions are omitted from the X-Factor contract', async () => withUI(async h => {
+  h.selectTeams(); await h.run();
+  const result = structuredClone(h.store.getState().simulation.result);
+  Object.assign(result.inputSnapshot.factors, {
+    venue: 'team-a-home',
+    wind: 'normal',
+    precipitation: 'none',
+    travel: 'neutral',
+    teamARest: 'standard',
+    teamBRest: 'standard',
+    gameType: 'regular-season',
+    momentum: 'neutral',
+  });
+  result.inputSnapshot.isDivisionalMatchup = false;
+  result.scenarios.forEach((scenario) => {
+    scenario.probabilitySummary.teamA.mean = .55;
+    scenario.probabilitySummary.teamB.mean = .45;
+  });
+  assertEqual(buildGameDaySummary(result).xFactors.length, 0);
+}));
+
+test('153 X-Factors report only saved notable conditions and exact injury designations', async () => withUI(async h => {
+  h.selectTeams(); await h.run();
+  const result = structuredClone(h.store.getState().simulation.result);
+  Object.assign(result.inputSnapshot.factors, {
+    venue: 'neutral',
+    wind: 'high',
+    precipitation: 'snow',
+    travel: 'team-b-traveled',
+    teamARest: 'short',
+    teamBRest: 'extended',
+    gameType: 'divisional-round',
+    momentum: 'team-a',
+  });
+  result.inputSnapshot.isDivisionalMatchup = true;
+  result.inputSnapshot.injuries.teamA.qb = 'out';
+  result.inputSnapshot.injuries.teamB.wr = 'questionable';
+  [.50, .50, .52, .54, .55, .58].forEach((mean, index) => {
+    result.scenarios[index].probabilitySummary.teamA.mean = mean;
+    result.scenarios[index].probabilitySummary.teamB.mean = 1 - mean;
+  });
+  const summary = buildGameDaySummary(result);
+  assert(summary.title.endsWith('— Divisional Round'));
+  assertDeepEqual(summary.xFactors.map(factor => factor.label), [
+    'Venue',
+    'Wind',
+    'Precipitation',
+    'Travel',
+    'Rest',
+    'Game Context',
+    'Momentum',
+    'Injuries',
+  ]);
+  const injuryText = summary.xFactors.find(factor => factor.label === 'Injuries').text;
+  assert(injuryText.includes(`${result.inputSnapshot.teamA.abbreviation} QB: Out`));
+  assert(injuryText.includes(`${result.inputSnapshot.teamB.abbreviation} WR: Questionable`));
+  assert(injuryText.includes('3.0 percentage points'));
+  assert(!injuryText.toLowerCase().includes('star'));
+  assert(!injuryText.toLowerCase().includes('starter'));
+}));
+
+test('154 bottom line distinguishes a range that crosses 50 percent from one that stays on the favorite side', async () => withUI(async h => {
+  h.selectTeams(); await h.run();
+  const crossing = structuredClone(h.store.getState().simulation.result);
+  const final = crossing.scenarios.find(
+    scenario => scenario.id === crossing.finalScenarioId,
+  );
+  final.probabilitySummary.teamA.mean = .6;
+  final.probabilitySummary.teamA.p5 = .45;
+  final.probabilitySummary.teamA.p95 = .7;
+  final.probabilitySummary.teamB.mean = .4;
+  final.probabilitySummary.teamB.p5 = .3;
+  final.probabilitySummary.teamB.p95 = .55;
+  assert(buildGameDaySummary(crossing).bottomLine.includes('crosses 50%'));
+
+  const staying = structuredClone(crossing);
+  const stayingFinal = staying.scenarios.find(
+    scenario => scenario.id === staying.finalScenarioId,
+  );
+  stayingFinal.probabilitySummary.teamA.p5 = .55;
+  stayingFinal.probabilitySummary.teamB.p95 = .45;
+  assert(buildGameDaySummary(staying).bottomLine.includes("side of 50%"));
+}));
+
+test('155 a displayed-even result identifies the strongest absolute base edge without inventing a favorite', async () => withUI(async h => {
+  h.selectTeams(); await h.run();
+  const result = structuredClone(h.store.getState().simulation.result);
+  result.scenarios.forEach((scenario) => {
+    scenario.probabilitySummary.teamA.mean = .50001;
+    scenario.probabilitySummary.teamB.mean = .49999;
+  });
+  const directions = [
+    result.baseMatchup.teamAOffenseVsTeamBDefense,
+    result.baseMatchup.teamBOffenseVsTeamADefense,
+  ];
+  directions.forEach((direction) => direction.contributions.forEach((contribution) => {
+    if (contribution.available) contribution.contribution = 0;
+  }));
+  const selected = directions[1].contributions.find(
+    contribution => contribution.available,
+  );
+  selected.contribution = -.75;
+  const summary = buildGameDaySummary(result);
+  assert(summary.odds.includes('dead even'));
+  assert(summary.decidingFactors[0].text.includes(
+    `${result.inputSnapshot.teamA.abbreviation}'s defense`,
+  ));
+  assert(!summary.decidingFactors[0].text.toLowerCase().includes('favorite'));
+}));
+
+test('156 editorial output excludes unsupported score, certainty, betting and player-status claims', async () => withUI(async h => {
+  h.selectTeams(); await h.run();
+  const summary = JSON.stringify(
+    buildGameDaySummary(h.store.getState().simulation.result),
+  ).toLowerCase();
+  for (const prohibited of [
+    'blowout',
+    'nail-biter',
+    'guaranteed win',
+    'sure thing',
+    'safe bet',
+    'bet the house',
+    'star player',
+    'starting player',
+  ]) {
+    assert(!summary.includes(prohibited), `Unsupported wording found: ${prohibited}`);
+  }
+}));
+
+test('157 structured Outlook renders every certified field in semantic section order', async () => withUI(async h => {
+  h.selectTeams(); await h.run();
+  const result = h.store.getState().simulation.result;
+  const before = JSON.stringify(result);
+  const summary = buildGameDaySummary(result);
+  const outlook = h.q('article.game-day-outlook');
+  assertEqual(outlook.querySelector('h3').textContent, summary.title);
+  const sections = [...outlook.querySelectorAll('section')];
+  assertDeepEqual(sections.map(section => section.dataset.outlookSection), [
+    'odds', 'deciding-factors', ...(summary.xFactors.length ? ['x-factors'] : []),
+    'interpretation', 'bottom-line',
+  ]);
+  for (const [key, value] of [
+    ['odds', summary.odds], ['interpretation', summary.interpretation],
+    ['bottom-line', summary.bottomLine],
+  ]) {
+    assertEqual(outlook.querySelector(`[data-outlook-section="${key}"] p`).textContent, value);
+  }
+  for (const [key, items] of [['deciding-factors', summary.decidingFactors], ['x-factors', summary.xFactors]]) {
+    assertDeepEqual([...outlook.querySelectorAll(`[data-outlook-section="${key}"] li`)]
+      .map(item => item.textContent), items.map(item => `${item.label}: ${item.text}`));
+  }
+  assertEqual(h.root.querySelectorAll('.result-team').length, 2);
+  assertEqual(h.root.querySelectorAll('.scenario-table tbody tr').length, 6);
+  assert(h.q('#prediction-content details summary').textContent.includes('range'));
+  assertEqual(JSON.stringify(result), before);
+}));
+
+test('158 no X-Factor section is rendered for an ordinary snapshot with no notable movement', async () => withUI(async h => {
+  h.selectTeams(); await h.run();
+  const result = structuredClone(h.store.getState().simulation.result);
+  Object.assign(result.inputSnapshot.factors, APP_CONFIG.factors.defaults, { venue: 'team-a-home' });
+  result.inputSnapshot.isDivisionalMatchup = false;
+  result.inputSnapshot.injuries = structuredClone(APP_CONFIG.injuries.defaults);
+  result.scenarios.forEach(scenario => {
+    scenario.probabilitySummary.teamA.mean = .55;
+    scenario.probabilitySummary.teamB.mean = .45;
+  });
+  assertEqual(buildGameDaySummary(result).xFactors.length, 0);
+  h.renderResult(result);
+  assertEqual(h.q('[data-outlook-section="x-factors"]'), null);
+  assertEqual(h.root.querySelectorAll('.game-day-outlook section').length, 4);
+}));
+
+test('159 complete Outlook stays on the saved snapshot after edits and clears on Reset', async () => withUI(async h => {
+  h.selectTeams(); await h.run();
+  const outlook = h.q('.game-day-outlook');
+  const before = outlook.textContent;
+  const calls = h.calls();
+  h.change('[data-factor="precipitation"]', 'snow');
+  h.change('[data-injury-team="teamA"][data-injury-group="qb"]', 'out');
+  assertEqual(h.q('.game-day-outlook'), outlook);
+  assertEqual(outlook.textContent, before);
+  assertEqual(h.calls(), calls);
+  assertEqual(h.store.getState().simulation.isStale, true);
+  h.q('[data-action="reset"]').click();
+  assertEqual(h.q('.game-day-outlook'), null);
+}));
+
+test('160 saved team names are rendered as text, never executable markup', async () => withUI(async h => {
+  h.selectTeams(); await h.run();
+  const result = structuredClone(h.store.getState().simulation.result);
+  result.inputSnapshot.teamA.teamName = '<img src=x onerror="throw 1">';
+  result.inputSnapshot.teamA.abbreviation = '<svg onload="throw 1">';
+  const summary = buildGameDaySummary(result);
+  h.renderResult(result);
+  assertEqual(h.q('.game-day-heading').textContent, summary.title);
+  assertEqual(h.q('.favored').textContent, summary.odds);
+  assertEqual(h.root.querySelectorAll('#prediction-content img, #prediction-content svg').length, 0);
 }));
