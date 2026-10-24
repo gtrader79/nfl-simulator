@@ -1,7 +1,7 @@
 {
   "schemaVersion": "1.0.0",
   "datasetId": "nfl-simulator",
-  "generatedAt": "2026-10-14T20:22:18Z",
+  "generatedAt": "2026-10-24T14:43:49Z",
   "source": {
     "provider": "nflreadpy / nflfastR",
     "description": "NFL season-to-date team statistics"
@@ -9,10 +9,10 @@
   "seasons": [
     {
       "season": 2026,
-      "updatedDate": "2026-10-12",
+      "updatedDate": "2026-10-22",
       "period": {
         "type": "regular-season",
-        "week": 5,
+        "week": 7,
         "postseasonRound": null
       },
       "teams": [
@@ -28,81 +28,81 @@
             "tertiary": "#ffb612"
           },
           "record": {
-            "wins": 1,
+            "wins": 2,
             "losses": 4,
             "ties": 0,
-            "gamesPlayed": 5
+            "gamesPlayed": 6
           },
           "metrics": {
             "offense.pass_epa_per_dropback": {
-              "value": 0.04557188063719161,
-              "rank": 21,
-              "sampleSize": 215
+              "value": 0.040737267492384474,
+              "rank": 20,
+              "sampleSize": 250
             },
             "offense.rush_epa_per_attempt": {
-              "value": -0.041763871064251314,
-              "rank": 17,
-              "sampleSize": 119
+              "value": -0.04895620114203198,
+              "rank": 18,
+              "sampleSize": 154
             },
             "offense.success_rate": {
-              "value": 0.44635650548661465,
-              "rank": 12,
-              "sampleSize": 329
+              "value": 0.44865855556210216,
+              "rank": 11,
+              "sampleSize": 399
             },
             "offense.pressure_allowed_rate": {
-              "value": 0.15786684521889657,
-              "rank": 19,
-              "sampleSize": 215
+              "value": 0.15680926081937033,
+              "rank": 17,
+              "sampleSize": 250
             },
             "offense.explosive_play_rate": {
-              "value": 0.07877828063808705,
+              "value": 0.07570572764192038,
               "rank": 32,
-              "sampleSize": 329
+              "sampleSize": 399
             },
             "offense.interception_rate": {
-              "value": 0.021697328958910946,
-              "rank": 23,
-              "sampleSize": 198
+              "value": 0.02184310973224205,
+              "rank": 24,
+              "sampleSize": 233
             },
             "offense.fumble_rate": {
-              "value": 0.012939309430152262,
+              "value": 0.012282322410136284,
               "rank": 1,
-              "sampleSize": 329
+              "sampleSize": 399
             },
             "defense.pass_epa_allowed_per_dropback": {
-              "value": 0.11148483618977575,
-              "rank": 31,
-              "sampleSize": 157
+              "value": 0.09356712827424897,
+              "rank": 28,
+              "sampleSize": 194
             },
             "defense.rush_epa_allowed_per_attempt": {
-              "value": -0.05265098753861159,
+              "value": -0.058048305786349,
               "rank": 6,
-              "sampleSize": 144
+              "sampleSize": 164
             },
             "defense.success_rate_allowed": {
-              "value": 0.43724911872099015,
-              "rank": 19,
-              "sampleSize": 295
+              "value": 0.4374621282884022,
+              "rank": 24,
+              "sampleSize": 352
             },
             "defense.pressure_generated_rate": {
-              "value": 0.15471156014981016,
-              "rank": 20,
-              "sampleSize": 157
+              "value": 0.15719986868698854,
+              "rank": 16,
+              "sampleSize": 194
             },
             "defense.explosive_play_rate_allowed": {
-              "value": 0.1004024464295893,
-              "rank": 30,
-              "sampleSize": 295
+              "value": 0.09615552729397789,
+              "rank": 25,
+              "sampleSize": 352
             },
             "defense.interception_forced_rate": {
-              "value": 0.020908440745737368,
-              "rank": 15,
-              "sampleSize": 140
+              "value": 0.020086172847439465,
+              "rank": 19,
+              "sampleSize": 174
             },
             "defense.fumble_forced_rate": {
-              "value": 0.017907287987800825,
-              "rank": 17,
-              "sampleSize": 295
+              "value": 0.017991757439022052,
+              "rank": 7,
+              "sampleSize": 352
             }
           }
         },
@@ -119,80 +119,80 @@
           },
           "record": {
             "wins": 2,
-            "losses": 3,
+            "losses": 4,
             "ties": 0,
-            "gamesPlayed": 5
+            "gamesPlayed": 6
           },
           "metrics": {
             "offense.pass_epa_per_dropback": {
-              "value": 0.014825331143251826,
-              "rank": 26,
-              "sampleSize": 152
+              "value": -0.009970636043208829,
+              "rank": 27,
+              "sampleSize": 193
             },
             "offense.rush_epa_per_attempt": {
-              "value": -0.015882177215804035,
-              "rank": 5,
-              "sampleSize": 161
+              "value": -0.025131323046414154,
+              "rank": 7,
+              "sampleSize": 173
             },
             "offense.success_rate": {
-              "value": 0.44751611386102136,
-              "rank": 11,
-              "sampleSize": 307
+              "value": 0.4380476757498282,
+              "rank": 13,
+              "sampleSize": 359
             },
             "offense.pressure_allowed_rate": {
-              "value": 0.14350778626659683,
-              "rank": 3,
-              "sampleSize": 152
+              "value": 0.14647370831734519,
+              "rank": 5,
+              "sampleSize": 193
             },
             "offense.explosive_play_rate": {
-              "value": 0.09660404592628752,
+              "value": 0.09557477777624032,
               "rank": 10,
-              "sampleSize": 307
+              "sampleSize": 359
             },
             "offense.interception_rate": {
-              "value": 0.02529832545560762,
-              "rank": 32,
-              "sampleSize": 135
+              "value": 0.024292713766397977,
+              "rank": 31,
+              "sampleSize": 170
             },
             "offense.fumble_rate": {
-              "value": 0.017713171044843636,
-              "rank": 15,
-              "sampleSize": 307
+              "value": 0.017883092812556865,
+              "rank": 21,
+              "sampleSize": 359
             },
             "defense.pass_epa_allowed_per_dropback": {
-              "value": 0.04698318583606586,
-              "rank": 6,
-              "sampleSize": 226
+              "value": 0.04806292801981641,
+              "rank": 14,
+              "sampleSize": 267
             },
             "defense.rush_epa_allowed_per_attempt": {
-              "value": -0.045411275257865966,
-              "rank": 15,
-              "sampleSize": 102
+              "value": -0.05666912768802272,
+              "rank": 8,
+              "sampleSize": 134
             },
             "defense.success_rate_allowed": {
-              "value": 0.4259677802486514,
-              "rank": 4,
-              "sampleSize": 324
+              "value": 0.4288932874483606,
+              "rank": 11,
+              "sampleSize": 396
             },
             "defense.pressure_generated_rate": {
-              "value": 0.16380015893115824,
-              "rank": 6,
-              "sampleSize": 226
+              "value": 0.16425179894551697,
+              "rank": 5,
+              "sampleSize": 267
             },
             "defense.explosive_play_rate_allowed": {
-              "value": 0.08802551498256253,
-              "rank": 4,
-              "sampleSize": 324
+              "value": 0.0850929493667747,
+              "rank": 5,
+              "sampleSize": 396
             },
             "defense.interception_forced_rate": {
-              "value": 0.01746185390800507,
+              "value": 0.016775484578229263,
               "rank": 32,
-              "sampleSize": 211
+              "sampleSize": 247
             },
             "defense.fumble_forced_rate": {
-              "value": 0.01744526721231486,
-              "rank": 22,
-              "sampleSize": 324
+              "value": 0.01732985331919181,
+              "rank": 13,
+              "sampleSize": 396
             }
           }
         },
@@ -209,80 +209,80 @@
           },
           "record": {
             "wins": 4,
-            "losses": 1,
+            "losses": 2,
             "ties": 0,
-            "gamesPlayed": 5
+            "gamesPlayed": 6
           },
           "metrics": {
             "offense.pass_epa_per_dropback": {
-              "value": 0.11212208169177462,
-              "rank": 6,
-              "sampleSize": 160
+              "value": 0.10807022685944856,
+              "rank": 7,
+              "sampleSize": 198
             },
             "offense.rush_epa_per_attempt": {
-              "value": -0.00514590769622348,
-              "rank": 3,
-              "sampleSize": 157
+              "value": -0.02564315059066431,
+              "rank": 8,
+              "sampleSize": 180
             },
             "offense.success_rate": {
-              "value": 0.46646859730077,
-              "rank": 2,
-              "sampleSize": 304
+              "value": 0.45529327975574196,
+              "rank": 5,
+              "sampleSize": 361
             },
             "offense.pressure_allowed_rate": {
-              "value": 0.14309650212733913,
-              "rank": 2,
-              "sampleSize": 160
+              "value": 0.15217127479577047,
+              "rank": 13,
+              "sampleSize": 198
             },
             "offense.explosive_play_rate": {
-              "value": 0.10411293373224663,
+              "value": 0.10230074715130279,
               "rank": 2,
-              "sampleSize": 304
+              "sampleSize": 361
             },
             "offense.interception_rate": {
-              "value": 0.01886104091986445,
+              "value": 0.018163321978703247,
               "rank": 5,
-              "sampleSize": 136
+              "sampleSize": 167
             },
             "offense.fumble_rate": {
-              "value": 0.015043913357465494,
-              "rank": 4,
-              "sampleSize": 304
+              "value": 0.015268307122957283,
+              "rank": 8,
+              "sampleSize": 361
             },
             "defense.pass_epa_allowed_per_dropback": {
-              "value": 0.05514126899228087,
-              "rank": 15,
-              "sampleSize": 196
+              "value": 0.03897298567622901,
+              "rank": 8,
+              "sampleSize": 233
             },
             "defense.rush_epa_allowed_per_attempt": {
-              "value": -0.048714052629749316,
-              "rank": 11,
-              "sampleSize": 129
+              "value": -0.05161694750353299,
+              "rank": 14,
+              "sampleSize": 158
             },
             "defense.success_rate_allowed": {
-              "value": 0.4296652742801117,
-              "rank": 6,
-              "sampleSize": 312
+              "value": 0.4282904196145387,
+              "rank": 9,
+              "sampleSize": 372
             },
             "defense.pressure_generated_rate": {
-              "value": 0.15869373801543005,
-              "rank": 15,
-              "sampleSize": 196
+              "value": 0.1619135232089706,
+              "rank": 9,
+              "sampleSize": 233
             },
             "defense.explosive_play_rate_allowed": {
-              "value": 0.0934718334895686,
-              "rank": 17,
-              "sampleSize": 312
+              "value": 0.08768870942206701,
+              "rank": 9,
+              "sampleSize": 372
             },
             "defense.interception_forced_rate": {
-              "value": 0.020199315828358815,
-              "rank": 20,
-              "sampleSize": 173
+              "value": 0.019583515869275314,
+              "rank": 22,
+              "sampleSize": 199
             },
             "defense.fumble_forced_rate": {
-              "value": 0.020331367218203153,
-              "rank": 4,
-              "sampleSize": 312
+              "value": 0.01853797318238345,
+              "rank": 5,
+              "sampleSize": 372
             }
           }
         },
@@ -298,81 +298,81 @@
             "tertiary": "#0c2e82"
           },
           "record": {
-            "wins": 4,
+            "wins": 5,
             "losses": 1,
             "ties": 0,
-            "gamesPlayed": 5
+            "gamesPlayed": 6
           },
           "metrics": {
             "offense.pass_epa_per_dropback": {
-              "value": 0.1462502589339851,
+              "value": 0.1485055763080984,
               "rank": 2,
-              "sampleSize": 167
-            },
-            "offense.rush_epa_per_attempt": {
-              "value": 0.018575660541268902,
-              "rank": 1,
-              "sampleSize": 142
-            },
-            "offense.success_rate": {
-              "value": 0.4594428463199742,
-              "rank": 4,
-              "sampleSize": 293
-            },
-            "offense.pressure_allowed_rate": {
-              "value": 0.14581673233199477,
-              "rank": 5,
-              "sampleSize": 167
-            },
-            "offense.explosive_play_rate": {
-              "value": 0.11339494861884747,
-              "rank": 1,
-              "sampleSize": 293
-            },
-            "offense.interception_rate": {
-              "value": 0.021948920617420962,
-              "rank": 24,
-              "sampleSize": 141
-            },
-            "offense.fumble_rate": {
-              "value": 0.02251462062821766,
-              "rank": 30,
-              "sampleSize": 293
-            },
-            "defense.pass_epa_allowed_per_dropback": {
-              "value": 0.09988511975006141,
-              "rank": 28,
-              "sampleSize": 223
-            },
-            "defense.rush_epa_allowed_per_attempt": {
-              "value": -0.03096060837147858,
-              "rank": 27,
-              "sampleSize": 136
-            },
-            "defense.success_rate_allowed": {
-              "value": 0.45025024782563844,
-              "rank": 30,
-              "sampleSize": 350
-            },
-            "defense.pressure_generated_rate": {
-              "value": 0.15939292577064354,
-              "rank": 12,
-              "sampleSize": 223
-            },
-            "defense.explosive_play_rate_allowed": {
-              "value": 0.09820928594817416,
-              "rank": 26,
-              "sampleSize": 350
-            },
-            "defense.interception_forced_rate": {
-              "value": 0.018598139881349077,
-              "rank": 27,
               "sampleSize": 203
             },
+            "offense.rush_epa_per_attempt": {
+              "value": 0.013748154759148533,
+              "rank": 1,
+              "sampleSize": 168
+            },
+            "offense.success_rate": {
+              "value": 0.4595201404431295,
+              "rank": 3,
+              "sampleSize": 354
+            },
+            "offense.pressure_allowed_rate": {
+              "value": 0.1478019041407361,
+              "rank": 7,
+              "sampleSize": 203
+            },
+            "offense.explosive_play_rate": {
+              "value": 0.1115868002102795,
+              "rank": 1,
+              "sampleSize": 354
+            },
+            "offense.interception_rate": {
+              "value": 0.021112866892614,
+              "rank": 21,
+              "sampleSize": 174
+            },
+            "offense.fumble_rate": {
+              "value": 0.020560229263217857,
+              "rank": 31,
+              "sampleSize": 354
+            },
+            "defense.pass_epa_allowed_per_dropback": {
+              "value": 0.10019758270471465,
+              "rank": 31,
+              "sampleSize": 264
+            },
+            "defense.rush_epa_allowed_per_attempt": {
+              "value": -0.04049233201151277,
+              "rank": 20,
+              "sampleSize": 156
+            },
+            "defense.success_rate_allowed": {
+              "value": 0.44752797009763773,
+              "rank": 29,
+              "sampleSize": 411
+            },
+            "defense.pressure_generated_rate": {
+              "value": 0.15907581717562652,
+              "rank": 13,
+              "sampleSize": 264
+            },
+            "defense.explosive_play_rate_allowed": {
+              "value": 0.09642540664133983,
+              "rank": 26,
+              "sampleSize": 411
+            },
+            "defense.interception_forced_rate": {
+              "value": 0.018739398805944482,
+              "rank": 29,
+              "sampleSize": 244
+            },
             "defense.fumble_forced_rate": {
-              "value": 0.018789982910123397,
-              "rank": 10,
-              "sampleSize": 350
+              "value": 0.017115197828037495,
+              "rank": 15,
+              "sampleSize": 411
             }
           }
         },
@@ -388,81 +388,81 @@
             "tertiary": "#bfc0bf"
           },
           "record": {
-            "wins": 2,
+            "wins": 3,
             "losses": 2,
             "ties": 0,
-            "gamesPlayed": 4
+            "gamesPlayed": 5
           },
           "metrics": {
             "offense.pass_epa_per_dropback": {
-              "value": 0.11545482177648916,
-              "rank": 5,
-              "sampleSize": 177
+              "value": 0.1084395990579987,
+              "rank": 6,
+              "sampleSize": 220
             },
             "offense.rush_epa_per_attempt": {
-              "value": -0.04380394755394178,
-              "rank": 19,
-              "sampleSize": 93
+              "value": -0.03612370844071563,
+              "rank": 13,
+              "sampleSize": 124
             },
             "offense.success_rate": {
-              "value": 0.43818630451089036,
+              "value": 0.4369623115096472,
               "rank": 14,
-              "sampleSize": 265
+              "sampleSize": 338
             },
             "offense.pressure_allowed_rate": {
-              "value": 0.16582159354334772,
-              "rank": 22,
-              "sampleSize": 177
+              "value": 0.1584861127826587,
+              "rank": 19,
+              "sampleSize": 220
             },
             "offense.explosive_play_rate": {
-              "value": 0.09759688154028195,
-              "rank": 7,
-              "sampleSize": 265
+              "value": 0.09558099072290205,
+              "rank": 9,
+              "sampleSize": 338
             },
             "offense.interception_rate": {
-              "value": 0.01939078409666645,
+              "value": 0.01852687859621361,
               "rank": 6,
-              "sampleSize": 162
+              "sampleSize": 202
             },
             "offense.fumble_rate": {
-              "value": 0.016533784363044042,
-              "rank": 6,
-              "sampleSize": 265
+              "value": 0.015576893295038143,
+              "rank": 11,
+              "sampleSize": 338
             },
             "defense.pass_epa_allowed_per_dropback": {
-              "value": 0.06543228726210198,
-              "rank": 20,
-              "sampleSize": 169
+              "value": 0.04690978821635218,
+              "rank": 13,
+              "sampleSize": 217
             },
             "defense.rush_epa_allowed_per_attempt": {
-              "value": -0.031063145794853458,
-              "rank": 26,
-              "sampleSize": 114
+              "value": -0.03693660073141297,
+              "rank": 25,
+              "sampleSize": 127
             },
             "defense.success_rate_allowed": {
-              "value": 0.43560242267992894,
-              "rank": 17,
-              "sampleSize": 267
+              "value": 0.4308123863370916,
+              "rank": 12,
+              "sampleSize": 328
             },
             "defense.pressure_generated_rate": {
-              "value": 0.1486676605401118,
-              "rank": 31,
-              "sampleSize": 169
+              "value": 0.15167814107656502,
+              "rank": 26,
+              "sampleSize": 217
             },
             "defense.explosive_play_rate_allowed": {
-              "value": 0.09179070181855696,
-              "rank": 12,
-              "sampleSize": 267
+              "value": 0.08490351723640295,
+              "rank": 4,
+              "sampleSize": 328
             },
             "defense.interception_forced_rate": {
-              "value": 0.020797814075125,
-              "rank": 16,
-              "sampleSize": 145
+              "value": 0.01976154783172327,
+              "rank": 21,
+              "sampleSize": 190
             },
             "defense.fumble_forced_rate": {
-              "value": 0.01650279320210113,
-              "rank": 26,
-              "sampleSize": 267
+              "value": 0.015714986320703374,
+              "rank": 25,
+              "sampleSize": 328
             }
           }
         },
@@ -478,81 +478,81 @@
             "tertiary": "#0b162a"
           },
           "record": {
-            "wins": 3,
+            "wins": 5,
             "losses": 2,
             "ties": 0,
-            "gamesPlayed": 5
+            "gamesPlayed": 7
           },
           "metrics": {
             "offense.pass_epa_per_dropback": {
-              "value": 0.06209930503064612,
-              "rank": 18,
-              "sampleSize": 197
+              "value": 0.08732607290284645,
+              "rank": 11,
+              "sampleSize": 277
             },
             "offense.rush_epa_per_attempt": {
-              "value": -0.01963488745610207,
-              "rank": 7,
-              "sampleSize": 178
+              "value": -0.034703815357942244,
+              "rank": 11,
+              "sampleSize": 239
             },
             "offense.success_rate": {
-              "value": 0.44788670065755537,
-              "rank": 10,
-              "sampleSize": 360
+              "value": 0.45203811136468186,
+              "rank": 8,
+              "sampleSize": 497
             },
             "offense.pressure_allowed_rate": {
-              "value": 0.14739229412050903,
-              "rank": 7,
-              "sampleSize": 197
+              "value": 0.1500297009826345,
+              "rank": 9,
+              "sampleSize": 277
             },
             "offense.explosive_play_rate": {
-              "value": 0.09650058520724163,
-              "rank": 11,
-              "sampleSize": 360
+              "value": 0.09619982069596186,
+              "rank": 6,
+              "sampleSize": 497
             },
             "offense.interception_rate": {
-              "value": 0.022300653245101054,
-              "rank": 27,
-              "sampleSize": 171
+              "value": 0.020734550339813498,
+              "rank": 16,
+              "sampleSize": 240
             },
             "offense.fumble_rate": {
-              "value": 0.018628000298829227,
+              "value": 0.017522362813996457,
               "rank": 20,
-              "sampleSize": 360
+              "sampleSize": 497
             },
             "defense.pass_epa_allowed_per_dropback": {
-              "value": 0.060985612754274506,
-              "rank": 19,
-              "sampleSize": 151
+              "value": 0.05268386539273541,
+              "rank": 18,
+              "sampleSize": 227
             },
             "defense.rush_epa_allowed_per_attempt": {
-              "value": -0.03463966165913563,
-              "rank": 19,
-              "sampleSize": 107
+              "value": -0.04458512478651756,
+              "rank": 17,
+              "sampleSize": 136
             },
             "defense.success_rate_allowed": {
-              "value": 0.4331312238090326,
-              "rank": 14,
-              "sampleSize": 250
+              "value": 0.4282852926048995,
+              "rank": 8,
+              "sampleSize": 351
             },
             "defense.pressure_generated_rate": {
-              "value": 0.15989375716442517,
-              "rank": 10,
-              "sampleSize": 151
+              "value": 0.1599383344448555,
+              "rank": 12,
+              "sampleSize": 227
             },
             "defense.explosive_play_rate_allowed": {
-              "value": 0.09708636080038122,
-              "rank": 23,
-              "sampleSize": 250
+              "value": 0.09537025842107952,
+              "rank": 24,
+              "sampleSize": 351
             },
             "defense.interception_forced_rate": {
-              "value": 0.021110563158961468,
-              "rank": 14,
-              "sampleSize": 131
+              "value": 0.020646518427114496,
+              "rank": 15,
+              "sampleSize": 196
             },
             "defense.fumble_forced_rate": {
-              "value": 0.01772236223489705,
-              "rank": 18,
-              "sampleSize": 250
+              "value": 0.017138579122287927,
+              "rank": 14,
+              "sampleSize": 351
             }
           }
         },
@@ -575,72 +575,72 @@
           },
           "metrics": {
             "offense.pass_epa_per_dropback": {
-              "value": 0.09257047002956344,
-              "rank": 10,
+              "value": 0.08672002538830592,
+              "rank": 12,
               "sampleSize": 204
             },
             "offense.rush_epa_per_attempt": {
-              "value": -0.04238781189057762,
-              "rank": 18,
+              "value": -0.04634432700745495,
+              "rank": 17,
               "sampleSize": 110
             },
             "offense.success_rate": {
-              "value": 0.4511213170900312,
-              "rank": 8,
+              "value": 0.4498279461781351,
+              "rank": 10,
               "sampleSize": 308
             },
             "offense.pressure_allowed_rate": {
-              "value": 0.16711569496495562,
+              "value": 0.16723803804137785,
               "rank": 25,
               "sampleSize": 204
             },
             "offense.explosive_play_rate": {
-              "value": 0.09110169570433238,
-              "rank": 21,
+              "value": 0.08914365292659074,
+              "rank": 19,
               "sampleSize": 308
             },
             "offense.interception_rate": {
-              "value": 0.01987253215469477,
+              "value": 0.019781529174323596,
               "rank": 11,
               "sampleSize": 189
             },
             "offense.fumble_rate": {
-              "value": 0.016794657352564895,
-              "rank": 11,
+              "value": 0.01599865033371246,
+              "rank": 12,
               "sampleSize": 308
             },
             "defense.pass_epa_allowed_per_dropback": {
-              "value": 0.047377103303529865,
-              "rank": 8,
+              "value": 0.04027425191997301,
+              "rank": 9,
               "sampleSize": 195
             },
             "defense.rush_epa_allowed_per_attempt": {
-              "value": -0.03416633385681537,
-              "rank": 21,
+              "value": -0.0385672557970715,
+              "rank": 23,
               "sampleSize": 117
             },
             "defense.success_rate_allowed": {
-              "value": 0.4343525318177129,
-              "rank": 15,
+              "value": 0.4326876107165812,
+              "rank": 14,
               "sampleSize": 300
             },
             "defense.pressure_generated_rate": {
-              "value": 0.15985825433504355,
-              "rank": 11,
+              "value": 0.1600569542460971,
+              "rank": 10,
               "sampleSize": 195
             },
             "defense.explosive_play_rate_allowed": {
-              "value": 0.1026733444003639,
+              "value": 0.1007010613115114,
               "rank": 32,
               "sampleSize": 300
             },
             "defense.interception_forced_rate": {
-              "value": 0.0203456876821875,
-              "rank": 19,
+              "value": 0.020252517964188445,
+              "rank": 18,
               "sampleSize": 166
             },
             "defense.fumble_forced_rate": {
-              "value": 0.02055316395149264,
+              "value": 0.019751367790684916,
               "rank": 3,
               "sampleSize": 300
             }
@@ -658,81 +658,81 @@
             "tertiary": "#a5acaf"
           },
           "record": {
-            "wins": 3,
+            "wins": 4,
             "losses": 2,
             "ties": 0,
-            "gamesPlayed": 5
+            "gamesPlayed": 6
           },
           "metrics": {
             "offense.pass_epa_per_dropback": {
-              "value": 0.061580865522352986,
-              "rank": 19,
-              "sampleSize": 185
+              "value": 0.04002711443911394,
+              "rank": 21,
+              "sampleSize": 222
             },
             "offense.rush_epa_per_attempt": {
-              "value": -0.0748273393436971,
+              "value": -0.07483802288608843,
               "rank": 28,
-              "sampleSize": 120
+              "sampleSize": 149
             },
             "offense.success_rate": {
-              "value": 0.41711740566000305,
-              "rank": 28,
-              "sampleSize": 289
+              "value": 0.41719383964501955,
+              "rank": 26,
+              "sampleSize": 349
             },
             "offense.pressure_allowed_rate": {
-              "value": 0.17796036562556383,
+              "value": 0.18380134447563187,
               "rank": 31,
-              "sampleSize": 185
+              "sampleSize": 222
             },
             "offense.explosive_play_rate": {
-              "value": 0.09085461785160724,
-              "rank": 22,
-              "sampleSize": 289
+              "value": 0.08509239986306574,
+              "rank": 26,
+              "sampleSize": 349
             },
             "offense.interception_rate": {
-              "value": 0.01963572031683487,
+              "value": 0.019020422493243892,
               "rank": 7,
-              "sampleSize": 150
+              "sampleSize": 176
             },
             "offense.fumble_rate": {
-              "value": 0.02167904531372076,
-              "rank": 29,
-              "sampleSize": 289
+              "value": 0.019779377345303224,
+              "rank": 27,
+              "sampleSize": 349
             },
             "defense.pass_epa_allowed_per_dropback": {
-              "value": 0.045548567252386006,
-              "rank": 5,
-              "sampleSize": 195
+              "value": 0.04223115756762923,
+              "rank": 10,
+              "sampleSize": 233
             },
             "defense.rush_epa_allowed_per_attempt": {
-              "value": -0.029988539627350444,
-              "rank": 28,
-              "sampleSize": 128
+              "value": -0.04401045661364613,
+              "rank": 18,
+              "sampleSize": 151
             },
             "defense.success_rate_allowed": {
-              "value": 0.43502036192983395,
-              "rank": 16,
-              "sampleSize": 319
+              "value": 0.4285343297519042,
+              "rank": 10,
+              "sampleSize": 376
             },
             "defense.pressure_generated_rate": {
-              "value": 0.1608632794606717,
-              "rank": 9,
-              "sampleSize": 195
+              "value": 0.16384963163104221,
+              "rank": 7,
+              "sampleSize": 233
             },
             "defense.explosive_play_rate_allowed": {
-              "value": 0.10003635285111732,
-              "rank": 29,
-              "sampleSize": 319
+              "value": 0.0984448702743729,
+              "rank": 30,
+              "sampleSize": 376
             },
             "defense.interception_forced_rate": {
-              "value": 0.02118352235999295,
-              "rank": 13,
-              "sampleSize": 175
+              "value": 0.02044128464553284,
+              "rank": 17,
+              "sampleSize": 206
             },
             "defense.fumble_forced_rate": {
-              "value": 0.01841687251710626,
-              "rank": 15,
-              "sampleSize": 319
+              "value": 0.018474918851831126,
+              "rank": 6,
+              "sampleSize": 376
             }
           }
         },
@@ -749,80 +749,80 @@
           },
           "record": {
             "wins": 2,
-            "losses": 3,
+            "losses": 4,
             "ties": 0,
-            "gamesPlayed": 5
+            "gamesPlayed": 6
           },
           "metrics": {
             "offense.pass_epa_per_dropback": {
-              "value": 0.10931000437615854,
-              "rank": 7,
-              "sampleSize": 211
+              "value": 0.0808265784800979,
+              "rank": 13,
+              "sampleSize": 268
             },
             "offense.rush_epa_per_attempt": {
-              "value": -0.03489708772658562,
-              "rank": 16,
-              "sampleSize": 107
+              "value": -0.039778015900630494,
+              "rank": 15,
+              "sampleSize": 122
             },
             "offense.success_rate": {
-              "value": 0.4545882496460284,
-              "rank": 6,
-              "sampleSize": 307
+              "value": 0.4504861001209764,
+              "rank": 9,
+              "sampleSize": 378
             },
             "offense.pressure_allowed_rate": {
-              "value": 0.14967090210667175,
-              "rank": 8,
-              "sampleSize": 211
+              "value": 0.14650463112973644,
+              "rank": 6,
+              "sampleSize": 268
             },
             "offense.explosive_play_rate": {
-              "value": 0.08847396462547451,
-              "rank": 26,
-              "sampleSize": 307
+              "value": 0.08214869901754035,
+              "rank": 29,
+              "sampleSize": 378
             },
             "offense.interception_rate": {
-              "value": 0.01977256971930898,
-              "rank": 8,
-              "sampleSize": 194
+              "value": 0.02055665619962444,
+              "rank": 14,
+              "sampleSize": 249
             },
             "offense.fumble_rate": {
-              "value": 0.015003143944572634,
+              "value": 0.014199070093169276,
               "rank": 3,
-              "sampleSize": 307
+              "sampleSize": 378
             },
             "defense.pass_epa_allowed_per_dropback": {
-              "value": 0.12053721767516672,
+              "value": 0.11427429741936374,
               "rank": 32,
-              "sampleSize": 161
+              "sampleSize": 205
             },
             "defense.rush_epa_allowed_per_attempt": {
-              "value": -0.031314119501497,
-              "rank": 25,
-              "sampleSize": 160
+              "value": -0.03849064319490049,
+              "rank": 24,
+              "sampleSize": 184
             },
             "defense.success_rate_allowed": {
-              "value": 0.45855646872120054,
+              "value": 0.45256735421711297,
               "rank": 32,
-              "sampleSize": 303
+              "sampleSize": 371
             },
             "defense.pressure_generated_rate": {
-              "value": 0.1499052685362834,
-              "rank": 29,
-              "sampleSize": 161
+              "value": 0.15149917360683246,
+              "rank": 28,
+              "sampleSize": 205
             },
             "defense.explosive_play_rate_allowed": {
-              "value": 0.10148746948359047,
+              "value": 0.09886521557870412,
               "rank": 31,
-              "sampleSize": 303
+              "sampleSize": 371
             },
             "defense.interception_forced_rate": {
-              "value": 0.01775472739977945,
-              "rank": 31,
-              "sampleSize": 138
+              "value": 0.017940686775695647,
+              "rank": 30,
+              "sampleSize": 179
             },
             "defense.fumble_forced_rate": {
-              "value": 0.018684025699584682,
-              "rank": 12,
-              "sampleSize": 303
+              "value": 0.016845862143256538,
+              "rank": 16,
+              "sampleSize": 371
             }
           }
         },
@@ -838,81 +838,81 @@
             "tertiary": "#00234c"
           },
           "record": {
-            "wins": 3,
+            "wins": 4,
             "losses": 2,
             "ties": 0,
-            "gamesPlayed": 5
+            "gamesPlayed": 6
           },
           "metrics": {
             "offense.pass_epa_per_dropback": {
-              "value": 0.02004732660239851,
-              "rank": 24,
-              "sampleSize": 174
+              "value": 0.0028545472585670504,
+              "rank": 25,
+              "sampleSize": 204
             },
             "offense.rush_epa_per_attempt": {
-              "value": -0.051312201424234184,
+              "value": -0.05610631240871759,
               "rank": 22,
-              "sampleSize": 116
+              "sampleSize": 143
             },
             "offense.success_rate": {
-              "value": 0.42039926020370566,
-              "rank": 26,
-              "sampleSize": 286
+              "value": 0.4090002505311585,
+              "rank": 29,
+              "sampleSize": 342
             },
             "offense.pressure_allowed_rate": {
-              "value": 0.13239235498888258,
+              "value": 0.13505982021959567,
               "rank": 1,
-              "sampleSize": 174
+              "sampleSize": 204
             },
             "offense.explosive_play_rate": {
-              "value": 0.08650154589355459,
-              "rank": 28,
-              "sampleSize": 286
+              "value": 0.08123569828604425,
+              "rank": 30,
+              "sampleSize": 342
             },
             "offense.interception_rate": {
-              "value": 0.020387898652482497,
-              "rank": 15,
-              "sampleSize": 164
+              "value": 0.019741606814738685,
+              "rank": 9,
+              "sampleSize": 191
             },
             "offense.fumble_rate": {
-              "value": 0.019897311553077262,
+              "value": 0.019024960218698254,
               "rank": 24,
-              "sampleSize": 286
+              "sampleSize": 342
             },
             "defense.pass_epa_allowed_per_dropback": {
-              "value": 0.044288709090498264,
-              "rank": 4,
-              "sampleSize": 186
+              "value": 0.03046525359884973,
+              "rank": 5,
+              "sampleSize": 243
             },
             "defense.rush_epa_allowed_per_attempt": {
-              "value": -0.026703570811797254,
-              "rank": 30,
-              "sampleSize": 149
+              "value": -0.030534942715868617,
+              "rank": 29,
+              "sampleSize": 175
             },
             "defense.success_rate_allowed": {
-              "value": 0.42723756455875705,
-              "rank": 5,
-              "sampleSize": 323
+              "value": 0.42355180381083,
+              "rank": 4,
+              "sampleSize": 404
             },
             "defense.pressure_generated_rate": {
-              "value": 0.16436000310686444,
-              "rank": 4,
-              "sampleSize": 186
+              "value": 0.1699488681446468,
+              "rank": 2,
+              "sampleSize": 243
             },
             "defense.explosive_play_rate_allowed": {
-              "value": 0.0961181467857527,
-              "rank": 22,
-              "sampleSize": 323
+              "value": 0.09283319555038416,
+              "rank": 20,
+              "sampleSize": 404
             },
             "defense.interception_forced_rate": {
-              "value": 0.022532709990627602,
-              "rank": 6,
-              "sampleSize": 161
+              "value": 0.0233075493109852,
+              "rank": 4,
+              "sampleSize": 211
             },
             "defense.fumble_forced_rate": {
-              "value": 0.017460801733430013,
-              "rank": 21,
-              "sampleSize": 323
+              "value": 0.016384140008100834,
+              "rank": 22,
+              "sampleSize": 404
             }
           }
         },
@@ -935,72 +935,72 @@
           },
           "metrics": {
             "offense.pass_epa_per_dropback": {
-              "value": 0.1391177165645804,
+              "value": 0.13329618680622862,
               "rank": 3,
               "sampleSize": 207
             },
             "offense.rush_epa_per_attempt": {
-              "value": -0.032163219055851906,
+              "value": -0.03598485297556296,
               "rank": 12,
               "sampleSize": 128
             },
             "offense.success_rate": {
-              "value": 0.46081355136950974,
-              "rank": 3,
+              "value": 0.459559158759068,
+              "rank": 2,
               "sampleSize": 330
             },
             "offense.pressure_allowed_rate": {
-              "value": 0.15359887166054567,
+              "value": 0.15372031294524977,
               "rank": 14,
               "sampleSize": 207
             },
             "offense.explosive_play_rate": {
-              "value": 0.09729263614194715,
-              "rank": 9,
+              "value": 0.09537271455102879,
+              "rank": 11,
               "sampleSize": 330
             },
             "offense.interception_rate": {
-              "value": 0.01680518092935734,
+              "value": 0.01671436160787693,
               "rank": 1,
               "sampleSize": 191
             },
             "offense.fumble_rate": {
-              "value": 0.018237593227116728,
-              "rank": 18,
+              "value": 0.01745708369004726,
+              "rank": 19,
               "sampleSize": 330
             },
             "defense.pass_epa_allowed_per_dropback": {
-              "value": 0.10525294998003105,
+              "value": 0.09848994794496975,
               "rank": 30,
               "sampleSize": 245
             },
             "defense.rush_epa_allowed_per_attempt": {
-              "value": -0.03219586374913666,
-              "rank": 24,
+              "value": -0.03657767202189983,
+              "rank": 26,
               "sampleSize": 121
             },
             "defense.success_rate_allowed": {
-              "value": 0.44830111255366595,
-              "rank": 28,
+              "value": 0.44671547340973095,
+              "rank": 27,
               "sampleSize": 355
             },
             "defense.pressure_generated_rate": {
-              "value": 0.16369278762044817,
-              "rank": 7,
+              "value": 0.16388198035872403,
+              "rank": 6,
               "sampleSize": 245
             },
             "defense.explosive_play_rate_allowed": {
-              "value": 0.09951573925575782,
+              "value": 0.09763737440923163,
               "rank": 28,
               "sampleSize": 355
             },
             "defense.interception_forced_rate": {
-              "value": 0.019382578206107618,
-              "rank": 25,
+              "value": 0.01929381888896059,
+              "rank": 24,
               "sampleSize": 214
             },
             "defense.fumble_forced_rate": {
-              "value": 0.01697703926116182,
+              "value": 0.01621342386991637,
               "rank": 24,
               "sampleSize": 355
             }
@@ -1018,81 +1018,81 @@
             "tertiary": "#1c2d25"
           },
           "record": {
-            "wins": 3,
+            "wins": 4,
             "losses": 2,
             "ties": 0,
-            "gamesPlayed": 5
+            "gamesPlayed": 6
           },
           "metrics": {
             "offense.pass_epa_per_dropback": {
-              "value": 0.07992565427305025,
+              "value": 0.0784066878080435,
               "rank": 14,
-              "sampleSize": 197
+              "sampleSize": 241
             },
             "offense.rush_epa_per_attempt": {
-              "value": -0.08860731073851652,
-              "rank": 32,
-              "sampleSize": 94
+              "value": -0.0956900134702021,
+              "rank": 31,
+              "sampleSize": 118
             },
             "offense.success_rate": {
-              "value": 0.42375926449237983,
-              "rank": 24,
-              "sampleSize": 290
+              "value": 0.41883665685240057,
+              "rank": 25,
+              "sampleSize": 358
             },
             "offense.pressure_allowed_rate": {
-              "value": 0.17510010268474074,
-              "rank": 30,
-              "sampleSize": 197
+              "value": 0.1758824656886999,
+              "rank": 29,
+              "sampleSize": 241
             },
             "offense.explosive_play_rate": {
-              "value": 0.09352355856917458,
-              "rank": 16,
-              "sampleSize": 290
+              "value": 0.09133952283476902,
+              "rank": 14,
+              "sampleSize": 358
             },
             "offense.interception_rate": {
-              "value": 0.01993299624847173,
+              "value": 0.020023303167873454,
               "rank": 12,
-              "sampleSize": 186
+              "sampleSize": 227
             },
             "offense.fumble_rate": {
-              "value": 0.0225765874739834,
-              "rank": 31,
-              "sampleSize": 290
+              "value": 0.02048920947301676,
+              "rank": 30,
+              "sampleSize": 358
             },
             "defense.pass_epa_allowed_per_dropback": {
-              "value": 0.04303785671007503,
+              "value": 0.02506361303072452,
               "rank": 3,
-              "sampleSize": 188
+              "sampleSize": 245
             },
             "defense.rush_epa_allowed_per_attempt": {
-              "value": -0.03459154872160191,
-              "rank": 20,
-              "sampleSize": 152
+              "value": -0.0393177641316677,
+              "rank": 22,
+              "sampleSize": 167
             },
             "defense.success_rate_allowed": {
-              "value": 0.43753361654758377,
-              "rank": 20,
-              "sampleSize": 324
+              "value": 0.43510993455082786,
+              "rank": 21,
+              "sampleSize": 395
             },
             "defense.pressure_generated_rate": {
-              "value": 0.15795441605604083,
-              "rank": 17,
-              "sampleSize": 188
+              "value": 0.15622647796637953,
+              "rank": 18,
+              "sampleSize": 245
             },
             "defense.explosive_play_rate_allowed": {
-              "value": 0.08624615555195754,
+              "value": 0.0801432363536925,
               "rank": 2,
-              "sampleSize": 324
+              "sampleSize": 395
             },
             "defense.interception_forced_rate": {
-              "value": 0.024690954385170275,
-              "rank": 2,
-              "sampleSize": 158
+              "value": 0.025235866094181676,
+              "rank": 1,
+              "sampleSize": 213
             },
             "defense.fumble_forced_rate": {
-              "value": 0.016555587497012372,
-              "rank": 25,
-              "sampleSize": 324
+              "value": 0.015670715121132557,
+              "rank": 26,
+              "sampleSize": 395
             }
           }
         },
@@ -1108,81 +1108,81 @@
             "tertiary": "#00071c"
           },
           "record": {
-            "wins": 1,
+            "wins": 2,
             "losses": 4,
             "ties": 0,
-            "gamesPlayed": 5
+            "gamesPlayed": 6
           },
           "metrics": {
             "offense.pass_epa_per_dropback": {
-              "value": 0.07995349550015819,
-              "rank": 13,
-              "sampleSize": 203
+              "value": 0.09049707284938698,
+              "rank": 10,
+              "sampleSize": 238
             },
             "offense.rush_epa_per_attempt": {
-              "value": -0.057420367826288676,
-              "rank": 24,
-              "sampleSize": 115
+              "value": -0.05965366631529047,
+              "rank": 23,
+              "sampleSize": 140
             },
             "offense.success_rate": {
-              "value": 0.43093374472537566,
-              "rank": 18,
-              "sampleSize": 311
+              "value": 0.43308855310924627,
+              "rank": 16,
+              "sampleSize": 370
             },
             "offense.pressure_allowed_rate": {
-              "value": 0.1501606470616429,
-              "rank": 10,
-              "sampleSize": 203
+              "value": 0.14284056476875948,
+              "rank": 4,
+              "sampleSize": 238
             },
             "offense.explosive_play_rate": {
-              "value": 0.09535614657101736,
+              "value": 0.0938215106347543,
               "rank": 12,
-              "sampleSize": 311
+              "sampleSize": 370
             },
             "offense.interception_rate": {
-              "value": 0.016959199899178334,
+              "value": 0.01728733499350988,
               "rank": 2,
-              "sampleSize": 182
+              "sampleSize": 216
             },
             "offense.fumble_rate": {
-              "value": 0.016749307242701985,
-              "rank": 9,
-              "sampleSize": 311
+              "value": 0.015150858606626842,
+              "rank": 7,
+              "sampleSize": 370
             },
             "defense.pass_epa_allowed_per_dropback": {
-              "value": 0.05390106563414044,
-              "rank": 14,
-              "sampleSize": 201
+              "value": 0.05595844848351669,
+              "rank": 19,
+              "sampleSize": 244
             },
             "defense.rush_epa_allowed_per_attempt": {
-              "value": -0.05034489460360568,
-              "rank": 9,
-              "sampleSize": 116
+              "value": -0.05297055018550443,
+              "rank": 11,
+              "sampleSize": 142
             },
             "defense.success_rate_allowed": {
-              "value": 0.4233703102513347,
-              "rank": 3,
-              "sampleSize": 312
+              "value": 0.42744391161004186,
+              "rank": 6,
+              "sampleSize": 379
             },
             "defense.pressure_generated_rate": {
-              "value": 0.16189706599737097,
-              "rank": 8,
-              "sampleSize": 201
+              "value": 0.1582918289989144,
+              "rank": 14,
+              "sampleSize": 244
             },
             "defense.explosive_play_rate_allowed": {
-              "value": 0.09167327233848946,
-              "rank": 11,
-              "sampleSize": 312
+              "value": 0.0905607866349979,
+              "rank": 16,
+              "sampleSize": 379
             },
             "defense.interception_forced_rate": {
-              "value": 0.019073552455003195,
-              "rank": 26,
-              "sampleSize": 178
+              "value": 0.019199148531311126,
+              "rank": 25,
+              "sampleSize": 219
             },
             "defense.fumble_forced_rate": {
-              "value": 0.018532806067124014,
-              "rank": 14,
-              "sampleSize": 312
+              "value": 0.01673155603880696,
+              "rank": 20,
+              "sampleSize": 379
             }
           }
         },
@@ -1199,80 +1199,80 @@
           },
           "record": {
             "wins": 2,
-            "losses": 3,
+            "losses": 4,
             "ties": 0,
-            "gamesPlayed": 5
+            "gamesPlayed": 6
           },
           "metrics": {
             "offense.pass_epa_per_dropback": {
-              "value": -0.006434464916059854,
-              "rank": 30,
-              "sampleSize": 189
+              "value": -0.018891890048598706,
+              "rank": 29,
+              "sampleSize": 239
             },
             "offense.rush_epa_per_attempt": {
-              "value": -0.005550371223316482,
+              "value": -0.015960645169852492,
               "rank": 4,
-              "sampleSize": 135
+              "sampleSize": 165
             },
             "offense.success_rate": {
-              "value": 0.42971373958297515,
+              "value": 0.42719973136025047,
               "rank": 19,
-              "sampleSize": 320
+              "sampleSize": 397
             },
             "offense.pressure_allowed_rate": {
-              "value": 0.15299419220010818,
-              "rank": 12,
-              "sampleSize": 189
+              "value": 0.16073842225220195,
+              "rank": 21,
+              "sampleSize": 239
             },
             "offense.explosive_play_rate": {
-              "value": 0.09369703467892883,
-              "rank": 15,
-              "sampleSize": 320
+              "value": 0.0917052359587824,
+              "rank": 13,
+              "sampleSize": 397
             },
             "offense.interception_rate": {
-              "value": 0.021161817931345413,
-              "rank": 20,
-              "sampleSize": 176
+              "value": 0.02218675747630879,
+              "rank": 26,
+              "sampleSize": 217
             },
             "offense.fumble_rate": {
-              "value": 0.01750757173807313,
+              "value": 0.016479953692358735,
               "rank": 14,
-              "sampleSize": 320
+              "sampleSize": 397
             },
             "defense.pass_epa_allowed_per_dropback": {
-              "value": 0.07341265259423377,
-              "rank": 23,
-              "sampleSize": 185
+              "value": 0.061262685823512374,
+              "rank": 22,
+              "sampleSize": 208
             },
             "defense.rush_epa_allowed_per_attempt": {
-              "value": -0.019085877804897462,
+              "value": -0.025992154574071297,
               "rank": 32,
-              "sampleSize": 126
+              "sampleSize": 148
             },
             "defense.success_rate_allowed": {
-              "value": 0.4381014382935428,
-              "rank": 23,
-              "sampleSize": 302
+              "value": 0.4345169038291792,
+              "rank": 19,
+              "sampleSize": 346
             },
             "defense.pressure_generated_rate": {
-              "value": 0.15335935336382572,
-              "rank": 24,
-              "sampleSize": 185
+              "value": 0.15104828320919306,
+              "rank": 29,
+              "sampleSize": 208
             },
             "defense.explosive_play_rate_allowed": {
-              "value": 0.09522747626170625,
-              "rank": 21,
-              "sampleSize": 302
+              "value": 0.0905507569307701,
+              "rank": 15,
+              "sampleSize": 346
             },
             "defense.interception_forced_rate": {
-              "value": 0.0182752943074463,
-              "rank": 30,
-              "sampleSize": 166
+              "value": 0.018789405215998013,
+              "rank": 28,
+              "sampleSize": 188
             },
             "defense.fumble_forced_rate": {
-              "value": 0.01507121628551897,
-              "rank": 32,
-              "sampleSize": 302
+              "value": 0.013722953376748172,
+              "rank": 31,
+              "sampleSize": 346
             }
           }
         },
@@ -1289,80 +1289,80 @@
           },
           "record": {
             "wins": 4,
-            "losses": 1,
+            "losses": 2,
             "ties": 0,
-            "gamesPlayed": 5
+            "gamesPlayed": 6
           },
           "metrics": {
             "offense.pass_epa_per_dropback": {
-              "value": 0.12245571334273858,
+              "value": 0.12700434297102248,
               "rank": 4,
-              "sampleSize": 158
+              "sampleSize": 201
             },
             "offense.rush_epa_per_attempt": {
-              "value": -0.027725871140875116,
+              "value": -0.02958619103137811,
               "rank": 9,
-              "sampleSize": 135
+              "sampleSize": 161
             },
             "offense.success_rate": {
-              "value": 0.449700425144974,
-              "rank": 9,
-              "sampleSize": 288
+              "value": 0.4549379945617479,
+              "rank": 6,
+              "sampleSize": 355
             },
             "offense.pressure_allowed_rate": {
-              "value": 0.16903558873140248,
-              "rank": 27,
-              "sampleSize": 158
+              "value": 0.15851413308906895,
+              "rank": 20,
+              "sampleSize": 201
             },
             "offense.explosive_play_rate": {
-              "value": 0.0973719474636032,
-              "rank": 8,
-              "sampleSize": 288
+              "value": 0.0959057726776299,
+              "rank": 7,
+              "sampleSize": 355
             },
             "offense.interception_rate": {
-              "value": 0.020841923967118904,
-              "rank": 17,
-              "sampleSize": 143
+              "value": 0.020898305237201258,
+              "rank": 19,
+              "sampleSize": 184
             },
             "offense.fumble_rate": {
-              "value": 0.017103382671545868,
-              "rank": 13,
-              "sampleSize": 288
+              "value": 0.015347623004115503,
+              "rank": 9,
+              "sampleSize": 355
             },
             "defense.pass_epa_allowed_per_dropback": {
-              "value": 0.04705866162541676,
-              "rank": 7,
-              "sampleSize": 198
+              "value": 0.05126432761874142,
+              "rank": 16,
+              "sampleSize": 233
             },
             "defense.rush_epa_allowed_per_attempt": {
-              "value": -0.05517169477499465,
-              "rank": 2,
-              "sampleSize": 106
+              "value": -0.05869481047848634,
+              "rank": 5,
+              "sampleSize": 131
             },
             "defense.success_rate_allowed": {
-              "value": 0.4308564246570632,
-              "rank": 8,
-              "sampleSize": 295
+              "value": 0.4315046549291502,
+              "rank": 13,
+              "sampleSize": 354
             },
             "defense.pressure_generated_rate": {
-              "value": 0.15937771850036908,
-              "rank": 13,
-              "sampleSize": 198
+              "value": 0.15610519794275568,
+              "rank": 19,
+              "sampleSize": 233
             },
             "defense.explosive_play_rate_allowed": {
-              "value": 0.08853030031086784,
-              "rank": 5,
-              "sampleSize": 295
+              "value": 0.08732336866781848,
+              "rank": 8,
+              "sampleSize": 354
             },
             "defense.interception_forced_rate": {
-              "value": 0.023163532005105444,
+              "value": 0.023284518135776717,
               "rank": 5,
-              "sampleSize": 178
+              "sampleSize": 212
             },
             "defense.fumble_forced_rate": {
-              "value": 0.019733772006065665,
-              "rank": 6,
-              "sampleSize": 295
+              "value": 0.01796057588366846,
+              "rank": 8,
+              "sampleSize": 354
             }
           }
         },
@@ -1378,81 +1378,81 @@
             "tertiary": "#000000"
           },
           "record": {
-            "wins": 4,
+            "wins": 5,
             "losses": 0,
             "ties": 0,
-            "gamesPlayed": 4
+            "gamesPlayed": 5
           },
           "metrics": {
             "offense.pass_epa_per_dropback": {
-              "value": 0.1017452160382059,
-              "rank": 8,
-              "sampleSize": 143
+              "value": 0.09377016885503846,
+              "rank": 9,
+              "sampleSize": 175
             },
             "offense.rush_epa_per_attempt": {
-              "value": 0.0012083313532574179,
+              "value": 0.0005426712742152127,
               "rank": 2,
-              "sampleSize": 114
+              "sampleSize": 139
             },
             "offense.success_rate": {
-              "value": 0.45515237673303865,
-              "rank": 5,
-              "sampleSize": 249
+              "value": 0.45948605950869265,
+              "rank": 4,
+              "sampleSize": 304
             },
             "offense.pressure_allowed_rate": {
-              "value": 0.15310420048350462,
-              "rank": 13,
-              "sampleSize": 143
+              "value": 0.1481711129832444,
+              "rank": 8,
+              "sampleSize": 175
             },
             "offense.explosive_play_rate": {
-              "value": 0.10003877868484297,
-              "rank": 4,
-              "sampleSize": 249
+              "value": 0.10124199949516534,
+              "rank": 3,
+              "sampleSize": 304
             },
             "offense.interception_rate": {
-              "value": 0.02007958482345869,
+              "value": 0.020400346562467194,
               "rank": 13,
-              "sampleSize": 129
+              "sampleSize": 159
             },
             "offense.fumble_rate": {
-              "value": 0.01678596791862908,
-              "rank": 10,
-              "sampleSize": 249
+              "value": 0.01605661645810997,
+              "rank": 13,
+              "sampleSize": 304
             },
             "defense.pass_epa_allowed_per_dropback": {
-              "value": 0.05271856128657148,
-              "rank": 12,
-              "sampleSize": 158
+              "value": 0.02803778551406819,
+              "rank": 4,
+              "sampleSize": 202
             },
             "defense.rush_epa_allowed_per_attempt": {
-              "value": -0.04698804170229114,
-              "rank": 13,
-              "sampleSize": 103
+              "value": -0.05332233615018365,
+              "rank": 9,
+              "sampleSize": 125
             },
             "defense.success_rate_allowed": {
-              "value": 0.43040663973334997,
-              "rank": 7,
-              "sampleSize": 252
+              "value": 0.41969181326299493,
+              "rank": 3,
+              "sampleSize": 315
             },
             "defense.pressure_generated_rate": {
-              "value": 0.15455006582815067,
+              "value": 0.15594477991503655,
               "rank": 21,
-              "sampleSize": 158
+              "sampleSize": 202
             },
             "defense.explosive_play_rate_allowed": {
-              "value": 0.09214893425893562,
-              "rank": 14,
-              "sampleSize": 252
+              "value": 0.08589342371539241,
+              "rank": 7,
+              "sampleSize": 315
             },
             "defense.interception_forced_rate": {
-              "value": 0.021856015133326058,
-              "rank": 9,
-              "sampleSize": 145
+              "value": 0.021959197915892095,
+              "rank": 10,
+              "sampleSize": 182
             },
             "defense.fumble_forced_rate": {
-              "value": 0.017688669531028427,
-              "rank": 19,
-              "sampleSize": 252
+              "value": 0.01679507136300754,
+              "rank": 17,
+              "sampleSize": 315
             }
           }
         },
@@ -1469,80 +1469,80 @@
           },
           "record": {
             "wins": 2,
-            "losses": 3,
+            "losses": 4,
             "ties": 0,
-            "gamesPlayed": 5
+            "gamesPlayed": 6
           },
           "metrics": {
             "offense.pass_epa_per_dropback": {
-              "value": 0.08653462360150219,
-              "rank": 12,
-              "sampleSize": 229
+              "value": 0.06648451063010882,
+              "rank": 15,
+              "sampleSize": 266
             },
             "offense.rush_epa_per_attempt": {
-              "value": -0.03240770634292508,
-              "rank": 13,
-              "sampleSize": 123
+              "value": -0.03901923066175594,
+              "rank": 14,
+              "sampleSize": 143
             },
             "offense.success_rate": {
-              "value": 0.4530038721549426,
+              "value": 0.45333107698273584,
               "rank": 7,
-              "sampleSize": 347
+              "sampleSize": 404
             },
             "offense.pressure_allowed_rate": {
-              "value": 0.150384011109189,
-              "rank": 11,
-              "sampleSize": 229
+              "value": 0.15571709735776107,
+              "rank": 16,
+              "sampleSize": 266
             },
             "offense.explosive_play_rate": {
-              "value": 0.09497879585039257,
-              "rank": 13,
-              "sampleSize": 347
+              "value": 0.09117206598227785,
+              "rank": 16,
+              "sampleSize": 404
             },
             "offense.interception_rate": {
-              "value": 0.02227525496656158,
-              "rank": 26,
-              "sampleSize": 217
+              "value": 0.02146901270542915,
+              "rank": 23,
+              "sampleSize": 251
             },
             "offense.fumble_rate": {
-              "value": 0.015351770136566613,
-              "rank": 5,
-              "sampleSize": 347
+              "value": 0.01555357522404768,
+              "rank": 10,
+              "sampleSize": 404
             },
             "defense.pass_epa_allowed_per_dropback": {
-              "value": 0.05575337150841891,
-              "rank": 17,
-              "sampleSize": 168
+              "value": 0.048741886674982075,
+              "rank": 15,
+              "sampleSize": 203
             },
             "defense.rush_epa_allowed_per_attempt": {
-              "value": -0.03332154086915703,
-              "rank": 23,
-              "sampleSize": 140
+              "value": -0.0397808794635429,
+              "rank": 21,
+              "sampleSize": 175
             },
             "defense.success_rate_allowed": {
-              "value": 0.4328056381034496,
-              "rank": 12,
-              "sampleSize": 297
+              "value": 0.43440991584253585,
+              "rank": 18,
+              "sampleSize": 367
             },
             "defense.pressure_generated_rate": {
-              "value": 0.15088735853653754,
-              "rank": 27,
-              "sampleSize": 168
+              "value": 0.15080425670475237,
+              "rank": 30,
+              "sampleSize": 203
             },
             "defense.explosive_play_rate_allowed": {
-              "value": 0.09201520404776689,
-              "rank": 13,
-              "sampleSize": 297
+              "value": 0.0880644108334726,
+              "rank": 10,
+              "sampleSize": 367
             },
             "defense.interception_forced_rate": {
-              "value": 0.021763892835609193,
-              "rank": 10,
-              "sampleSize": 149
+              "value": 0.021914565399802886,
+              "rank": 11,
+              "sampleSize": 184
             },
             "defense.fumble_forced_rate": {
-              "value": 0.018786217271323524,
-              "rank": 11,
-              "sampleSize": 297
+              "value": 0.017760500916669586,
+              "rank": 10,
+              "sampleSize": 367
             }
           }
         },
@@ -1559,80 +1559,80 @@
           },
           "record": {
             "wins": 0,
-            "losses": 5,
+            "losses": 6,
             "ties": 0,
-            "gamesPlayed": 5
+            "gamesPlayed": 6
           },
           "metrics": {
             "offense.pass_epa_per_dropback": {
-              "value": -0.02052222372987421,
+              "value": -0.04951234343955991,
               "rank": 32,
-              "sampleSize": 176
+              "sampleSize": 220
             },
             "offense.rush_epa_per_attempt": {
-              "value": -0.07827299498114548,
+              "value": -0.08381452517896329,
               "rank": 29,
-              "sampleSize": 147
+              "sampleSize": 169
             },
             "offense.success_rate": {
-              "value": 0.4107410077789846,
-              "rank": 30,
-              "sampleSize": 307
+              "value": 0.3980236180443112,
+              "rank": 32,
+              "sampleSize": 370
             },
             "offense.pressure_allowed_rate": {
-              "value": 0.1822200552283034,
-              "rank": 32,
-              "sampleSize": 176
+              "value": 0.1822956365921825,
+              "rank": 30,
+              "sampleSize": 220
             },
             "offense.explosive_play_rate": {
-              "value": 0.09299067645925951,
-              "rank": 19,
-              "sampleSize": 307
+              "value": 0.08698390379714746,
+              "rank": 24,
+              "sampleSize": 370
             },
             "offense.interception_rate": {
-              "value": 0.02508370551536917,
-              "rank": 31,
-              "sampleSize": 143
+              "value": 0.025065237095312283,
+              "rank": 32,
+              "sampleSize": 180
             },
             "offense.fumble_rate": {
-              "value": 0.023133225245385643,
+              "value": 0.02198846544423368,
               "rank": 32,
-              "sampleSize": 307
+              "sampleSize": 370
             },
             "defense.pass_epa_allowed_per_dropback": {
-              "value": 0.05133591025245406,
-              "rank": 10,
-              "sampleSize": 157
+              "value": 0.04475732288289212,
+              "rank": 11,
+              "sampleSize": 189
             },
             "defense.rush_epa_allowed_per_attempt": {
-              "value": -0.05036495172290094,
-              "rank": 8,
-              "sampleSize": 149
+              "value": -0.05148125707742581,
+              "rank": 15,
+              "sampleSize": 174
             },
             "defense.success_rate_allowed": {
-              "value": 0.4312332288823653,
-              "rank": 10,
-              "sampleSize": 301
+              "value": 0.43421831469570876,
+              "rank": 17,
+              "sampleSize": 356
             },
             "defense.pressure_generated_rate": {
-              "value": 0.16411594886454373,
-              "rank": 5,
-              "sampleSize": 157
+              "value": 0.16203909957013812,
+              "rank": 8,
+              "sampleSize": 189
             },
             "defense.explosive_play_rate_allowed": {
-              "value": 0.09258917242543169,
-              "rank": 16,
-              "sampleSize": 301
+              "value": 0.0940927054002271,
+              "rank": 22,
+              "sampleSize": 356
             },
             "defense.interception_forced_rate": {
-              "value": 0.021948920617420962,
-              "rank": 8,
-              "sampleSize": 141
+              "value": 0.022207963288780677,
+              "rank": 9,
+              "sampleSize": 171
             },
             "defense.fumble_forced_rate": {
-              "value": 0.019626231014206998,
-              "rank": 7,
-              "sampleSize": 301
+              "value": 0.018794554126084263,
+              "rank": 4,
+              "sampleSize": 356
             }
           }
         },
@@ -1649,80 +1649,80 @@
           },
           "record": {
             "wins": 3,
-            "losses": 2,
+            "losses": 3,
             "ties": 0,
-            "gamesPlayed": 5
+            "gamesPlayed": 6
           },
           "metrics": {
             "offense.pass_epa_per_dropback": {
-              "value": 0.08943873678722122,
-              "rank": 11,
-              "sampleSize": 192
+              "value": 0.09622298773279317,
+              "rank": 8,
+              "sampleSize": 233
             },
             "offense.rush_epa_per_attempt": {
-              "value": -0.08555039495611483,
-              "rank": 30,
-              "sampleSize": 129
+              "value": -0.09648429178411579,
+              "rank": 32,
+              "sampleSize": 149
             },
             "offense.success_rate": {
-              "value": 0.4315117050205608,
+              "value": 0.4299205474217476,
               "rank": 17,
-              "sampleSize": 317
+              "sampleSize": 378
             },
             "offense.pressure_allowed_rate": {
-              "value": 0.16968046113735225,
-              "rank": 28,
-              "sampleSize": 192
+              "value": 0.16758468214484215,
+              "rank": 26,
+              "sampleSize": 233
             },
             "offense.explosive_play_rate": {
-              "value": 0.08947240719820974,
-              "rank": 25,
-              "sampleSize": 317
+              "value": 0.08809097405998517,
+              "rank": 22,
+              "sampleSize": 378
             },
             "offense.interception_rate": {
-              "value": 0.021075443164278698,
-              "rank": 19,
-              "sampleSize": 180
+              "value": 0.021120403872092103,
+              "rank": 22,
+              "sampleSize": 221
             },
             "offense.fumble_rate": {
-              "value": 0.01665933782152364,
-              "rank": 8,
-              "sampleSize": 317
+              "value": 0.01504796652780425,
+              "rank": 4,
+              "sampleSize": 378
             },
             "defense.pass_epa_allowed_per_dropback": {
-              "value": 0.07117347714369686,
-              "rank": 22,
-              "sampleSize": 185
+              "value": 0.07169164752344336,
+              "rank": 24,
+              "sampleSize": 221
             },
             "defense.rush_epa_allowed_per_attempt": {
-              "value": -0.048713527800118124,
-              "rank": 12,
-              "sampleSize": 131
+              "value": -0.05185911515327982,
+              "rank": 13,
+              "sampleSize": 157
             },
             "defense.success_rate_allowed": {
-              "value": 0.43962695475066443,
-              "rank": 24,
-              "sampleSize": 305
+              "value": 0.43992827769145737,
+              "rank": 26,
+              "sampleSize": 366
             },
             "defense.pressure_generated_rate": {
-              "value": 0.16655732290697292,
-              "rank": 3,
-              "sampleSize": 185
+              "value": 0.16675481829076064,
+              "rank": 4,
+              "sampleSize": 221
             },
             "defense.explosive_play_rate_allowed": {
-              "value": 0.09949382700488713,
-              "rank": 27,
-              "sampleSize": 305
+              "value": 0.09843153296969342,
+              "rank": 29,
+              "sampleSize": 366
             },
             "defense.interception_forced_rate": {
-              "value": 0.02149212726430086,
-              "rank": 12,
-              "sampleSize": 161
+              "value": 0.02068806071771231,
+              "rank": 14,
+              "sampleSize": 194
             },
             "defense.fumble_forced_rate": {
-              "value": 0.02679500483858996,
+              "value": 0.024636796372001207,
               "rank": 1,
-              "sampleSize": 305
+              "sampleSize": 366
             }
           }
         },
@@ -1745,72 +1745,72 @@
           },
           "metrics": {
             "offense.pass_epa_per_dropback": {
-              "value": 0.011402607589121753,
-              "rank": 27,
+              "value": 0.005103733144701908,
+              "rank": 24,
               "sampleSize": 161
             },
             "offense.rush_epa_per_attempt": {
-              "value": -0.029447560943423233,
-              "rank": 11,
+              "value": -0.0332547736030599,
+              "rank": 10,
               "sampleSize": 130
             },
             "offense.success_rate": {
-              "value": 0.411563638723653,
-              "rank": 29,
+              "value": 0.41020502358177985,
+              "rank": 28,
               "sampleSize": 274
             },
             "offense.pressure_allowed_rate": {
-              "value": 0.1537804453347426,
+              "value": 0.1539173611321791,
               "rank": 15,
               "sampleSize": 161
             },
             "offense.explosive_play_rate": {
-              "value": 0.09957232666703937,
-              "rank": 6,
+              "value": 0.09755229743264668,
+              "rank": 5,
               "sampleSize": 274
             },
             "offense.interception_rate": {
-              "value": 0.02220853150644422,
+              "value": 0.02211175521871617,
               "rank": 25,
               "sampleSize": 130
             },
             "offense.fumble_rate": {
-              "value": 0.021050726579741066,
-              "rank": 28,
+              "value": 0.020229520083569277,
+              "rank": 29,
               "sampleSize": 274
             },
             "defense.pass_epa_allowed_per_dropback": {
-              "value": 0.10394122791649438,
+              "value": 0.09655634063682972,
               "rank": 29,
               "sampleSize": 157
             },
             "defense.rush_epa_allowed_per_attempt": {
-              "value": -0.04881403781056786,
+              "value": -0.05310271519549334,
               "rank": 10,
               "sampleSize": 141
             },
             "defense.success_rate_allowed": {
-              "value": 0.449346591742646,
-              "rank": 29,
+              "value": 0.4476663961359994,
+              "rank": 30,
               "sampleSize": 290
             },
             "defense.pressure_generated_rate": {
-              "value": 0.15366662807039533,
+              "value": 0.1538732178420759,
               "rank": 23,
               "sampleSize": 157
             },
             "defense.explosive_play_rate_allowed": {
-              "value": 0.09444098976183513,
+              "value": 0.09245061233271792,
               "rank": 19,
               "sampleSize": 290
             },
             "defense.interception_forced_rate": {
-              "value": 0.020797814075125,
-              "rank": 16,
+              "value": 0.020702573918948187,
+              "rank": 13,
               "sampleSize": 145
             },
             "defense.fumble_forced_rate": {
-              "value": 0.016154569125359546,
+              "value": 0.015345417036471014,
               "rank": 28,
               "sampleSize": 290
             }
@@ -1835,73 +1835,73 @@
           },
           "metrics": {
             "offense.pass_epa_per_dropback": {
-              "value": 0.03529377896931497,
+              "value": 0.02909436043717543,
               "rank": 22,
               "sampleSize": 170
             },
             "offense.rush_epa_per_attempt": {
-              "value": -0.06010626313557094,
+              "value": -0.06382232705749992,
               "rank": 25,
               "sampleSize": 143
             },
             "offense.success_rate": {
-              "value": 0.4031431124638139,
-              "rank": 32,
+              "value": 0.4018312118826929,
+              "rank": 30,
               "sampleSize": 298
             },
             "offense.pressure_allowed_rate": {
-              "value": 0.1500398399076813,
-              "rank": 9,
+              "value": 0.1501734253208558,
+              "rank": 11,
               "sampleSize": 170
             },
             "offense.explosive_play_rate": {
-              "value": 0.090109907869217,
-              "rank": 23,
+              "value": 0.08813403227929192,
+              "rank": 21,
               "sampleSize": 298
             },
             "offense.interception_rate": {
-              "value": 0.019844610958503324,
+              "value": 0.019748864205751105,
               "rank": 10,
               "sampleSize": 140
             },
             "offense.fumble_rate": {
-              "value": 0.017858360971440716,
-              "rank": 16,
+              "value": 0.01705510434403771,
+              "rank": 17,
               "sampleSize": 298
             },
             "defense.pass_epa_allowed_per_dropback": {
-              "value": 0.015196099984544575,
+              "value": 0.007977165228018451,
               "rank": 1,
               "sampleSize": 179
             },
             "defense.rush_epa_allowed_per_attempt": {
-              "value": -0.05425605883781618,
+              "value": -0.058700602251048416,
               "rank": 4,
               "sampleSize": 108
             },
             "defense.success_rate_allowed": {
-              "value": 0.4090627638884113,
+              "value": 0.4073670109150364,
               "rank": 1,
               "sampleSize": 280
             },
             "defense.pressure_generated_rate": {
-              "value": 0.17268535552948758,
+              "value": 0.17288730283438877,
               "rank": 1,
               "sampleSize": 179
             },
             "defense.explosive_play_rate_allowed": {
-              "value": 0.09068581374111137,
-              "rank": 6,
+              "value": 0.0886770068913542,
+              "rank": 11,
               "sampleSize": 280
             },
             "defense.interception_forced_rate": {
-              "value": 0.02372139717381479,
+              "value": 0.02362715429676025,
               "rank": 3,
               "sampleSize": 155
             },
             "defense.fumble_forced_rate": {
-              "value": 0.018156000320964726,
-              "rank": 16,
+              "value": 0.017339356083105006,
+              "rank": 12,
               "sampleSize": 280
             }
           }
@@ -1918,81 +1918,81 @@
             "tertiary": "#b0b7bc"
           },
           "record": {
-            "wins": 3,
-            "losses": 2,
+            "wins": 4,
+            "losses": 3,
             "ties": 0,
-            "gamesPlayed": 5
+            "gamesPlayed": 7
           },
           "metrics": {
             "offense.pass_epa_per_dropback": {
-              "value": 0.09954587544421678,
-              "rank": 9,
-              "sampleSize": 187
+              "value": 0.11641242935879234,
+              "rank": 5,
+              "sampleSize": 257
             },
             "offense.rush_epa_per_attempt": {
-              "value": -0.03423376402379543,
-              "rank": 15,
-              "sampleSize": 144
+              "value": -0.04908196097652324,
+              "rank": 19,
+              "sampleSize": 196
             },
             "offense.success_rate": {
-              "value": 0.44375019985938585,
-              "rank": 13,
-              "sampleSize": 313
+              "value": 0.44327887321365456,
+              "rank": 12,
+              "sampleSize": 429
             },
             "offense.pressure_allowed_rate": {
-              "value": 0.15378485986005708,
-              "rank": 16,
-              "sampleSize": 187
+              "value": 0.1500310008068198,
+              "rank": 10,
+              "sampleSize": 257
             },
             "offense.explosive_play_rate": {
-              "value": 0.09967715978472622,
-              "rank": 5,
-              "sampleSize": 313
+              "value": 0.09582682460753664,
+              "rank": 8,
+              "sampleSize": 429
             },
             "offense.interception_rate": {
-              "value": 0.024690954385170275,
+              "value": 0.024082286620986312,
               "rank": 30,
-              "sampleSize": 158
+              "sampleSize": 220
             },
             "offense.fumble_rate": {
-              "value": 0.020313100041906472,
-              "rank": 25,
-              "sampleSize": 313
+              "value": 0.020119206322012535,
+              "rank": 28,
+              "sampleSize": 429
             },
             "defense.pass_epa_allowed_per_dropback": {
-              "value": 0.04846226266649007,
-              "rank": 9,
-              "sampleSize": 180
+              "value": 0.05869628140497674,
+              "rank": 20,
+              "sampleSize": 252
             },
             "defense.rush_epa_allowed_per_attempt": {
-              "value": -0.036319869733118584,
-              "rank": 18,
-              "sampleSize": 112
+              "value": -0.04767250551489462,
+              "rank": 16,
+              "sampleSize": 167
             },
             "defense.success_rate_allowed": {
-              "value": 0.43206247465390246,
-              "rank": 11,
-              "sampleSize": 285
+              "value": 0.43503421984138896,
+              "rank": 20,
+              "sampleSize": 409
             },
             "defense.pressure_generated_rate": {
-              "value": 0.15924383986057994,
-              "rank": 14,
-              "sampleSize": 180
+              "value": 0.15993979988105192,
+              "rank": 11,
+              "sampleSize": 252
             },
             "defense.explosive_play_rate_allowed": {
-              "value": 0.091189565751521,
-              "rank": 9,
-              "sampleSize": 285
+              "value": 0.09244927001047355,
+              "rank": 18,
+              "sampleSize": 409
             },
             "defense.interception_forced_rate": {
-              "value": 0.02043028513616749,
-              "rank": 18,
-              "sampleSize": 162
+              "value": 0.020062373027713208,
+              "rank": 20,
+              "sampleSize": 225
             },
             "defense.fumble_forced_rate": {
-              "value": 0.018993991102895763,
-              "rank": 9,
-              "sampleSize": 285
+              "value": 0.01631638095099537,
+              "rank": 23,
+              "sampleSize": 409
             }
           }
         },
@@ -2008,81 +2008,81 @@
             "tertiary": "#9f8958"
           },
           "record": {
-            "wins": 1,
+            "wins": 2,
             "losses": 4,
             "ties": 0,
-            "gamesPlayed": 5
+            "gamesPlayed": 6
           },
           "metrics": {
             "offense.pass_epa_per_dropback": {
-              "value": 0.029485401332759044,
+              "value": 0.027977812940039506,
               "rank": 23,
-              "sampleSize": 224
+              "sampleSize": 256
             },
             "offense.rush_epa_per_attempt": {
-              "value": -0.04997671322879098,
-              "rank": 21,
-              "sampleSize": 116
-            },
-            "offense.success_rate": {
-              "value": 0.43377914509501647,
-              "rank": 15,
-              "sampleSize": 334
-            },
-            "offense.pressure_allowed_rate": {
-              "value": 0.15923287916472187,
+              "value": -0.05354557477374869,
               "rank": 20,
-              "sampleSize": 224
-            },
-            "offense.explosive_play_rate": {
-              "value": 0.0846037732278662,
-              "rank": 31,
-              "sampleSize": 334
-            },
-            "offense.interception_rate": {
-              "value": 0.021546203284570273,
-              "rank": 21,
-              "sampleSize": 205
-            },
-            "offense.fumble_rate": {
-              "value": 0.02081876573777946,
-              "rank": 26,
-              "sampleSize": 334
-            },
-            "defense.pass_epa_allowed_per_dropback": {
-              "value": 0.08039762360789704,
-              "rank": 25,
-              "sampleSize": 176
-            },
-            "defense.rush_epa_allowed_per_attempt": {
-              "value": -0.027238319275862552,
-              "rank": 29,
-              "sampleSize": 146
-            },
-            "defense.success_rate_allowed": {
-              "value": 0.4551738367894357,
-              "rank": 31,
-              "sampleSize": 309
-            },
-            "defense.pressure_generated_rate": {
-              "value": 0.15272434740099214,
-              "rank": 25,
-              "sampleSize": 176
-            },
-            "defense.explosive_play_rate_allowed": {
-              "value": 0.09733154088403993,
-              "rank": 24,
-              "sampleSize": 309
-            },
-            "defense.interception_forced_rate": {
-              "value": 0.018524590032521642,
-              "rank": 28,
               "sampleSize": 153
             },
+            "offense.success_rate": {
+              "value": 0.425066399368439,
+              "rank": 20,
+              "sampleSize": 401
+            },
+            "offense.pressure_allowed_rate": {
+              "value": 0.15036001615946634,
+              "rank": 12,
+              "sampleSize": 256
+            },
+            "offense.explosive_play_rate": {
+              "value": 0.08390605115958578,
+              "rank": 27,
+              "sampleSize": 401
+            },
+            "offense.interception_rate": {
+              "value": 0.02083471724966767,
+              "rank": 17,
+              "sampleSize": 235
+            },
+            "offense.fumble_rate": {
+              "value": 0.01975562412136004,
+              "rank": 26,
+              "sampleSize": 401
+            },
+            "defense.pass_epa_allowed_per_dropback": {
+              "value": 0.06589267667710821,
+              "rank": 23,
+              "sampleSize": 227
+            },
+            "defense.rush_epa_allowed_per_attempt": {
+              "value": -0.02939893676060894,
+              "rank": 31,
+              "sampleSize": 165
+            },
+            "defense.success_rate_allowed": {
+              "value": 0.45242476382702823,
+              "rank": 31,
+              "sampleSize": 378
+            },
+            "defense.pressure_generated_rate": {
+              "value": 0.1521486557691009,
+              "rank": 25,
+              "sampleSize": 227
+            },
+            "defense.explosive_play_rate_allowed": {
+              "value": 0.09657993840633491,
+              "rank": 27,
+              "sampleSize": 378
+            },
+            "defense.interception_forced_rate": {
+              "value": 0.020605142638683405,
+              "rank": 16,
+              "sampleSize": 198
+            },
             "defense.fumble_forced_rate": {
-              "value": 0.018582939897783503,
-              "rank": 13,
-              "sampleSize": 309
+              "value": 0.0167457593970742,
+              "rank": 19,
+              "sampleSize": 378
             }
           }
         },
@@ -2099,80 +2099,80 @@
           },
           "record": {
             "wins": 3,
-            "losses": 1,
+            "losses": 2,
             "ties": 1,
-            "gamesPlayed": 5
+            "gamesPlayed": 6
           },
           "metrics": {
             "offense.pass_epa_per_dropback": {
-              "value": 0.07522981913908068,
-              "rank": 15,
-              "sampleSize": 187
+              "value": 0.057832712702261,
+              "rank": 16,
+              "sampleSize": 238
             },
             "offense.rush_epa_per_attempt": {
-              "value": -0.06434323318932901,
-              "rank": 26,
-              "sampleSize": 143
+              "value": -0.0632083217993236,
+              "rank": 24,
+              "sampleSize": 162
             },
             "offense.success_rate": {
-              "value": 0.4293138208848438,
-              "rank": 20,
-              "sampleSize": 323
+              "value": 0.4286340730986359,
+              "rank": 18,
+              "sampleSize": 392
             },
             "offense.pressure_allowed_rate": {
-              "value": 0.16670475650088393,
-              "rank": 24,
-              "sampleSize": 187
+              "value": 0.16338850997423893,
+              "rank": 23,
+              "sampleSize": 238
             },
             "offense.explosive_play_rate": {
-              "value": 0.08543248338414985,
-              "rank": 30,
-              "sampleSize": 323
+              "value": 0.08537849617673031,
+              "rank": 25,
+              "sampleSize": 392
             },
             "offense.interception_rate": {
-              "value": 0.02032464767424315,
-              "rank": 14,
-              "sampleSize": 167
+              "value": 0.0222963758432866,
+              "rank": 27,
+              "sampleSize": 212
             },
             "offense.fumble_rate": {
-              "value": 0.021022689533964297,
-              "rank": 27,
-              "sampleSize": 323
+              "value": 0.01906585953838373,
+              "rank": 25,
+              "sampleSize": 392
             },
             "defense.pass_epa_allowed_per_dropback": {
-              "value": 0.0655294827617105,
+              "value": 0.0599262674066562,
               "rank": 21,
-              "sampleSize": 181
+              "sampleSize": 213
             },
             "defense.rush_epa_allowed_per_attempt": {
-              "value": -0.026278600773993226,
-              "rank": 31,
-              "sampleSize": 119
+              "value": -0.03137089502587248,
+              "rank": 28,
+              "sampleSize": 156
             },
             "defense.success_rate_allowed": {
-              "value": 0.44281965533040824,
-              "rank": 26,
-              "sampleSize": 288
+              "value": 0.43546006215431976,
+              "rank": 22,
+              "sampleSize": 355
             },
             "defense.pressure_generated_rate": {
-              "value": 0.14990719986072207,
-              "rank": 28,
-              "sampleSize": 181
+              "value": 0.14635406660895026,
+              "rank": 31,
+              "sampleSize": 213
             },
             "defense.explosive_play_rate_allowed": {
-              "value": 0.09461459452242672,
-              "rank": 20,
-              "sampleSize": 288
+              "value": 0.0933083700802273,
+              "rank": 21,
+              "sampleSize": 355
             },
             "defense.interception_forced_rate": {
-              "value": 0.023573292716954346,
-              "rank": 4,
-              "sampleSize": 161
+              "value": 0.022768852021600443,
+              "rank": 6,
+              "sampleSize": 191
             },
             "defense.fumble_forced_rate": {
-              "value": 0.016184265024487044,
+              "value": 0.015347623004115503,
               "rank": 27,
-              "sampleSize": 288
+              "sampleSize": 355
             }
           }
         },
@@ -2189,80 +2189,80 @@
           },
           "record": {
             "wins": 2,
-            "losses": 3,
+            "losses": 4,
             "ties": 0,
-            "gamesPlayed": 5
+            "gamesPlayed": 6
           },
           "metrics": {
             "offense.pass_epa_per_dropback": {
-              "value": 0.056391865906420535,
-              "rank": 20,
-              "sampleSize": 173
+              "value": 0.05720672639158834,
+              "rank": 18,
+              "sampleSize": 206
             },
             "offense.rush_epa_per_attempt": {
-              "value": -0.056182129817743946,
-              "rank": 23,
-              "sampleSize": 126
+              "value": -0.0717988558245243,
+              "rank": 27,
+              "sampleSize": 152
             },
             "offense.success_rate": {
-              "value": 0.4324549166662929,
-              "rank": 16,
-              "sampleSize": 290
+              "value": 0.4358854284300663,
+              "rank": 15,
+              "sampleSize": 349
             },
             "offense.pressure_allowed_rate": {
-              "value": 0.1675998411952871,
-              "rank": 26,
-              "sampleSize": 173
+              "value": 0.16887725952885876,
+              "rank": 27,
+              "sampleSize": 206
             },
             "offense.explosive_play_rate": {
-              "value": 0.09352355856917458,
-              "rank": 16,
-              "sampleSize": 290
+              "value": 0.09118465399709533,
+              "rank": 15,
+              "sampleSize": 349
             },
             "offense.interception_rate": {
-              "value": 0.01756744124577334,
-              "rank": 3,
-              "sampleSize": 148
+              "value": 0.017959031036202493,
+              "rank": 4,
+              "sampleSize": 178
             },
             "offense.fumble_rate": {
-              "value": 0.01982429389600175,
-              "rank": 23,
-              "sampleSize": 290
+              "value": 0.018038733307009055,
+              "rank": 22,
+              "sampleSize": 349
             },
             "defense.pass_epa_allowed_per_dropback": {
-              "value": 0.0529472760538749,
-              "rank": 13,
-              "sampleSize": 187
+              "value": 0.051894304841276634,
+              "rank": 17,
+              "sampleSize": 222
             },
             "defense.rush_epa_allowed_per_attempt": {
-              "value": -0.05243236173172462,
-              "rank": 7,
-              "sampleSize": 135
+              "value": -0.060687038931572526,
+              "rank": 3,
+              "sampleSize": 170
             },
             "defense.success_rate_allowed": {
-              "value": 0.4377587994599678,
-              "rank": 21,
-              "sampleSize": 312
+              "value": 0.4359256758169968,
+              "rank": 23,
+              "sampleSize": 379
             },
             "defense.pressure_generated_rate": {
-              "value": 0.15811445092539853,
-              "rank": 16,
-              "sampleSize": 187
+              "value": 0.15680691729439003,
+              "rank": 17,
+              "sampleSize": 222
             },
             "defense.explosive_play_rate_allowed": {
-              "value": 0.09257255291402904,
-              "rank": 15,
-              "sampleSize": 312
+              "value": 0.08971261021430241,
+              "rank": 14,
+              "sampleSize": 379
             },
             "defense.interception_forced_rate": {
-              "value": 0.01838951489686784,
-              "rank": 29,
-              "sampleSize": 160
+              "value": 0.017705576969159312,
+              "rank": 31,
+              "sampleSize": 192
             },
             "defense.fumble_forced_rate": {
-              "value": 0.02212992836928229,
+              "value": 0.022668790983675493,
               "rank": 2,
-              "sampleSize": 312
+              "sampleSize": 379
             }
           }
         },
@@ -2279,80 +2279,80 @@
           },
           "record": {
             "wins": 2,
-            "losses": 3,
+            "losses": 4,
             "ties": 0,
-            "gamesPlayed": 5
+            "gamesPlayed": 6
           },
           "metrics": {
             "offense.pass_epa_per_dropback": {
-              "value": 0.01900160101532904,
-              "rank": 25,
-              "sampleSize": 180
+              "value": -0.0018185264151851478,
+              "rank": 26,
+              "sampleSize": 228
             },
             "offense.rush_epa_per_attempt": {
-              "value": -0.06536904515775645,
-              "rank": 27,
-              "sampleSize": 119
+              "value": -0.07097222809923293,
+              "rank": 26,
+              "sampleSize": 132
             },
             "offense.success_rate": {
-              "value": 0.4052312845702214,
+              "value": 0.40170880467128295,
               "rank": 31,
-              "sampleSize": 287
+              "sampleSize": 348
             },
             "offense.pressure_allowed_rate": {
-              "value": 0.15661773885747918,
-              "rank": 18,
-              "sampleSize": 180
+              "value": 0.1625331013287772,
+              "rank": 22,
+              "sampleSize": 228
             },
             "offense.explosive_play_rate": {
-              "value": 0.08550200445299014,
-              "rank": 29,
-              "sampleSize": 287
+              "value": 0.07906896118698827,
+              "rank": 31,
+              "sampleSize": 348
             },
             "offense.interception_rate": {
-              "value": 0.021627156336118454,
-              "rank": 22,
-              "sampleSize": 155
+              "value": 0.020563932353406037,
+              "rank": 15,
+              "sampleSize": 200
             },
             "offense.fumble_rate": {
-              "value": 0.018039080355696326,
-              "rank": 17,
-              "sampleSize": 287
+              "value": 0.017183366349959414,
+              "rank": 18,
+              "sampleSize": 348
             },
             "defense.pass_epa_allowed_per_dropback": {
-              "value": 0.07791098428662736,
-              "rank": 24,
-              "sampleSize": 196
+              "value": 0.07187756596447187,
+              "rank": 25,
+              "sampleSize": 239
             },
             "defense.rush_epa_allowed_per_attempt": {
-              "value": -0.03392034685487776,
-              "rank": 22,
-              "sampleSize": 145
+              "value": -0.032178306932693246,
+              "rank": 27,
+              "sampleSize": 176
             },
             "defense.success_rate_allowed": {
-              "value": 0.4396352079641453,
+              "value": 0.43803522176911,
               "rank": 25,
-              "sampleSize": 330
+              "sampleSize": 403
             },
             "defense.pressure_generated_rate": {
-              "value": 0.14664554524434573,
+              "value": 0.14461662124626237,
               "rank": 32,
-              "sampleSize": 196
+              "sampleSize": 239
             },
             "defense.explosive_play_rate_allowed": {
-              "value": 0.09109794587646043,
-              "rank": 8,
-              "sampleSize": 330
+              "value": 0.08958534284510601,
+              "rank": 13,
+              "sampleSize": 403
             },
             "defense.interception_forced_rate": {
-              "value": 0.02007552022573353,
-              "rank": 22,
-              "sampleSize": 179
+              "value": 0.019199148531311126,
+              "rank": 25,
+              "sampleSize": 219
             },
             "defense.fumble_forced_rate": {
-              "value": 0.01735263747490434,
-              "rank": 23,
-              "sampleSize": 330
+              "value": 0.016397759409603828,
+              "rank": 21,
+              "sampleSize": 403
             }
           }
         },
@@ -2368,81 +2368,81 @@
             "tertiary": "#c60c30"
           },
           "record": {
-            "wins": 3,
+            "wins": 4,
             "losses": 2,
             "ties": 0,
-            "gamesPlayed": 5
+            "gamesPlayed": 6
           },
           "metrics": {
             "offense.pass_epa_per_dropback": {
-              "value": 0.008497719442684846,
+              "value": -0.018513961143528556,
               "rank": 28,
-              "sampleSize": 204
+              "sampleSize": 256
             },
             "offense.rush_epa_per_attempt": {
-              "value": -0.019011542155413987,
-              "rank": 6,
-              "sampleSize": 102
+              "value": -0.02385537131557818,
+              "rank": 5,
+              "sampleSize": 123
             },
             "offense.success_rate": {
-              "value": 0.42791152777741037,
-              "rank": 21,
-              "sampleSize": 302
+              "value": 0.42126217534725113,
+              "rank": 23,
+              "sampleSize": 375
             },
             "offense.pressure_allowed_rate": {
-              "value": 0.15968995239069822,
-              "rank": 21,
-              "sampleSize": 204
+              "value": 0.16351791089630846,
+              "rank": 24,
+              "sampleSize": 256
             },
             "offense.explosive_play_rate": {
-              "value": 0.09341259422903837,
-              "rank": 18,
-              "sampleSize": 302
+              "value": 0.0883158871852447,
+              "rank": 20,
+              "sampleSize": 375
             },
             "offense.interception_rate": {
-              "value": 0.02094719503143319,
+              "value": 0.02087505552120623,
               "rank": 18,
-              "sampleSize": 186
+              "sampleSize": 233
             },
             "offense.fumble_rate": {
-              "value": 0.016886098318186847,
-              "rank": 12,
-              "sampleSize": 302
+              "value": 0.015086386867875239,
+              "rank": 6,
+              "sampleSize": 375
             },
             "defense.pass_epa_allowed_per_dropback": {
-              "value": 0.06022761347961362,
-              "rank": 18,
-              "sampleSize": 175
+              "value": 0.033564425686795386,
+              "rank": 7,
+              "sampleSize": 227
             },
             "defense.rush_epa_allowed_per_attempt": {
-              "value": -0.038084231102617064,
-              "rank": 17,
-              "sampleSize": 124
+              "value": -0.04177378956426459,
+              "rank": 19,
+              "sampleSize": 149
             },
             "defense.success_rate_allowed": {
-              "value": 0.4380492085997111,
-              "rank": 22,
-              "sampleSize": 293
+              "value": 0.42792141662799255,
+              "rank": 7,
+              "sampleSize": 366
             },
             "defense.pressure_generated_rate": {
-              "value": 0.1549322698085829,
-              "rank": 19,
-              "sampleSize": 175
+              "value": 0.1560434951069782,
+              "rank": 20,
+              "sampleSize": 227
             },
             "defense.explosive_play_rate_allowed": {
-              "value": 0.09784142620347692,
-              "rank": 25,
-              "sampleSize": 293
+              "value": 0.0950010012372749,
+              "rank": 23,
+              "sampleSize": 366
             },
             "defense.interception_forced_rate": {
-              "value": 0.021559430376819545,
-              "rank": 11,
-              "sampleSize": 158
+              "value": 0.022541390962443595,
+              "rank": 7,
+              "sampleSize": 201
             },
             "defense.fumble_forced_rate": {
-              "value": 0.019769881378446392,
-              "rank": 5,
-              "sampleSize": 293
+              "value": 0.017775732907164155,
+              "rank": 9,
+              "sampleSize": 366
             }
           }
         },
@@ -2459,80 +2459,80 @@
           },
           "record": {
             "wins": 3,
-            "losses": 2,
+            "losses": 3,
             "ties": 0,
-            "gamesPlayed": 5
+            "gamesPlayed": 6
           },
           "metrics": {
             "offense.pass_epa_per_dropback": {
-              "value": 0.07111027991009933,
-              "rank": 16,
-              "sampleSize": 162
+              "value": 0.051056927646469054,
+              "rank": 19,
+              "sampleSize": 219
             },
             "offense.rush_epa_per_attempt": {
-              "value": -0.08571745157971347,
-              "rank": 31,
-              "sampleSize": 136
-            },
-            "offense.success_rate": {
-              "value": 0.4270805367431442,
-              "rank": 22,
-              "sampleSize": 294
-            },
-            "offense.pressure_allowed_rate": {
-              "value": 0.17269265404928752,
-              "rank": 29,
+              "value": -0.08604379321120158,
+              "rank": 30,
               "sampleSize": 162
             },
+            "offense.success_rate": {
+              "value": 0.4225524979278963,
+              "rank": 22,
+              "sampleSize": 375
+            },
+            "offense.pressure_allowed_rate": {
+              "value": 0.18511734455540968,
+              "rank": 32,
+              "sampleSize": 219
+            },
             "offense.explosive_play_rate": {
-              "value": 0.09409568449762366,
-              "rank": 14,
-              "sampleSize": 294
+              "value": 0.0908690786746064,
+              "rank": 17,
+              "sampleSize": 375
             },
             "offense.interception_rate": {
-              "value": 0.022865822915515442,
-              "rank": 29,
-              "sampleSize": 147
+              "value": 0.023634836863998032,
+              "rank": 28,
+              "sampleSize": 197
             },
             "offense.fumble_rate": {
-              "value": 0.019751810188886568,
-              "rank": 22,
-              "sampleSize": 294
+              "value": 0.018490642187024176,
+              "rank": 23,
+              "sampleSize": 375
             },
             "defense.pass_epa_allowed_per_dropback": {
-              "value": 0.037223950681458194,
+              "value": 0.022989822467093766,
               "rank": 2,
-              "sampleSize": 184
+              "sampleSize": 214
             },
             "defense.rush_epa_allowed_per_attempt": {
-              "value": -0.056953494845036534,
+              "value": -0.06161325506591272,
               "rank": 1,
-              "sampleSize": 132
+              "sampleSize": 159
             },
             "defense.success_rate_allowed": {
-              "value": 0.4216252590904402,
+              "value": 0.4134570690209683,
               "rank": 2,
-              "sampleSize": 300
+              "sampleSize": 356
             },
             "defense.pressure_generated_rate": {
-              "value": 0.16977536896683773,
-              "rank": 2,
-              "sampleSize": 184
+              "value": 0.16987837226318206,
+              "rank": 3,
+              "sampleSize": 214
             },
             "defense.explosive_play_rate_allowed": {
-              "value": 0.08630970803672752,
+              "value": 0.0811169268535143,
               "rank": 3,
-              "sampleSize": 300
+              "sampleSize": 356
             },
             "defense.interception_forced_rate": {
-              "value": 0.024794480399363862,
-              "rank": 1,
-              "sampleSize": 154
+              "value": 0.024020318403064258,
+              "rank": 2,
+              "sampleSize": 181
             },
             "defense.fumble_forced_rate": {
-              "value": 0.015098618496947186,
-              "rank": 31,
-              "sampleSize": 300
+              "value": 0.014469294610513326,
+              "rank": 30,
+              "sampleSize": 356
             }
           }
         },
@@ -2548,81 +2548,81 @@
             "tertiary": "#000000"
           },
           "record": {
-            "wins": 5,
+            "wins": 6,
             "losses": 0,
             "ties": 0,
-            "gamesPlayed": 5
+            "gamesPlayed": 6
           },
           "metrics": {
             "offense.pass_epa_per_dropback": {
-              "value": 0.16406566120226662,
+              "value": 0.1550335549938838,
               "rank": 1,
-              "sampleSize": 157
+              "sampleSize": 191
             },
             "offense.rush_epa_per_attempt": {
-              "value": -0.029040788702508234,
-              "rank": 10,
-              "sampleSize": 132
+              "value": -0.006146923050920135,
+              "rank": 3,
+              "sampleSize": 161
             },
             "offense.success_rate": {
-              "value": 0.47325538035412423,
+              "value": 0.4769039157315056,
               "rank": 1,
-              "sampleSize": 277
+              "sampleSize": 337
             },
             "offense.pressure_allowed_rate": {
-              "value": 0.1442989937418546,
-              "rank": 4,
-              "sampleSize": 157
+              "value": 0.1395503001757459,
+              "rank": 2,
+              "sampleSize": 191
             },
             "offense.explosive_play_rate": {
-              "value": 0.10393749195951744,
-              "rank": 3,
-              "sampleSize": 277
+              "value": 0.10094209977366977,
+              "rank": 4,
+              "sampleSize": 337
             },
             "offense.interception_rate": {
-              "value": 0.01980247802653198,
-              "rank": 9,
-              "sampleSize": 142
+              "value": 0.019118364936566466,
+              "rank": 8,
+              "sampleSize": 171
             },
             "offense.fumble_rate": {
-              "value": 0.014492553710902419,
+              "value": 0.01383157833751399,
               "rank": 2,
-              "sampleSize": 277
+              "sampleSize": 337
             },
             "defense.pass_epa_allowed_per_dropback": {
-              "value": 0.052357311949862116,
-              "rank": 11,
-              "sampleSize": 189
+              "value": 0.0449111672816926,
+              "rank": 12,
+              "sampleSize": 234
             },
             "defense.rush_epa_allowed_per_attempt": {
-              "value": -0.05466180871321308,
-              "rank": 3,
-              "sampleSize": 133
+              "value": -0.061407231858872216,
+              "rank": 2,
+              "sampleSize": 149
             },
             "defense.success_rate_allowed": {
-              "value": 0.43311350492344153,
-              "rank": 13,
-              "sampleSize": 317
+              "value": 0.43400542279850157,
+              "rank": 16,
+              "sampleSize": 375
             },
             "defense.pressure_generated_rate": {
-              "value": 0.1557724601247405,
-              "rank": 18,
-              "sampleSize": 189
+              "value": 0.1578884617745325,
+              "rank": 15,
+              "sampleSize": 234
             },
             "defense.explosive_play_rate_allowed": {
-              "value": 0.07872934542560454,
+              "value": 0.07640099356822343,
               "rank": 1,
-              "sampleSize": 317
+              "sampleSize": 375
             },
             "defense.interception_forced_rate": {
-              "value": 0.020199315828358815,
-              "rank": 20,
-              "sampleSize": 173
+              "value": 0.019351070577058396,
+              "rank": 23,
+              "sampleSize": 211
             },
             "defense.fumble_forced_rate": {
-              "value": 0.019345103264674937,
-              "rank": 8,
-              "sampleSize": 317
+              "value": 0.01763957835723694,
+              "rank": 11,
+              "sampleSize": 375
             }
           }
         },
@@ -2639,80 +2639,80 @@
           },
           "record": {
             "wins": 1,
-            "losses": 4,
+            "losses": 5,
             "ties": 0,
-            "gamesPlayed": 5
+            "gamesPlayed": 6
           },
           "metrics": {
             "offense.pass_epa_per_dropback": {
-              "value": -0.0010096456410240257,
-              "rank": 29,
-              "sampleSize": 189
+              "value": -0.0332484722020718,
+              "rank": 31,
+              "sampleSize": 241
             },
             "offense.rush_epa_per_attempt": {
-              "value": -0.0213967618870666,
-              "rank": 8,
-              "sampleSize": 133
+              "value": -0.02480313285639425,
+              "rank": 6,
+              "sampleSize": 158
             },
             "offense.success_rate": {
-              "value": 0.42424235734627974,
-              "rank": 23,
-              "sampleSize": 301
+              "value": 0.4114705244110073,
+              "rank": 27,
+              "sampleSize": 374
             },
             "offense.pressure_allowed_rate": {
-              "value": 0.15556488628751178,
-              "rank": 17,
-              "sampleSize": 189
+              "value": 0.1577418761195389,
+              "rank": 18,
+              "sampleSize": 241
             },
             "offense.explosive_play_rate": {
-              "value": 0.0898643767851047,
-              "rank": 24,
-              "sampleSize": 301
+              "value": 0.08753932490857115,
+              "rank": 23,
+              "sampleSize": 374
             },
             "offense.interception_rate": {
-              "value": 0.02276964700419887,
-              "rank": 28,
-              "sampleSize": 151
+              "value": 0.023706169369623782,
+              "rank": 29,
+              "sampleSize": 194
             },
             "offense.fumble_rate": {
-              "value": 0.018717965800764673,
-              "rank": 21,
-              "sampleSize": 301
+              "value": 0.01680281479536065,
+              "rank": 16,
+              "sampleSize": 374
             },
             "defense.pass_epa_allowed_per_dropback": {
-              "value": 0.05568334836212284,
-              "rank": 16,
-              "sampleSize": 179
+              "value": 0.0326891837339111,
+              "rank": 6,
+              "sampleSize": 231
             },
             "defense.rush_epa_allowed_per_attempt": {
-              "value": -0.05266083124292231,
-              "rank": 5,
-              "sampleSize": 105
+              "value": -0.05681257021650291,
+              "rank": 7,
+              "sampleSize": 126
             },
             "defense.success_rate_allowed": {
-              "value": 0.4311574999995215,
-              "rank": 9,
-              "sampleSize": 278
+              "value": 0.42567886341289257,
+              "rank": 5,
+              "sampleSize": 351
             },
             "defense.pressure_generated_rate": {
-              "value": 0.14919199495747532,
-              "rank": 30,
-              "sampleSize": 179
+              "value": 0.15155836030539924,
+              "rank": 27,
+              "sampleSize": 231
             },
             "defense.explosive_play_rate_allowed": {
-              "value": 0.09085406200408189,
-              "rank": 7,
-              "sampleSize": 278
+              "value": 0.0858133513837207,
+              "rank": 6,
+              "sampleSize": 351
             },
             "defense.interception_forced_rate": {
-              "value": 0.022392900001027016,
-              "rank": 7,
-              "sampleSize": 167
+              "value": 0.022252398770617396,
+              "rank": 8,
+              "sampleSize": 214
             },
             "defense.fumble_forced_rate": {
-              "value": 0.015406753568313456,
-              "rank": 30,
-              "sampleSize": 278
+              "value": 0.013663340199611995,
+              "rank": 32,
+              "sampleSize": 351
             }
           }
         },
@@ -2728,81 +2728,81 @@
             "tertiary": null
           },
           "record": {
-            "wins": 0,
+            "wins": 1,
             "losses": 5,
             "ties": 0,
-            "gamesPlayed": 5
+            "gamesPlayed": 6
           },
           "metrics": {
             "offense.pass_epa_per_dropback": {
-              "value": -0.009941241017698587,
-              "rank": 31,
-              "sampleSize": 177
+              "value": -0.021268504998520534,
+              "rank": 30,
+              "sampleSize": 200
             },
             "offense.rush_epa_per_attempt": {
-              "value": -0.04626853580077257,
-              "rank": 20,
-              "sampleSize": 108
+              "value": -0.05368610031333881,
+              "rank": 21,
+              "sampleSize": 130
             },
             "offense.success_rate": {
-              "value": 0.42343307492543336,
-              "rank": 25,
-              "sampleSize": 274
+              "value": 0.4198860527773254,
+              "rank": 24,
+              "sampleSize": 318
             },
             "offense.pressure_allowed_rate": {
-              "value": 0.14725395428605328,
-              "rank": 6,
-              "sampleSize": 177
+              "value": 0.14141041842179164,
+              "rank": 3,
+              "sampleSize": 200
             },
             "offense.explosive_play_rate": {
-              "value": 0.08746804361303565,
-              "rank": 27,
-              "sampleSize": 274
+              "value": 0.08297957731901837,
+              "rank": 28,
+              "sampleSize": 318
             },
             "offense.interception_rate": {
-              "value": 0.020558508683047202,
-              "rank": 16,
-              "sampleSize": 156
+              "value": 0.02102651569877918,
+              "rank": 20,
+              "sampleSize": 178
             },
             "offense.fumble_rate": {
-              "value": 0.01825743049035559,
-              "rank": 19,
-              "sampleSize": 274
+              "value": 0.016750004087435964,
+              "rank": 15,
+              "sampleSize": 318
             },
             "defense.pass_epa_allowed_per_dropback": {
-              "value": 0.09063518124001234,
-              "rank": 27,
-              "sampleSize": 163
+              "value": 0.07449752523723298,
+              "rank": 26,
+              "sampleSize": 213
             },
             "defense.rush_epa_allowed_per_attempt": {
-              "value": -0.04551088026470219,
-              "rank": 14,
-              "sampleSize": 153
+              "value": -0.05232757631572835,
+              "rank": 12,
+              "sampleSize": 183
             },
             "defense.success_rate_allowed": {
-              "value": 0.43623785843055385,
-              "rank": 18,
-              "sampleSize": 309
+              "value": 0.433352758674738,
+              "rank": 15,
+              "sampleSize": 386
             },
             "defense.pressure_generated_rate": {
-              "value": 0.15167078199726722,
-              "rank": 26,
-              "sampleSize": 163
+              "value": 0.15523856808970052,
+              "rank": 22,
+              "sampleSize": 213
             },
             "defense.explosive_play_rate_allowed": {
-              "value": 0.09372468786330053,
-              "rank": 18,
-              "sampleSize": 309
+              "value": 0.0917126201034254,
+              "rank": 17,
+              "sampleSize": 386
             },
             "defense.interception_forced_rate": {
-              "value": 0.019718746618385966,
-              "rank": 24,
-              "sampleSize": 146
+              "value": 0.020834784552589705,
+              "rank": 12,
+              "sampleSize": 187
             },
             "defense.fumble_forced_rate": {
-              "value": 0.015877800132228947,
+              "value": 0.014946462537734743,
               "rank": 29,
-              "sampleSize": 309
+              "sampleSize": 386
             }
           }
         },
@@ -2819,80 +2819,80 @@
           },
           "record": {
             "wins": 1,
-            "losses": 3,
+            "losses": 4,
             "ties": 1,
-            "gamesPlayed": 5
+            "gamesPlayed": 6
           },
           "metrics": {
             "offense.pass_epa_per_dropback": {
-              "value": 0.0648099761717311,
+              "value": 0.05742557786930637,
               "rank": 17,
-              "sampleSize": 195
+              "sampleSize": 240
             },
             "offense.rush_epa_per_attempt": {
-              "value": -0.03368865368451787,
-              "rank": 14,
-              "sampleSize": 145
+              "value": -0.04210069349928116,
+              "rank": 16,
+              "sampleSize": 161
             },
             "offense.success_rate": {
-              "value": 0.41918482962411974,
-              "rank": 27,
-              "sampleSize": 319
+              "value": 0.42275184799758,
+              "rank": 21,
+              "sampleSize": 377
             },
             "offense.pressure_allowed_rate": {
-              "value": 0.1658601032046635,
-              "rank": 23,
-              "sampleSize": 195
+              "value": 0.1694640167470833,
+              "rank": 28,
+              "sampleSize": 240
             },
             "offense.explosive_play_rate": {
-              "value": 0.0928871124579091,
-              "rank": 20,
-              "sampleSize": 319
+              "value": 0.08986505305238958,
+              "rank": 18,
+              "sampleSize": 377
             },
             "offense.interception_rate": {
-              "value": 0.018313209855801996,
-              "rank": 4,
-              "sampleSize": 164
+              "value": 0.017528874604197643,
+              "rank": 3,
+              "sampleSize": 202
             },
             "offense.fumble_rate": {
-              "value": 0.016629562418804204,
-              "rank": 7,
-              "sampleSize": 319
+              "value": 0.015060751546094653,
+              "rank": 5,
+              "sampleSize": 377
             },
             "defense.pass_epa_allowed_per_dropback": {
-              "value": 0.08086022939829146,
-              "rank": 26,
-              "sampleSize": 212
+              "value": 0.07508330908171533,
+              "rank": 27,
+              "sampleSize": 246
             },
             "defense.rush_epa_allowed_per_attempt": {
-              "value": -0.04188130967704868,
-              "rank": 16,
-              "sampleSize": 117
+              "value": -0.03004408871595443,
+              "rank": 30,
+              "sampleSize": 146
             },
             "defense.success_rate_allowed": {
-              "value": 0.4442542876339464,
-              "rank": 27,
-              "sampleSize": 316
+              "value": 0.44724181274510144,
+              "rank": 28,
+              "sampleSize": 376
             },
             "defense.pressure_generated_rate": {
-              "value": 0.15420846152506754,
-              "rank": 22,
-              "sampleSize": 212
+              "value": 0.15225303009069466,
+              "rank": 24,
+              "sampleSize": 246
             },
             "defense.explosive_play_rate_allowed": {
-              "value": 0.09134469430143394,
-              "rank": 10,
-              "sampleSize": 316
+              "value": 0.08909112877777427,
+              "rank": 12,
+              "sampleSize": 376
             },
             "defense.interception_forced_rate": {
-              "value": 0.019852458889892045,
-              "rank": 23,
-              "sampleSize": 190
+              "value": 0.019199148531311126,
+              "rank": 25,
+              "sampleSize": 219
             },
             "defense.fumble_forced_rate": {
-              "value": 0.017570322891256186,
-              "rank": 20,
-              "sampleSize": 316
+              "value": 0.016774238579722284,
+              "rank": 18,
+              "sampleSize": 376
             }
           }
         }
